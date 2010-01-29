@@ -10,6 +10,27 @@ module NavigationHelpers
     
     when /the home\s?page/
       '/'
+    when /the new cat page/
+      new_cat_path
+
+    when /the new cat page/
+      new_cat_path
+
+    when /the new categories page/
+      new_categories_path
+
+    when /the new profiles page/
+      new_profiles_path
+
+    when /the new user_files page/
+      new_user_files_path
+
+    when /the new macros page/
+      new_macros_path
+
+    when /the new users page/
+      new_users_path
+
     when /the new tasks page/
       new_tasks_path
 

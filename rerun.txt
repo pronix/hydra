@@ -1,1 +1,1 @@
-features/manage_dashboards.feature:6:14 features/manage_tasks.feature:6:16
+features/manage_categories.feature:6:10 features/manage_cats.feature:6 features/manage_profiles.feature:6:10 features/manage_user_files.feature:6:10 features/manage_users.feature:6:10
