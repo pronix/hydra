@@ -12,3 +12,25 @@ end
 Then /^I should see the following dashboards:$/ do |expected_dashboards_table|
   expected_dashboards_table.diff!(tableish('table tr', 'td,th'))
 end
+
+
+Допустим /^Я авторизован$/ do
+  pending # express the regexp above with the code you wish you had
+end
+
+Если /^Я перешел на страницу "([^\"]*)"$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
+
+То /^Я должен увидеть таблицу с активными заданиями:$/ do |table|
+  # table is a Cucumber::Ast::Table
+  pending # express the regexp above with the code you wish you had
+end
+
+Допустим /^Я не авторизован$/ do
+  pending # express the regexp above with the code you wish you had
+end
+
+То /^Я должен перейти на страницу авторизации$/ do
+  pending # express the regexp above with the code you wish you had
+end

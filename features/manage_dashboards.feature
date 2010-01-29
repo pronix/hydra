@@ -1,26 +1,21 @@
-Feature: Manage dashboards
-  In order to [goal]
-  [stakeholder]
-  wants [behaviour]
-  
-  Scenario: Register new dashboard
-    Given I am on the new dashboard page
-    When I fill in "Name" with "name 1"
-    And I fill in "State" with "state 1"
-    And I press "Create"
-    Then I should see "name 1"
-    And I should see "state 1"
+# language: ru
+ Функционал: Dashboard
+   Для работы с сервисом 
+   Как пользователь
+   Я должен перейти на главную страницу сайта (Dashboard)
 
-  Scenario: Delete dashboard
-    Given the following dashboards:
-      |name|state|
-      |name 1|state 1|
-      |name 2|state 2|
-      |name 3|state 3|
-      |name 4|state 4|
-    When I delete the 3rd dashboard
-    Then I should see the following dashboards:
-      |Name|State|
-      |name 1|state 1|
-      |name 2|state 2|
-      |name 4|state 4|
+   Сценарий: Авторизованный пользователь заходит на главную страницу сайта(dasboard)
+     Допустим Я авторизован
+         Если Я перешел на страницу "dashboard"
+           То Я должен увидеть таблицу с активными заданиями:
+           |Name|State|
+           |task 1| state 1|
+           |task 2| state 2|
+           |task 3| state 1|
+
+   Сценарий: Не авторизованный пользователь заходит на главную страницу сайта(dashboard)
+     Допустим Я не авторизован
+         Если Я перешел на страницу "dashboard"
+           То Я должен перейти на страницу авторизации
+
+
