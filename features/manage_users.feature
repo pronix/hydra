@@ -6,7 +6,7 @@
 
     Предыстория:
       Допустим у нас есть следущие пользователи
-      | username  | password | admin |
+      | nickname  | password | admin |
       | admin     | secret   | true  |
       | free_user | secter   | false |
 
@@ -14,8 +14,60 @@
       Допустим Я вошел в как "admin" с паролем "secret"
                И перешел на страницу "Пользователи"
             То Я должен увидеть таблицу пользователей:
-               | username  | login     | E-mail              | active task | complete task |
+               | nickname  | login     | E-mail              | active task | complete task |
                | admin     | admin     | admin@gmail.com     | 0           | 0             |
                | free_user | free_user | free_user@gmail.com | 12          | 0             |
+
+    Сценарий: Создание нового пользователя
+      Допустим Я вошел как "admin" с паролем "secret"
+               И нахожусь на странице создания нового пользователя
+               И пока в системе нет пользователей
+          Если Я заполнил поле "Nikcname" значениеailм "other_user"
+               И заполнил поле "login" значением "other_user"
+               И заполнил поле "email" значением "ouser@gmail.com"
+               И заполнил поле "password" значением "other_secret"
+               И заполнил поле "password_confirmation" значением "other_secret"
+               И выбрал значение "User" поля "Account Type"
+               И нажал кнопку "Создать" 
+            То Я должен увидеть сообщение "Создан новый пользователь"
+               И в списке пользователей должнен появиться новый пользователь 	
+
+    Сценарий: Редактирование данных пользователя
+      Допустим Я вошел как "admin" с паролем "secret"
+               И нахожусь на странице редактирования пользователя "free_user"
+          Если Я изменил поле "nickname" на значение "new_nickname"
+               И нажал кнопку "Изменить"
+            То Я должен увидеть сообщение "Пользоваель изменен"
+               И значение поля "nickname" должно изменить с "free_user" на "new_nickname" 
+
+   Сценарий: Удаление пользователя
+      Допустим Я вошел как "admin" с паролем "secret"
+               И нахожусь на странице пользователей
+               И имееться следующий список пользователей:
+                 | admin      | admin      | admin@gmail.com      | 
+                 | free_user  | free_user  | free_user@gmail.com  | 
+                 | other_user | other_user | other_user@gmail.com |
+               И у пользователя "free_user" нет задач
+          Если Я удаляю пользователя "free_user"
+            То Я должен увидеть сообщение "Пользователь удален"
+               И должен увидеть следующий список пользователей:
+                 | admin      | admin      | admin@gmail.com      | 
+                 | other_user | other_user | other_user@gmail.com |
+
+   Сценарий: Удаление пользователя у которого есть задачи
+      Допустим Я вошел как "admin" с паролем "secret"
+               И нахожусь на странице пользователей
+               И имееться следующий список пользователей:
+                 | admin      | admin      | admin@gmail.com      | 
+                 | free_user  | free_user  | free_user@gmail.com  | 
+                 | other_user | other_user | other_user@gmail.com |
+               И у пользователя "free_user" есть список задач
+          Если Я удаляю пользователя "free_user"
+            То Я должен увидеть сообщение "Пользователь помечен удален"
+               И должен увидеть следующий список пользователей:
+                 | admin      | admin      | admin@gmail.com      | 
+                 | other_user | other_user | other_user@gmail.com |
+               И должен увидеть пользователя "free_user" в удаленных пользователях
+               И должен увидеть что активные задачи пользователя приостановлены
 
 
