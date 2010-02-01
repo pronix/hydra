@@ -1,27 +1,4 @@
-Given /^the following macros:$/ do |macros|
-  Macros.create!(macros.hashes)
-end
-
-When /^I delete the (\d+)(?:st|nd|rd|th) macros$/ do |pos|
-  visit macros_url
-  within("table tr:nth-child(#{pos.to_i+1})") do
-    click_link "Destroy"
-  end
-end
-
-Then /^I should see the following macros:$/ do |expected_macros_table|
-  expected_macros_table.diff!(tableish('table tr', 'td,th'))
-end
- Given /^the following cats:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
-end
-
-When /^I delete the 3rd cat$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Then /^I should see the following cats:$/ do |table|
+То /^должен увидеть список макросов:$/ do |table|
   # table is a Cucumber::Ast::Table
   pending # express the regexp above with the code you wish you had
 end

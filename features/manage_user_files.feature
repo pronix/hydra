@@ -7,10 +7,14 @@
   Сценарий: Список файлов
     Допустим у меня есть несколько файлов File1, File2
         Если Я перешел на страницу файлов
-          То Я должен увидеть список файлов:
-             | name       | description | actions      |
-             | file1_name | file1_desc  | edit, delete |
-             | file2_name | file2_desc  | edit, delete |
+          То Я должен увидеть главное меню
+             И должен увидеть панель пользователя
+             И должен увидеть дополнительное меню "Tools"  
+             И должен увидеть ссылку "Add file" 
+             И должен увидеть список файлов:
+             | name       |   uploaded | actions      |
+             | file1_name | 01.01.2010 | edit, delete |
+             | file2_name | 11.01.2010 | edit, delete |
 
 
   Сценарий: Загрузка нового файла
@@ -35,6 +39,6 @@
           То Я должен увидеть следующие файлы:
                 | name       | description |
                 | file1_name | file1_desc  |
-                | file2_name | file2_desc  |
                 | file4_name | file4_desc  |
+                | file2_name | file2_desc  |
 
