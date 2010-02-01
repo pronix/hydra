@@ -34,7 +34,7 @@
                | gamma    | task3 | Stopped - error code | delete  |
                | alpha    | task1 | Finished             | delete  |
                | zeta     | task2 | Finished             | delete  |
-
+             И должен увидеть фильтр "Category"
 
   Сценарий: Удаление активной задачи
     Допустим Я зашел в сервис как "free_user"
@@ -64,6 +64,7 @@
                | gamma    | task4 | Complete | delete  |
                | alpha    | task5 | Complete | delete  |
                | zeta     | task6 | Complete | delete  |
+             И должен увидеть фильтр "Category"
 
   Сценарий: Удаление завершенной задачи
     Допустим Я зашел в сервис как "free_user"

@@ -8,9 +8,10 @@
     Допустим у меня есть несколько файлов File1, File2
         Если Я перешел на страницу файлов
           То Я должен увидеть список файлов:
-             | name       | description |
-             | file1_name | file1_desc  |
-             | file2_name | file2_desc  |
+             | name       | description | actions      |
+             | file1_name | file1_desc  | edit, delete |
+             | file2_name | file2_desc  | edit, delete |
+
 
   Сценарий: Загрузка нового файла
     Допустим Я на странице загрузки нового файла
@@ -25,7 +26,7 @@
   Сценарий: Удаление файла
     Допустим Я на странице файлов
              И у меня есть следующие файлы:
-                | name       | description |
+                | name       | description | 
                 | file1_name | file1_desc  |
                 | file2_name | file2_desc  |
                 | file3_name | file3_desc  |
