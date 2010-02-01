@@ -1,4 +1,8 @@
-Допустим /^Я авторизован$/ do
+Допустим /^у пользователь "([^\"]*)" есть задачи "([^\"]*)", "([^\"]*)"$/ do |arg1, arg2, arg3|
+  pending # express the regexp above with the code you wish you had
+end
+
+Допустим /^Я вошел в сервис как "([^\"]*)"$/ do |arg1|
   pending # express the regexp above with the code you wish you had
 end
 
@@ -6,15 +10,24 @@ end
   pending # express the regexp above with the code you wish you had
 end
 
-То /^Я должен увидеть ссылку на "([^\"]*)"$/ do |arg1|
+То /^Я должен увидеть главное меню$/ do
   pending # express the regexp above with the code you wish you had
 end
 
-То /^должен увидеть ссылку на "([^\"]*)"$/ do |arg1|
+То /^должен увидеть панель пользователя$/ do
   pending # express the regexp above with the code you wish you had
 end
 
-То /^должен увидеть таблицу с активными заданиями:$/ do |table|
+То /^должен увидеть ссылку "([^\"]*)"$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
+
+То /^должен увидеть таблицу со своими активными заданиями:$/ do |table|
+  # table is a Cucumber::Ast::Table
+  pending # express the regexp above with the code you wish you had
+end
+
+То /^должен увидеть таблицу со всеми активными заданиями:$/ do |table|
   # table is a Cucumber::Ast::Table
   pending # express the regexp above with the code you wish you had
 end
@@ -24,5 +37,9 @@ end
 end
 
 То /^Я должен перейти на "([^\"]*)"$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
+
+То /^увидеть сообщение "([^\"]*)"$/ do |arg1|
   pending # express the regexp above with the code you wish you had
 end
