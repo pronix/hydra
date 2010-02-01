@@ -24,6 +24,7 @@
               | Category | Name  | Status           |
               | Alpha    | task1 | Finished         |
               | Delta    | task2 | Extracting files |
+              И должен увидеть фильтр "Category"
 
    Сценарий: Администратор заходит на главную страницу сайта(dashboard)
      Допустим Я вошел в сервис как "admin"
@@ -37,11 +38,7 @@
               | Delta    | task2 | Extracting files |
               | Zeta     | task3 | Downloading      |
               | Gamma    | task4 | Finished         |
-
-
-
-           
-
+              И должен увидеть фильтр "Category"
 
    Сценарий: Не авторизованный пользователь заходит на главную страницу сайта(dashboard)
      Допустим Я не авторизован
