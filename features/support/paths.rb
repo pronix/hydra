@@ -10,6 +10,9 @@ module NavigationHelpers
     
     when /the home\s?page/
       '/'
+    when /the new profiles page/
+      new_profiles_path
+
     when /the new cat page/
       new_cat_path
 
