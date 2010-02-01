@@ -1,18 +1,3 @@
-Given /^the following categories:$/ do |categories|
-  Categories.create!(categories.hashes)
-end
-
-When /^I delete the (\d+)(?:st|nd|rd|th) categories$/ do |pos|
-  visit categories_url
-  within("table tr:nth-child(#{pos.to_i+1})") do
-    click_link "Destroy"
-  end
-end
-
-Then /^I should see the following categories:$/ do |expected_categories_table|
-  expected_categories_table.diff!(tableish('table tr', 'td,th'))
-end
-
 Допустим /^в системе уже есть следующие категории Category1, Category2, Category3$/ do
   pending # express the regexp above with the code you wish you had
 end
@@ -21,7 +6,7 @@ end
   pending # express the regexp above with the code you wish you had
 end
 
-То /^Я должен увидеть список категорий:$/ do |table|
+То /^должен увидеть список категорий:$/ do |table|
   # table is a Cucumber::Ast::Table
   pending # express the regexp above with the code you wish you had
 end
