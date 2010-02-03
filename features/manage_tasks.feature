@@ -130,3 +130,16 @@
              И заполнил поле "password_arhive" значением "secret_arhive"
           То Я должен увидеть "Create new task."            
              И теперь у меня должно быть одна активная задача
+
+  Сценарий: Завершение задачи
+    Допустим есть список задач:
+             | gamma | task3 | Stopped - error code | delete           |
+             | alpha | task1 | Finished             | delete, complete |
+             | zeta  | task2 | Finished             | delete, complete |
+        Если Я нажал ссылку "complete" для "task1"
+          То Я должен увидеть сообщение "Task task1 has been completed"
+             И должен увидеть следующий список активных задач:
+             | gamma | task3 | Stopped - error code | delete           |
+             | zeta  | task2 | Finished             | delete, complete |
+             И должен увидеть следующий список завершенных задач:
+             | alpha | task1 | Complete | delete |
