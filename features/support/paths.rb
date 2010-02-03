@@ -10,6 +10,12 @@ module NavigationHelpers
     
     when /the home\s?page/
       '/'
+    when /the new profile_task page/
+      new_profile_task_path
+
+    when /the new profile_tasks page/
+      new_profile_tasks_path
+
     when /the new profiles page/
       new_profiles_path
 
