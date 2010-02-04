@@ -19,6 +19,7 @@ Rails::Initializer.run do |config|
   config.gem 'authlogic'
   config.gem 'ttilley-aasm',:lib => 'aasm'
   
+  
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
@@ -38,3 +39,15 @@ Rails::Initializer.run do |config|
   config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   config.i18n.default_locale = :en
 end
+
+# если ключь локализации не находит то сначала пытаеться вывести default потом  сам ключь в нормальном виде
+  module I18n
+    class << self
+      def just_raise_that_exception(exception, locale, key, options)
+        return key.to_s.gsub('.',', ').humanize if I18n::MissingTranslationData === exception
+        raise exception
+      end
+    end
+  end
+
+I18n.exception_handler = :just_raise_that_exception
