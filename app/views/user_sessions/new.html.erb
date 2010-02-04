@@ -1,0 +1,14 @@
+<% semantic_form_for @user_session, :url => login_path,  :html => { :method => :post, :class => 'login_form' }  do |form| %>
+
+<% form.inputs :class => "base_form"  do -%>
+<%= form.input :login %>
+<%= form.input :password %>
+<%= form.input :remember_me, :as => :boolean %>
+<% end -%>
+
+
+<% form.buttons do -%>
+<%= form.commit_button I18n.t('login'),  :class => "base_buttons" %>
+<% end -%>
+
+<% end -%>
