@@ -1,27 +1,33 @@
 Допустим /^в сервисе зарегистрированы следующие пользователи:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
+  table.hashes.each do |hash|  
+
+    user = Factory(:user, 
+                   :name => hash["nickname"],
+                   :login => hash["login"],
+                   :email => hash["email"],
+                   :password => hash["password"],
+                   :password_confirmation => hash["password"],
+                   :admin => hash["admin"])
+  end 
 end
 
-Если /^Я перешел на страницу входа$/ do
-  pending # express the regexp above with the code you wish you had
+То /^(?:|Я )должен быть переправлен на страницу "([^\"]*)"$/ do |page|
+  redirect_to(path_to(page))
+
 end
 
-То /^Я должен быть переправлен на страницу "([^\"]*)"$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
+Если /^(?:|Я )занова перешел на страницу "([^\"]*)"$/ do |page|
+  visit path_to(page)
 end
 
 Допустим /^в сервисе нет зарегистрированных пользователей$/ do
-  pending # express the regexp above with the code you wish you had
-end
-Допустим /^Я зашел в сервис как "([^\"]*)"$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
+ User.destroy_all
 end
 
-То /^должен быть переправлен на страницу "([^\"]*)"$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
-end
-Допустим /^у нас есть следующие пользователи$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
+Допустим /^(?:|Я )зашел в сервис как "(.*)\/(.*)"$/ do |login, password|
+  Допустим %{Я перешел на страницу "login"}
+         И %{заполнил поле "login" значением "free_user" }
+         И %{заполнил поле "password" значением "secret" }
+         И %{нажал кнопку "Login"}
+
 end

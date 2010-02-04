@@ -19,11 +19,23 @@ When /^(?:|I )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
+Если /^(?:|Я )перешел на страницу "([^\"]*)"$/ do |page_name|
+  visit path_to(page_name)
+end
+
+
 When /^(?:|I )press "([^\"]*)"$/ do |button|
   click_button(button)
 end
 
+Если /^(?:|Я )нажал кнопку "([^\"]*)"$/ do |button|
+  click_button(button)
+end
+
 When /^(?:|I )follow "([^\"]*)"$/ do |link|
+  click_link(link)
+end
+Если /^(?:|Я )нажал ссылку "([^\"]*)"$/ do |link|
   click_link(link)
 end
 
@@ -31,11 +43,18 @@ When /^(?:|I )follow "([^\"]*)" within "([^\"]*)"$/ do |link, parent|
   click_link_within(parent, link)
 end
 
+
 When /^(?:|I )fill in "([^\"]*)" with "([^\"]*)"$/ do |field, value|
   fill_in(field, :with => value)
 end
 
 When /^(?:|I )fill in "([^\"]*)" for "([^\"]*)"$/ do |value, field|
+  fill_in(field, :with => value)
+end
+Если /^(?:|Я )заполнил поле "([^\"]*)" значением "([^\"]*)"$/ do |field, value|
+  fill_in(field, :with => value)
+end
+Допустим /^(?:|Я )заполнил поле "([^\"]*)" значением "([^\"]*)" $/ do |field, value|
   fill_in(field, :with => value)
 end
 
@@ -111,6 +130,11 @@ When /^(?:|I )check "([^\"]*)"$/ do |field|
   check(field)
 end
 
+Если /^(?:|Я )включил флажок "([^\"]*)"$/ do |field|
+  check(field)
+end
+
+
 When /^(?:|I )uncheck "([^\"]*)"$/ do |field|
   uncheck(field)
 end
@@ -140,6 +164,14 @@ When /^(?:|I )attach the file "([^\"]*)" to "([^\"]*)"$/ do |path, field|
 end
 
 Then /^(?:|I )should see "([^\"]*)"$/ do |text|
+  if defined?(Spec::Rails::Matchers)
+    response.should contain(text)
+  else
+    assert_contain text
+  end
+end
+
+То /^(?:|Я )должен увидеть сообщение "([^\"]*)"$/ do |text|
   if defined?(Spec::Rails::Matchers)
     response.should contain(text)
   else

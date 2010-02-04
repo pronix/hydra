@@ -10,6 +10,10 @@
   </head>
 
   <body>
+    <%= flash[:notice] %>
+    <% if current_user -%>
+    <%= link_to "sign out", logout_path %>
+    <% end -%>
     <%= yield %>
   </body>
 </html>

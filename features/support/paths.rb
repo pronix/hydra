@@ -7,7 +7,10 @@ module NavigationHelpers
   #
   def path_to(page_name)
     case page_name
-    
+    when /dashboard/
+      dashboards_path
+    when /login/
+      login_path
     when /the home\s?page/
       '/'
     when /the new profile_task page/

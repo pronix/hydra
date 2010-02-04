@@ -20,6 +20,7 @@ class UserSessionsController < ApplicationController
 
   def destroy
     current_user_session.destroy
-    redirect_back_or_default root_path
+    flash[:notice] = I18n.t('Goodbye')
+    redirect_back_or_default login_path
   end
 end

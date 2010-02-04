@@ -4,13 +4,14 @@
 
   
   Предыстория:
-    Допустим у нас есть следующие пользователи
-        | nickname  | password | admin |
-        | admin     | secret   | true  |
-        | free_user | secter   | false |
-
+    Допустим в сервисе зарегистрированы следующие пользователи:
+     | nickname  | password | login     | email                | admin |
+     | admin     | secret   | admin     | admin_user@gmail.com | true  |
+     | free_user | secret   | free_user | free_user@gmail.com  | false |
   Сценарий: Пользователь выходит из сервиса
-    Допустим Я зашел в сервис как "free_user"
+    Допустим Я зашел в сервис как "free_user/secret"
        Если Я нажал ссылку "sign out"
-         То Я должен увидеть сообщение "До свидание."
+         То Я должен увидеть сообщение "Goodbye"
             И должен быть переправлен на страницу "login"
+
+
