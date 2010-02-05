@@ -1,7 +1,7 @@
 <% semantic_form_for @user_session, :url => login_path,  :html => { :method => :post, :class => 'login_form' }  do |form| %>
 
 <% form.inputs :class => "base_form"  do -%>
-<%= form.input :login %>
+<%= form.input :email %>
 <%= form.input :password %>
 <%= form.input :remember_me, :as => :boolean %>
 <% end -%>
