@@ -7,6 +7,8 @@ module NavigationHelpers
   #
   def path_to(page_name)
     case page_name
+    when /^categories/
+      categories_path
     when /dashboard/
       dashboards_path
     when /login/
@@ -28,9 +30,13 @@ module NavigationHelpers
     when /the new cat page/
       new_cat_path
 
-    when /the new categories page/
-      new_categories_path
-
+    when /^new categories/
+      new_category_path
+      
+    when /^edit category for (.*)$/
+      @category = Category.find_by_name $1
+      edit_category_path(@category)
+        
     when /the new profiles page/
       new_profiles_path
 

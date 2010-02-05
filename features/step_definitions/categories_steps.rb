@@ -1,50 +1,76 @@
-Допустим /^в системе уже есть следующие категории Category1, Category2, Category3$/ do
-  pending # express the regexp above with the code you wish you had
+Допустим /^в сервисе уже есть следующие категории:$/ do |table|
+  table.hashes.each do |hash|
+    Factory(:category, :name => hash["name"], :created_at => hash["created_at"])
+  end
 end
 
-Если /^Я перешел на страницу категорий$/ do
-  pending # express the regexp above with the code you wish you had
+
+То /^(?:|[Я|я] )должен увидеть список категорий:$/ do |table|
+  response.should have_tag("table") do 
+    with_tag("tr") do 
+      table.headers.each do |k|
+        with_tag("th", k)
+      end
+    end
+    table.hashes.each do |hash|
+      with_tag("tr") do
+        with_tag("td", hash["Name"])
+        with_tag("td", hash["Created"])      
+        with_tag("td") do 
+          category = Category.find_by_name(hash["Name"])
+          with_tag("a[href='#{edit_category_path(category)}']","Edit" )
+          with_tag("a[href='#{edit_category_path(category)}']","Edit" )
+        end
+      end
+    end
+  end
 end
 
-То /^должен увидеть список категорий:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
+То /^должен увидеть список категорий без ссылок редактирования:$/ do |table|
+ response.should have_tag("table") do 
+    
+    with_tag("tr") do 
+      table.headers.each do |k|
+        with_tag("th", k)
+      end
+    end
+    
+    table.hashes.each do |hash|
+      with_tag("tr") do
+        with_tag("td", hash["Name"])
+        with_tag("td", hash["Created"]) 
+        category = Category.find_by_name(hash["Name"])
+        without_tag("a[href='#{edit_category_path(category)}']","Edit" )
+      end
+    end
+    
+  end
+  
 end
 
-Допустим /^в системе еще нет категорий$/ do
-  pending # express the regexp above with the code you wish you had
+
+Допустим /^в сервисе еще нет категорий$/ do
+  Category.destroy_all
 end
 
-Допустим /^Я перешел на страницу добавления категорий$/ do
-  pending # express the regexp above with the code you wish you had
-end
 
 То /^список категорий не должен быть пустым$/ do
-  pending # express the regexp above with the code you wish you had
+  Category.all.size.should == 1
+end
+Допустим /^(?:|[Я|я] )нажал ссылку "([^\"]*)" для категории "([^\"]*)"$/ do |link, category|
+  @category = Category.find_by_name category
+  click_link "href='#{edit_category_path(@category)}'"
+
 end
 
-Допустим /^Я на странице редактирования категории$/ do
-  pending # express the regexp above with the code you wish you had
+
+Допустим /^перешел на страницу редактирования категории для "([^\"]*)"$/ do |category|
+  visit path_to("edit category for #{category}")
 end
 
-Если /^Я изменил поле "([^\"]*)" на значение "([^\"]*)"$/ do |arg1, arg2|
-  pending # express the regexp above with the code you wish you had
-end
 
-То /^поле "([^\"]*)" должно содержать "([^\"]*)"$/ do |arg1, arg2|
-  pending # express the regexp above with the code you wish you had
-end
-
-Допустим /^есть следующие категории:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
-end
-
-Если /^Я удаляю 3 категорию$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-То /^Я должен увидеть следующие категории:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
+Если /^(?:|[Я|я] )удаляю категорию "([^\"]*)"$/ do |category|
+  @category = Category.find_by_name category
+  @category.destroy
+  visit path_to("categories")
 end

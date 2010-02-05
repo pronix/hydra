@@ -1,0 +1,8 @@
+<% semantic_form_for @category, :url => category_path, :html => { :method => :put, :class => 'base_form' }  do |form| %>
+<% form.inputs :class => "base_form"  do -%>
+<%= form.input :name %>
+<% end -%>
+<% form.buttons do -%>
+<%= form.commit_button I18n.t('save'),  :class => "base_buttons" %>
+<% end -%>
+<% end -%>
