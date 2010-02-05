@@ -1,0 +1,8 @@
+<%= case params[:controller]
+    when /macros|files|profiles|categories/
+    render("shared/tools_sub_menu")
+    when /settings|users|proxy/
+    render("shared/settings_sub_menu")
+    when /tasks/
+    render("shared/tasks_sub_menu")
+    end  %>

@@ -10,10 +10,22 @@
   </head>
 
   <body>
-    <%= flash[:notice] %>
-    <% if current_user -%>
-    <%= link_to "sign out", logout_path %>
-    <% end -%>
+    <div class="user_panel">
+      <%= flash[:notice] %>
+      <% if current_user -%>
+      <%= link_to I18n.t("sign out"), logout_path %>
+      <% end -%>
+    </div>
+
+    <ul class="main_menu">
+      <li><%= link_to I18n.t("Dashboard"), dashboards_path %></li>
+      <li><%= link_to I18n.t("Tasks"), "" %></li>
+      <li><%= link_to I18n.t("Tools"), "" %></li>
+      <li><%= link_to I18n.t("Settings"), "" %></li>
+    </ul>
+    
+    <%= render "shared/sub_menu" %>
+    
     <%= yield %>
   </body>
 </html>
