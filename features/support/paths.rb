@@ -7,6 +7,10 @@ module NavigationHelpers
   #
   def path_to(page_name)
     case page_name
+    when /^edit settings/
+      edit_settings_path
+    when /^settings/
+      settings_path
     when /^categories/
       categories_path
     when /dashboard/

@@ -1,39 +1,23 @@
-Допустим /^Я зашел как пользователь "([^\"]*)"  с паролем "([^\"]*)"$/ do |arg1, arg2|
-  pending # express the regexp above with the code you wish you had
+То /^должен увидеть свой "([^\"]*)"$/ do |field|
+  response.should contain(current_user.send(field.to_sym))
 end
 
-Допустим /^перешел на страницу учетной записи$/ do
-  pending # express the regexp above with the code you wish you had
+То /^(?:|[Я|я] )должен увидеть кнопку "([^\"]*)"$/ do |value|
+  response.should have_tag("input[type=submit][value='#{value}']")
 end
 
-То /^должен увидеть свой "([^\"]*)"$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
+То /^(?:|[Я|я] )должен увидеть текстовое поле "([^\"]*)"$/ do |field|
+  response.should have_tag("input[type=text][name='#{field}']")
 end
 
-Допустим /^нахожуь на странице учетной записи$/ do
-  pending # express the regexp above with the code you wish you had
+То /^должен увидеть поле для пароля "([^\"]*)"$/ do |field|
+  response.should have_tag("input[type=password][name='#{field}']")
 end
 
-Если /^Я перешел по ссылке "([^\"]*)"$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
+Допустим /^перешел на страницу редактирования настроек$/ do
+  visit path_to("edit settings")
 end
 
-То /^Я должен увидеть форму редактирования учетной записи$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-То /^должен увидеть кнопку "([^\"]*)"$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
-end
-
-Допустим /^Я зашел как пользователь "([^\"]*)" с паролем "([^\"]*)"$/ do |arg1, arg2|
-  pending # express the regexp above with the code you wish you had
-end
-
-Допустим /^нахожусь странице редактирования учетной записи$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-То /^должен увидеть свой новый "([^\"]*)" равный "([^\"]*)"$/ do |arg1, arg2|
-  pending # express the regexp above with the code you wish you had
+То /^должен увидеть свой новый nickname  "([^\"]*)"$/ do |value|
+  response.should contain(value) 
 end
