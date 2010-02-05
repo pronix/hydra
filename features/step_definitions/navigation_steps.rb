@@ -32,3 +32,18 @@ end
 То /^должен не видеть ссылку "([^\"]*)"$/ do |link|
   response.should_not have_tag("a",  link)
 end
+
+То /^должен увидеть дополнительное меню Settings для пользователя$/ do
+  response.should have_tag("ul.sub_menu") do 
+    with_tag("li") { with_tag("a", "My settings")     }
+    with_tag("li") { with_tag("a", "Proxy")           }
+  end
+end
+
+То /^должен увидеть дополнительное меню Settings для администратора$/ do
+  response.should have_tag("ul.sub_menu") do 
+    with_tag("li") { with_tag("a", "My settings")     }
+    with_tag("li") { with_tag("a", "Users")           }
+    with_tag("li") { with_tag("a", "Proxy")           }
+  end
+end

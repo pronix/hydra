@@ -6,9 +6,9 @@
 
    Предыстория:
      Допустим в сервисе зарегистрированы следующие пользователи:
-       | nickname  | password | login     | email                | admin |
-       | admin     | secret   | admin     | admin_user@gmail.com | true  |
-       | free_user | secret   | free_user | free_user@gmail.com  | false |
+       | nickname  | password | email                | admin |
+       | admin     | secret   | admin_user@gmail.com | true  |
+       | free_user | secret   | free_user@gmail.com  | false |
 
  
    Сценарий: Список категорий
@@ -17,7 +17,7 @@
                | Category1 | 01.01.2010 |
                | Category2 | 11.01.2010 |
                | Category3 | 05.01.2010 |
-          И я зашел в сервис как "admin/secret"
+          И я зашел в сервис как "admin_user@gmail.com/secret"
      Если Я перешел на страницу "categories"
        То я должен увидеть главное меню
           И должен увидеть панель пользователя
@@ -37,7 +37,7 @@
                | Category1 | 01.01.2010 |
                | Category2 | 11.01.2010 |
                | Category3 | 05.01.2010 |
-          И я зашел в сервис как "free_user/secret"
+          И я зашел в сервис как "free_user@gmail.com/secret"
      Если Я перешел на страницу "categories"
        То я должен увидеть главное меню
           И должен увидеть панель пользователя
@@ -51,7 +51,7 @@
 
    Сценарий: Добавление категории
      Допустим в сервисе еще нет категорий
-              И я зашел в сервис как "admin/secret"
+              И я зашел в сервис как "admin_user@gmail.com/secret"
               И я перешел на страницу "new categories"
          Если Я заполнил поле "category[name]" значением "Category 1"   
               И нажал кнопку "Create"
@@ -64,7 +64,7 @@
                | Category1 | 01.01.2010 |
                | Category2 | 11.01.2010 |
                | Category3 | 05.01.2010 |
-              И зашел в сервис как "admin/secret"
+              И зашел в сервис как "admin_user@gmail.com/secret"
               И перешел на страницу редактирования категории для "Category1"
          Если Я изменил поле "name" на значение "New category"
               И нажал кнопку "Save" 
@@ -82,7 +82,7 @@
                | Category2 | 11.01.2010 |
                | Category3 | 05.01.2010 |
                | Category4 | 05.02.2010 |
-              И зашел в сервис как "admin/secret"
+              И зашел в сервис как "admin_user@gmail.com/secret"
               И перешел на страницу "categories"
         Если Я удаляю категорию "Category3"
           То Я должен увидеть список категорий:

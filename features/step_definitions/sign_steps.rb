@@ -1,9 +1,22 @@
+module UserHelpers
+  def current_user_session
+    return @current_user_session if defined?(@current_user_session)
+    @current_user_session = UserSession.find
+  end
+ 
+  def current_user
+    return @current_user if defined?(@current_user)
+    @current_user = current_user_session && current_user_session.user
+  end
+end
+World(UserHelpers)
+ 
+
 Допустим /^в сервисе зарегистрированы следующие пользователи:$/ do |table|
   table.hashes.each do |hash|  
 
     user = Factory(:user, 
                    :name =>     hash["nickname"],
-                   :login =>    hash["login"],
                    :email =>    hash["email"],
                    :password => hash["password"],
                    :password_confirmation => hash["password"],
@@ -24,10 +37,11 @@ end
  User.destroy_all
 end
 
-Допустим /^(?:|Я|я )зашел в сервис как "(.*)\/(.*)"$/ do |login, password|
+Допустим /^(?:|[Я|я] )зашел в сервис как "(.*)\/(.*)"$/ do |email, password|
+
   Допустим %{Я перешел на страницу "login"}
-         И %{заполнил поле "login" значением "#{login}" }
-         И %{заполнил поле "password" значением "#{password}" }
+         И %{заполнил поле "user_session[email]" значением "#{email}" }
+         И %{заполнил поле "user_session[password]" значением "#{password}" }
          И %{нажал кнопку "Login"}
 
 end
