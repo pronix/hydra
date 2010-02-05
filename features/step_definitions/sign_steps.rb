@@ -14,13 +14,10 @@ World(UserHelpers)
 
 Допустим /^в сервисе зарегистрированы следующие пользователи:$/ do |table|
   table.hashes.each do |hash|  
-
-    user = Factory(:user, 
-                   :name =>     hash["nickname"],
-                   :email =>    hash["email"],
-                   :password => hash["password"],
-                   :password_confirmation => hash["password"],
-                   :admin => hash["admin"] )
+    hash["name"] = hash["nickname"]
+    hash["password_confirmation"] = hash["password"]
+    hash.delete("nickname")
+    user = Factory(:user,hash)
   end 
 end
 

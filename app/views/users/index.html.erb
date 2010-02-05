@@ -1,2 +1,20 @@
-<h1>Users#index</h1>
-<p>Find me in app/views/users/index.html.erb</p>
+<%= link_to I18n.t("add_user"), new_user_path %>
+<table>
+  <tr>
+    <th><%= I18n.t("login") %></th>
+    <th><%= I18n.t("added_date") %></th>
+    <th><%= I18n.t("tasks") %></th>
+    <th><%= I18n.t("actions") %></th>    
+  </tr>
+  <% @users.each do |user| -%>
+  <tr>
+    <td><%= user.email %></td>
+    <td><%= user.created_at.strftime("%d.%m.%Y %H:%M") %></td>
+    <td><%= user.active_tasks %>/<%= user.completed_tasks %></td>
+    <td>
+      <%= link_to I18n.t("edit"), "" %>
+      <%= link_to I18n.t("delete"), "" %>
+    </td>
+  </tr>
+  <% end -%>
+</table>

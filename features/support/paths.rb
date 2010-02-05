@@ -7,6 +7,14 @@ module NavigationHelpers
   #
   def path_to(page_name)
     case page_name
+    when /^edit user for (.*)$/
+      @user = User.find_by_email $1
+      edit_user_path(@user)
+      
+    when /^new user/
+      new_user_path
+    when /^users/
+      users_path
     when /^edit settings/
       edit_settings_path
     when /^settings/

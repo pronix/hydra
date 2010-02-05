@@ -152,6 +152,11 @@ When /^(?:|I )uncheck "([^\"]*)"$/ do |field|
   uncheck(field)
 end
 
+Если /^(?:|[Я|я] )выключил флажок "([^\"]*)"$/ do |field|
+  uncheck(field)
+end
+
+
 When /^(?:|I )choose "([^\"]*)"$/ do |field|
   choose(field)
 end
