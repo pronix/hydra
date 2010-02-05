@@ -2,12 +2,12 @@
   table.hashes.each do |hash|  
 
     user = Factory(:user, 
-                   :name => hash["nickname"],
-                   :login => hash["login"],
-                   :email => hash["email"],
+                   :name =>     hash["nickname"],
+                   :login =>    hash["login"],
+                   :email =>    hash["email"],
                    :password => hash["password"],
                    :password_confirmation => hash["password"],
-                   :admin => hash["admin"])
+                   :admin => hash["admin"] )
   end 
 end
 
@@ -24,10 +24,10 @@ end
  User.destroy_all
 end
 
-Допустим /^(?:|Я )зашел в сервис как "(.*)\/(.*)"$/ do |login, password|
+Допустим /^(?:|Я|я )зашел в сервис как "(.*)\/(.*)"$/ do |login, password|
   Допустим %{Я перешел на страницу "login"}
-         И %{заполнил поле "login" значением "free_user" }
-         И %{заполнил поле "password" значением "secret" }
+         И %{заполнил поле "login" значением "#{login}" }
+         И %{заполнил поле "password" значением "#{password}" }
          И %{нажал кнопку "Login"}
 
 end

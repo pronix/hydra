@@ -15,11 +15,15 @@ Given /^(?:|I )am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
+Допустим /^(?:|[Я|я] )на странице "([^\"]*)"$/ do |page_name|
+  visit path_to(page_name)
+end
+
 When /^(?:|I )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
-Если /^(?:|Я )перешел на страницу "([^\"]*)"$/ do |page_name|
+Если /^(?:|[Я|я] )перешел на страницу "([^\"]*)"$/ do |page_name|
   visit path_to(page_name)
 end
 
@@ -28,18 +32,22 @@ When /^(?:|I )press "([^\"]*)"$/ do |button|
   click_button(button)
 end
 
-Если /^(?:|Я )нажал кнопку "([^\"]*)"$/ do |button|
+Если /^(?:|[Я|я] )нажал кнопку "([^\"]*)"$/ do |button|
   click_button(button)
 end
 
 When /^(?:|I )follow "([^\"]*)"$/ do |link|
   click_link(link)
 end
-Если /^(?:|Я )нажал ссылку "([^\"]*)"$/ do |link|
+Если /^(?:|[Я|я] )нажал ссылку "([^\"]*)"$/ do |link|
   click_link(link)
 end
 
 When /^(?:|I )follow "([^\"]*)" within "([^\"]*)"$/ do |link, parent|
+  click_link_within(parent, link)
+end
+
+Допустим /^(?:|[Я|я] )нажал ссылку "([^\"]*)" для "([^\"]*)"$/ do |link, parent|
   click_link_within(parent, link)
 end
 
@@ -51,12 +59,17 @@ end
 When /^(?:|I )fill in "([^\"]*)" for "([^\"]*)"$/ do |value, field|
   fill_in(field, :with => value)
 end
-Если /^(?:|Я )заполнил поле "([^\"]*)" значением "([^\"]*)"$/ do |field, value|
+Если /^(?:|[Я|я] )заполнил поле "([^\"]*)" значением "([^\"]*)"$/ do |field, value|
   fill_in(field, :with => value)
 end
-Допустим /^(?:|Я )заполнил поле "([^\"]*)" значением "([^\"]*)" $/ do |field, value|
+Допустим /^(?:|[Я|я] )заполнил поле "([^\"]*)" значением "([^\"]*)" $/ do |field, value|
   fill_in(field, :with => value)
 end
+
+Если /^(?:|[Я|я] )изменил поле "([^\"]*)" на значение "([^\"]*)"$/ do |field, value|
+  fill_in(field, :with => value)
+end
+
 
 # Use this to fill in an entire form with data from a table. Example:
 #
@@ -130,7 +143,7 @@ When /^(?:|I )check "([^\"]*)"$/ do |field|
   check(field)
 end
 
-Если /^(?:|Я )включил флажок "([^\"]*)"$/ do |field|
+Если /^(?:|[Я|я] )включил флажок "([^\"]*)"$/ do |field|
   check(field)
 end
 
@@ -171,7 +184,7 @@ Then /^(?:|I )should see "([^\"]*)"$/ do |text|
   end
 end
 
-То /^(?:|Я )должен увидеть сообщение "([^\"]*)"$/ do |text|
+То /^(?:|[Я|я] )должен увидеть сообщение "([^\"]*)"$/ do |text|
   if defined?(Spec::Rails::Matchers)
     response.should contain(text)
   else

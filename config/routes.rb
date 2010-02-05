@@ -5,6 +5,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :dashboards, :only => [:show]
   map.root :controller => :dashboards, :action => :show  
   
+  map.resources :categories
+  
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 end

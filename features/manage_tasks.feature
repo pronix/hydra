@@ -136,7 +136,7 @@
              И включил флажок "Use proxy"                
              И заполний поле "Description" значением "Download all internet"
              И заполнил поле "Links" значением "http://login:pwd@domain.com/file.rar, http://www.domain.com/file.rar, ftp://login:pwd@domain.com/file.rar, ftp://domain.com/file.rar"
-             И включил флажок "Passwort"
+             И включил флажок "Password"
              И заполнил поле "Password" значением "secret"
              # Add files
              И добавил файл обложки "test_cover.png"

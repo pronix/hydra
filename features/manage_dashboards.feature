@@ -5,11 +5,11 @@
    Должен перейти на главную страницу сайта (Dashboard)
 
    Предыстория:
-     Допустим у нас есть следующие пользователи
-        | nickname   | password | admin |
-        | admin      | secret   | true  |
-        | free_user  | secret   | false |
-        | other_user | secret   | false |
+    Допустим в сервисе зарегистрированы следующие пользователи:
+             | nickname   | password | login      | email                | admin |
+             | admin      | secret   | admin      | admin_user@gmail.com | true  |
+             | free_user  | secret   | free_user  | free_user@gmail.com  | false |
+             | other_user | secret   | other_user | other_user@gmail.com | false |
       И у пользователь "free_user" есть задачи "task1", "task2"
       И у пользователь "other_user" есть задачи "task3", "task4"
 
@@ -21,8 +21,8 @@
               И должен увидеть панель пользователя
               И должен увидеть ссылку "Create task"
               И должен увидеть таблицу со своими активными заданиями:
-              | Category | Name  | Status           |
               | Alpha    | task1 | Finished         |
+              | Category | Name  | Status           |
               | Delta    | task2 | Extracting files |
               И должен увидеть фильтр "Category"
 
