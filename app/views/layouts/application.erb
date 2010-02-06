@@ -3,29 +3,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xml:lang="en" lang="en">
   <head>
-    <title></title>
+    <title><%= I18n.t("hydra") %></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <%= stylesheet_link_tag 'style', 'formtastic','formtastic_changes' %>
     <%= javascript_include_tag  'application', 'jquery' %>
   </head>
 
   <body>
-    <div class="user_panel">
-      <%= flash[:notice] %>
-      <% if current_user -%>
-      <%= link_to I18n.t("sign out"), logout_path %>
-      <% end -%>
-    </div>
 
-    <ul class="main_menu">
-      <li><%= link_to I18n.t("Dashboard"), dashboards_path %></li>
-      <li><%= link_to I18n.t("Tasks"), "" %></li>
-      <li><%= link_to I18n.t("Tools"), "" %></li>
-      <li><%= link_to I18n.t("Settings"), settings_path %></li>
+    <ul class="user_panel">
+      <li><%= current_user.name || current_user.login %></li>
+      <li>
+        <%= link_to I18n.t("sign out"), logout_path %>        
+      </li>
     </ul>
-    
+    <%= link_to I18n.t("create_task"), new_task_path, :class => "gray_button" %>
+  
+    <%= render "shared/main_menu" %>  
     <%= render "shared/sub_menu" %>
-    
-    <%= yield %>
+    <div class="content">
+      <div class="<%= params[:controller] %>">
+        <h1><%= yield :head %></h1>
+        <%= yield %>
+      </div>
+    </div>
   </body>
 </html>

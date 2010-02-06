@@ -1,0 +1,24 @@
+<% content_for :head do  %><%= t("dashboard") %><% end -%>
+<%= content_tag :h2, I18n.t("active_tasks"), :class => "brown" %>
+
+<form class="categories" action="#" method="post">
+<select class="categories">
+<option>All categories</option>
+<option>2</option>
+</select>
+</form>
+
+<table class="brown">
+  <tr>
+		<th><%= I18n.t("category") %></th>
+		<th><%= I18n.t("name") %></th>
+		<th><%= I18n.t("status") %></th>
+  </tr>
+  <% @tasks.each do |task| -%>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <% end -%>
+</table>

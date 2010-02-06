@@ -9,6 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resource :settings, :only => [:show, :edit, :update]
   map.resources :users
+  map.resources :tasks
   
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

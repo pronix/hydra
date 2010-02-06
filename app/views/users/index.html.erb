@@ -1,5 +1,6 @@
-<%= link_to I18n.t("add_user"), new_user_path %>
-<table>
+<% content_for :head do  %><%= I18n.t("users") %><% end -%>
+<%= link_to I18n.t("add_user"), new_user_path, :class => "gray_button users" %>
+<table class="brown">
   <tr>
     <th><%= I18n.t("login") %></th>
     <th><%= I18n.t("added_date") %></th>
@@ -10,10 +11,10 @@
   <tr>
     <td><%= user.email %></td>
     <td><%= user.created_at.strftime("%d.%m.%Y %H:%M") %></td>
-    <td><%= user.active_tasks %>/<%= user.completed_tasks %></td>
+    <td><%= user.active_tasks.to_i %>/<%= user.completed_tasks.to_i %></td>
     <td>
-      <%= link_to I18n.t("edit"), "" %>
-      <%= link_to I18n.t("delete"), "" %>
+      <%= link_to I18n.t("edit"), edit_user_path(user) %>
+      <%= link_to I18n.t("delete"), user_path(user), :method => :destroy, :confirm => I18n.t("Delete user") %>
     </td>
   </tr>
   <% end -%>
