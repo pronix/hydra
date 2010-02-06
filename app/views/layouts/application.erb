@@ -12,18 +12,21 @@
   <body>
 
     <ul class="user_panel">
-      <li><%= current_user.name || current_user.login %></li>
+      <li><%= current_user.name || current_user.email %></li>
       <li>
         <%= link_to I18n.t("sign out"), logout_path %>        
       </li>
     </ul>
+    <div>
+      <%= flash[:notice] %>
+    </div>
     <%= link_to I18n.t("create_task"), new_task_path, :class => "gray_button" %>
   
     <%= render "shared/main_menu" %>  
     <%= render "shared/sub_menu" %>
     <div class="content">
       <div class="<%= params[:controller] %>">
-        <h1><%= yield :head %></h1>
+        <%= yield :head %>
         <%= yield %>
       </div>
     </div>

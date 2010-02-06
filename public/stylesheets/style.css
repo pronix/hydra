@@ -94,7 +94,7 @@ table.brown { width:100%; margin:3px 0 0 0; color:#6e737e; font-size:14px; font-
 /* -------------------------------
 	Form 
 ------------------------------- */
-.categories { float:right; margin-top:-14px; }
+form.categories { float:right; margin-top:-14px; }
 select.categories { width:158px;  }
 
 /*--------------------------------

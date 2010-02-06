@@ -1,29 +1,30 @@
   <ul class="main_menu">
-      <li class="<%= 'main_menu_a' if params[:controller][/dashboards/]%>">
+      <li <%= "class='main_menu_a'" if params[:controller][/dashboards/]%>>
         <% link_to dashboards_path do %>
         <span class="conten_menu_left">
           <span class="conten_menu_right"><%= I18n.t("Dashboard") %></span>
         </span>
         <% end -%>
       </li>
-      <li class="<%= 'main_menu_a' if params[:controller][/tasks/]%>">
-        <% link_to "" do %>
+      <li <%= "class='main_menu_a'" if params[:controller][/tasks/]%>>
+        <% link_to tasks_path do %>
         <span class="conten_menu_left">
           <span class="conten_menu_right"><%= I18n.t("Tasks") %></span>
         </span>
         <% end -%>
       </li>
-      <li class="<%= 'main_menu_a' if params[:controller][/macros|files|profiles|categories/]%>">
-        <% link_to "" do %>
+      <li <%= "class='main_menu_a'" if params[:controller][/macros|files|profiles|categories/]%>>
+        <% link_to macros_path do %>
         <span class="conten_menu_left">
           <span class="conten_menu_right"><%= I18n.t("Tools") %></span>
         </span>
         <% end -%>
       </li>
-      <li class="<%= 'main_menu_a' if params[:controller][/settings|users|proxy/]%>">
+      <li <%= "class='main_menu_a'" if params[:controller][/settings|users|proxy/]%>>
         <% link_to settings_path do %>
         <span class="conten_menu_left">
           <span class="conten_menu_right"><%= I18n.t("Settings") %></span>
         </span>
         <% end -%>
+        </li>
     </ul>

@@ -11,8 +11,11 @@
 end
 
 То /^должен увидеть панель пользователя$/ do
-  response.should have_tag("div.user_panel") do 
+  response.should have_tag("ul.user_panel") do 
+    with_tag("li", current_user.name || current_user.email)
+    with_tag("li") do 
       with_tag("a[href='#{logout_path}']", "Sign out")    
+    end    
   end
 end
 
