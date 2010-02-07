@@ -1,7 +1,7 @@
 <%= head_page %>
 <%= link_to("Add category", new_category_path , :class=>"gray_button category") if current_user && current_user.admin? %>
   
-<table class="brown">
+<table class="brown categories">
   <tr>
     <th><%= I18n.t("name") %></th>
     <th><%= I18n.t("created") %></th>
@@ -17,7 +17,7 @@
     <% if current_user && current_user.admin? -%>
     <td>
       <%= link_to I18n.t("edit"), edit_category_path(category) %>
-      <%= link_to I18n.t("delete"), categories_path(category),
+      <%= link_to I18n.t("delete"), category_path(category),
           :method => :destroy, :confirm => I18n.t("delete_category") %>
     </td>
     <% end -%>
