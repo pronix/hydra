@@ -111,6 +111,8 @@ div.proxy {width:65%;}
 		div.proxy	table.brown td.login { width:31%; } 
 .delete { background:url('../images/delete.gif') no-repeat ; float:left; width:22px; height:21px;  margin-right:4px;}
 img.flag { vertical-align:middle; }
+table.brown td.red { color:red; }
+table.brown td.green { color:green; }
 /*-------------------------------
   Users
 -------------------------------*/
@@ -119,3 +121,4 @@ div.users .brown td { width:23%; }
 div.users .login{ width:31%; }
 		div.users .login a:hover{ color:#7382df; }
 a.user { background:url('../images/user.gif') no-repeat ; float:left; width:22px; height:21px; margin-right:4px;}
+

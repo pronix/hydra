@@ -1,12 +1,26 @@
 class Proxy < ActiveRecord::Base
   GEOPATH = "#{RAILS_ROOT}/data/GeoLiteCity.dat"
-
+  include AASM
+  
   attr_accessor :proxies
   validates_presence_of :address
   validates_uniqueness_of :address, :scope => :user_id
   belongs_to :user
     
-
+  aasm_column :state
+  aasm_initial_state :offline
+  
+  aasm_state :offline
+  aasm_state :online
+  
+  aasm_event :fix do 
+    transitions :to => :online, :from => :offline
+  end
+  aasm_event :break do 
+    transitions :to => :offline, :from => :online
+  end
+  
+  
   before_save :update_proxy
   def update_proxy
     geo = GeoIP.new(GEOPATH)
