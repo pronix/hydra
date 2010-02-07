@@ -70,7 +70,35 @@ end
 
 
 Если /^(?:|[Я|я] )удаляю категорию "([^\"]*)"$/ do |category|
-  @category = Category.find_by_name category
-  @category.destroy
-  visit path_to("categories")
+  puts response.body
+  # @category = Category.find_by_name category
+  # @category.destroy
+  # visit path_to("categories"
+                # ) 
+  # within("td", category) do 
+  #   click_link "Delete"
+  # end
+  # //a[@id='#{locator}' or contains(.,'#{locator}') or @title='#{locator}']
+  # within "//td[text()='#{category}' and .//a[text()='Delete']" do |scope| 
+  doc = Nokogiri::XML.parse(response.body)
+  f =  doc.xpath("//td[text()='#{categories_steps.rb}']")
+  f do |scope|
+    scope.click_link "Delete"
+  end
 end
+
+# When /I delete the "(.*)" entity/ do |row|
+#   visits entities_url
+#   puts entities_url
+#   my_entity = Entity.find_by_entity_name(
+#               "my entity number #{row.hll_words_to_i}")
+#   puts "selector found" if have_selector(
+#                "table > tbody > tr#" + dom_id(my_entity) + " > td > a")
+#   within("table > tbody > tr#" + dom_id(my_entity) + " > td > a") do
+#   click_link "Destroy Entity"
+#   end
+# end
+ #  within "//*[.//text()='#{cell_value}' and .//a[text()='#{link}']]" do |scope|
+ #   scope.click_link link
+ # end
+# When I follow the "Delete" link for "Harry Potter and half blood prince"

@@ -30,7 +30,7 @@
                И заполнил поле "user[notification_email]" значением "other_user@gmail.com"
                И заполнил поле "user[password]" значением "other_secret"
                И заполнил поле "user[password_confirmation]" значением "other_secret"
-               И выключил флажок "user[admin]"
+               И выбрал роль "admin"
                И нажал кнопку "Create" 
             То Я должен увидеть сообщение "User was successfully created."
 

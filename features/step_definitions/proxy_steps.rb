@@ -1,50 +1,28 @@
-Допустим /^у меня есть список proxy:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
-end
+Допустим /^у пользователя "([^\"]*)" есть следующие proxy:$/ do |user_email, table|
+  user = User.find_by_email user_email
+  table.hashes.each do |hash|  
+    Factory(:proxy,hash)
+  end
 
-Допустим /^Я перешел на страницу Proxy$/ do
-  pending # express the regexp above with the code you wish you had
 end
-
 То /^должен увидеть список proxy:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
-end
+  response.should have_tag("table") do 
+    with_tag("tr") do 
+      table.headers.each do |k|
+        with_tag("th", k)
+      end
+    end
 
-Допустим /^Я на странице редактирования proxy$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Если /^Я изменил поле "([^\"]*)" с "([^\"]*)" на "([^\"]*)"$/ do |arg1, arg2, arg3|
-  pending # express the regexp above with the code you wish you had
-end
-
-То /^должен увидеть proxy c "([^\"]*)" равный "([^\"]*)"$/ do |arg1, arg2|
-  pending # express the regexp above with the code you wish you had
-end
-
-Если /^Я удаляю proxy "([^\"]*)"$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
-end
-
-То /^Я должен увидеть оставшийся список proxy:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
-end
-
-Допустим /^Я на странице добавление Proxy$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Допустим /^у меня пока нет proxy$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Если /^нажал кноку "([^\"]*)"$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
-end
-
-То /^в список proxy не должен быть пустым$/ do
-  pending # express the regexp above with the code you wish you had
+    table.hashes.each do |hash|
+      with_tag("tr") do
+        with_tag("td", hash["address"])
+        with_tag("td", hash["country"])
+        with_tag("td", hash["status"])
+        with_tag("td") do 
+          with_tag("a", "Edit")
+          with_tag("a", "Delete")
+        end
+      end
+    end
+  end
 end

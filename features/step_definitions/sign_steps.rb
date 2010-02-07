@@ -13,11 +13,16 @@ World(UserHelpers)
  
 
 Допустим /^в сервисе зарегистрированы следующие пользователи:$/ do |table|
+  Factory(:admin_role)
+  Factory(:user_role)
   table.hashes.each do |hash|  
     hash["name"] = hash["nickname"]
     hash["password_confirmation"] = hash["password"]
     hash.delete("nickname")
+    admin = hash["admin"].to_s == "true" ? true : false
+    hash.delete("admin")
     user = Factory(:user,hash)
+    admin ? user.has_role!(:admin) : user.has_role!(:user)
   end 
 end
 

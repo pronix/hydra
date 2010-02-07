@@ -37,3 +37,7 @@ end
   user.destroy
   visit path_to("users")
 end
+Если /^выбрал роль "([^\"]*)"$/ do |role_name|
+  role = Role.find_by_name role_name
+  check("user_role_ids_#{role.id}")
+end

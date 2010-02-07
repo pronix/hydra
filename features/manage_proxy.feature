@@ -4,25 +4,30 @@
    Пользователь должен иметь возможность редактировать, добавлять и удалять proxy.
 
    Предыстория:
-     Допустим у меня есть список proxy:
-              | 234.34.21.5:80 | en | Online  |
-              | 224.34.21.5:80 | en | Online  |
-              | 234.32.21.5:80 | ru | Offline |
-              | 234.34.61.5:80 | ua | Online  |
-
+     Допустим в сервисе зарегистрированы следующие пользователи:
+       | nickname  | password | email                | admin |
+       | admin     | secret   | admin_user@gmail.com | true  |
+       | free_user | secret   | free_user@gmail.com  | false |
+       И у пользователя "free_user@gmail.com" есть следующие proxy:
+       |        address | country | state   |
+       | 224.34.21.5:80 | en      | Online  |
+       | 234.32.21.5:80 | ru      | Offline |
+       | 234.34.61.5:80 | ua      | Online  |
+       И зашел в сервис как "free_user@gmail.com/secret"
 
    Сценарий: Список proxy
-     Допустим Я перешел на страницу Proxy
+     Допустим Я перешел на страницу "proxies"
            То Я должен увидеть главное меню
               И должен увидеть панель пользователя
               И должен увидеть ссылку "Add proxy"
-              И должен увидеть дополнительное меню "Settings"
+              И должен увидеть дополнительное меню Settings для пользователя
               И должен увидеть список proxy:
-                |         adress | country | status  | actions |
-                | 234.34.21.5:80 | en      | Online  | delete  |
-                | 224.34.21.5:80 | en      | Online  | delete  |
-                | 234.32.21.5:80 | ru      | Offline | delete  |
-                | 234.34.61.5:80 | ua      | Online  | delete  |
+                |        Address | Country | Status  | Actions      |
+                | 234.34.21.5:80 | en      | Online  | edit, delete |
+                | 224.34.21.5:80 | en      | Online  | edit, delete |
+                | 234.32.21.5:80 | ru      | Offline | edit, delete |
+                | 234.34.61.5:80 | ua      | Online  | edit, delete |
+
 
 
 
