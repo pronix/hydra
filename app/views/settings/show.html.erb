@@ -1,5 +1,8 @@
-My settings
-<%= resource.name %>
-<%= resource.email %>
-<%= resource.notification_email %>
-<%= link_to I18n.t("edit"), edit_settings_path %>
+<%= head_page "my_settings" %>
+
+<div>
+  <div><%= I18n.t("nickname") %>: <span><%= resource.name %></span></div>
+  <div><%= I18n.t("email") %>: <span><%= resource.email %></span></div>
+  <div><%= I18n.t("notification_email") %>: <span><%= resource.notification_email %></span></div>
+  <%= link_to I18n.t("edit"), edit_settings_path, :class => "gray_button" %>
+</div>

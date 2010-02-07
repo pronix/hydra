@@ -1,12 +1,6 @@
+<%= head_page "new_user" %>
 <% semantic_form_for @user, :html => { :method => :post, :class => 'base_form' }  do |form| %>
-<% form.inputs :class => "base_form"  do -%>
-<%= form.input :name %>
-<%= form.input :email %>
-<%= form.input :notification_email %>
-<%= form.input :password %>
-<%= form.input :password_confirmation %>
-<%= form.input :admin, :as => :boolean %>
-<% end -%>
+<%= render :partial => 'form', :object => form %>
 <% form.buttons do -%>
 <%= form.commit_button I18n.t('Create'),  :class => "base_buttons" %>
 <% end -%>

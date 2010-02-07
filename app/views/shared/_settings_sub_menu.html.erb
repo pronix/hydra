@@ -1,5 +1,5 @@
 <ul class="sub_menu">
   <li><%= link_to I18n.t("my_settings"), settings_path %></li>
   <li><%= link_to I18n.t("users"), users_path if current_user.admin? %></li>
-  <li><%= link_to I18n.t("proxy"), settings_path %></li>
+  <li><%= link_to I18n.t("proxy"), proxies_path %></li>
 </ul>
