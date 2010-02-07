@@ -19,6 +19,7 @@ Rails::Initializer.run do |config|
   config.gem 'authlogic'
   config.gem 'ttilley-aasm',:lib => 'aasm'
   config.gem "acl9", :source => "http://gemcutter.org", :lib => "acl9"
+  config.gem "geoip"
   
   
   # Only load the plugins named here, in the order given (default is alphabetical).

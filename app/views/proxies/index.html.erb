@@ -10,12 +10,13 @@
   <% @proxies.each do |proxy| -%>
   <tr>
     <td><%= proxy.address %></td>
-    <td><%= proxy.country %></td>
-    <td><%= proxy.state %></td>
+    <td><%= image_tag "flags/#{proxy.country_code}.png" %>
+      <%= proxy.country %></td>
+    <td><%= I18n.t proxy.state %></td>
     <td>
       <%= link_to I18n.t("edit"), edit_proxy_path(proxy) %>
       <%= link_to I18n.t("delete"), proxy_path(proxy),
-          :method => :destroy, :confirm => I18n.t("delete_proxy") %>
+          :method => :delete, :confirm => I18n.t("delete_proxy") %>
     </td>
 
   </tr>

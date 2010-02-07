@@ -1,2 +1,9 @@
-<h1>Proxies#edit</h1>
-<p>Find me in app/views/proxies/edit.html.erb</p>
+<%= head_page "edit_proxy"%>
+<% semantic_form_for @proxy, :html => { :method => :put, :class => 'base_form' }  do |form| %>
+<% form.inputs :class => "base_form"  do -%>
+<%= form.input :address %>
+<% end -%>
+<% form.buttons do -%>
+<%= form.commit_button I18n.t('Save'),  :class => "base_buttons" %>
+<% end -%>
+<% end -%>
