@@ -9,8 +9,13 @@ class ApplicationController < ActionController::Base
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password
   before_filter :require_user
+  rescue_from 'Acl9::AccessDenied', :with => :access_denied
   
   private
+  
+  def access_denied
+    render :file => File.join(RAILS_ROOT, 'public', 'access_denied.html'), :status => 403
+  end
   
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
