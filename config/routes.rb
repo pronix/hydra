@@ -17,6 +17,7 @@ ActionController::Routing::Routes.draw do |map|
   # Settings
   map.resource :settings, :only => [:show, :edit, :update]
   map.resources :users
+  map.resources :proxies
   
   
   
