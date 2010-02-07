@@ -1,0 +1,23 @@
+<%= head_page %>
+<%= link_to("Add proxy", new_proxy_path , :class=>"gray_button category") %>
+<table class="brown proxies">
+  <tr>
+    <th><%= I18n.t("address") %></th>
+    <th><%= I18n.t("country") %></th>
+    <th><%= I18n.t("status") %></th>
+    <th><%= I18n.t("actions") %></th> 
+  </tr>
+  <% @proxies.each do |proxy| -%>
+  <tr>
+    <td><%= proxy.address %></td>
+    <td><%= proxy.country %></td>
+    <td><%= proxy.state %></td>
+    <td>
+      <%= link_to I18n.t("edit"), edit_proxy_path(proxy) %>
+      <%= link_to I18n.t("delete"), proxy_path(proxy),
+          :method => :destroy, :confirm => I18n.t("delete_proxy") %>
+    </td>
+
+  </tr>
+  <% end -%>
+</table>
