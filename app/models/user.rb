@@ -22,6 +22,11 @@ class User < ActiveRecord::Base
   # задачи, если пользователя удаляют то в задача user_id == nil
   has_many :tasks, :dependent => :nullify
   has_many :proxies
+  has_many :macros, :class_name => "Macros"
+  
+  has_many :user_files
+  has_many :attachment_files, :class_name => "UserFile", :conditions => { :type => "AttachmentFile"}
+  has_many :profiles
   
   def admin?
     has_role? :admin

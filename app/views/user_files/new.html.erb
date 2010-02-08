@@ -1,0 +1,8 @@
+<%= head_page "new_file" %>
+<% semantic_form_for :attachment_file, @attachment_file, :url => user_files_path,
+   :html => { :method => :post, :class => 'base_form', :multipart => true }  do |form| %>
+<%= render :partial => 'form', :object => form %>
+<% form.buttons do -%>
+<%= form.commit_button I18n.t('Upload'),  :class => "base_buttons" %>
+<% end -%>
+<% end -%>

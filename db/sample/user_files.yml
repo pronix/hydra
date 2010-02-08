@@ -1,0 +1,17 @@
+<%
+require 'faker'
+file = File.new("#{RAILS_ROOT}/spec/factories/test_files/small_text_file.txt", "rb")
+User.all.each  do |user|
+ 1.upto(5) do |i| %>
+
+attachment_<%= user.id %>_<%= i %>:
+  name: <%= Faker::Lorem .words(1).first %>
+  description: <%= Faker::Lorem .words(10) %>
+  user_id: <%= user.id %>
+  type: "AttachmentFile"
+  file_file_name: "small_text_file.txt"
+  file_file_size: <%= file.size %>
+  file_content_type: "text/txt"
+  created_at: <%= Time.now.to_s(:db) %>
+<% end end %>
+

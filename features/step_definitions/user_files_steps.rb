@@ -1,50 +1,46 @@
-Допустим /^у меня есть несколько файлов File1, File2$/ do
-  pending # express the regexp above with the code you wish you had
+Допустим /^у пользователя "([^\"]*)" есть следующие файлы:$/ do |user_email, table|
+  user = User.find_by_email user_email
+  table.hashes.each do |hash|
+    hash["user_id"] = user.id
+    Factory(:attachment, hash)  
+  end
 end
 
-Если /^Я перешел на страницу файлов$/ do
-  pending # express the regexp above with the code you wish you had
-end
 
-То /^должен увидеть список файлов:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
-end
-
-Допустим /^Я на странице загрузки нового файла$/ do
-  pending # express the regexp above with the code you wish you had
+То /^(?:|[Я|я] )должен увидеть список файлов:$/ do |table|
+  response.should have_tag("table") do 
+    with_tag("tr") do 
+      table.headers.each do |k|
+        with_tag("th", k)
+      end
+    end
+    table.hashes.each do |hash|
+      with_tag("tr") do
+        with_tag("td", hash["Name"])
+        with_tag("td", hash["Uploaded"])      
+        with_tag("td") do 
+          att = current_user.attachment_files.find_by_name(hash["Name"])
+          with_tag("a[href='#{edit_user_file_path(att)}']","Edit" )
+          with_tag("a.delete[href='#{user_file_path(att)}']","" )
+        end
+      end
+    end
+  end
 end
 
 Допустим /^у меня нет не одного файла$/ do
-  pending # express the regexp above with the code you wish you had
+ current_user.attachment_files.destroy_all
 end
+Если /^Я выбрал в поле "([^\"]*)" файл "([^\"]*)"$/ do |field, path|
+ attach_file(field, File.join(RAILS_ROOT, path))
 
-Если /^Я выбрал файл$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Если /^заполнил поле "([^\"]*)" значение "([^\"]*)"$/ do |arg1, arg2|
-  pending # express the regexp above with the code you wish you had
 end
 
 То /^список моих файлов не должен быть пустым$/ do
-  pending # express the regexp above with the code you wish you had
+  current_user.attachment_files.should_not be_nil
 end
-
-Допустим /^Я на странице файлов$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Допустим /^у меня есть следующие файлы:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
-end
-
-Если /^Я удаляю третий файл$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-То /^Я должен увидеть следующие файлы:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
+Если /^Я удаляю "([^\"]*)" файл$/ do |file_name|
+  file = current_user.attachment_files.find_by_name(file_name)
+  file.destroy
+  Допустим %{Я перешел на страницу "user files"}
 end
