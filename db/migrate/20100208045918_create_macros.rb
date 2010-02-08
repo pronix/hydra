@@ -29,7 +29,7 @@ class CreateMacros < ActiveRecord::Migration
       t.string   :position_timestamp
       
       t.boolean  :add_logo
-      t.string   :logo_id
+      t.integer  :logo_id
       
       t.string   :file_format
       
