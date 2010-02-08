@@ -5,10 +5,10 @@ email = Faker::Internet.email
 %>
 user_<%= i %>:
   email: <%= email %>
-  name:  <% Faker::Name.name %>
+  name:  <%= Faker::Name.name %>
+  notification_email: <%= email %>
   password_salt: MBdB_21h3IDzr63RDxIb
   crypted_password: 92c8e189627993f5698af73641cc273db0eb4c70bde1a56a30a7612a62bbbeb8163793d1e9447f9ea1c7f6bedf199eff4d713bccdd8fe33638ae42e79db5623c
-  admin: false
 <% end %>
 <%
  user_role = Role.find_by_name "user"
@@ -18,10 +18,10 @@ user_<%= i %>:
 %>
 user_admin:
   email: "hydra@gmail.com"
-  name:  <% Faker::Name.name %>
+  notification_email: "hydra@gmail.com"
+  name:  <%= Faker::Name.name %>
   password_salt: MBdB_21h3IDzr63RDxIb
   crypted_password: 92c8e189627993f5698af73641cc273db0eb4c70bde1a56a30a7612a62bbbeb8163793d1e9447f9ea1c7f6bedf199eff4d713bccdd8fe33638ae42e79db5623c
-  admin: true
 <%
 admin_role = Role.find_by_name "admin"
 admin_user = User.find_by_email "hydra@gmail.com"
