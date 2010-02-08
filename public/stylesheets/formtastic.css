@@ -136,3 +136,12 @@ form.formtastic fieldset ol li.datetime fieldset ol li label { display:none; }
 form.formtastic fieldset ol li.date fieldset ol li label input, 
 form.formtastic fieldset ol li.time fieldset ol li label input, 
 form.formtastic fieldset ol li.datetime fieldset ol li label input { display:inline; margin:0; padding:0;  }
+
+/* Macros */
+ form.formtastic fieldset ol li.string input.color_field{
+  background: transparent url('../images/colorpicker/select2.png') repeat scroll center center;
+  width: 28px;
+  height: 28px;
+  border: 0.1em solid gray;
+  font-size: 0;
+  }
