@@ -1,7 +1,7 @@
 class ProxiesController < ApplicationController
   inherit_resources 
   defaults :resource_class => Proxy, :collection_name => 'proxies', :instance_name => 'proxy'
-  # belongs_to :user
+
   
   def create
     Proxy.add_proxies(current_user, params[:proxy][:proxies])
