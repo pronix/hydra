@@ -1,8 +1,20 @@
 <%= head_page "my_settings" %>
 
 <div>
-  <div><%= I18n.t("nickname") %>: <span><%= resource.name %></span></div>
-  <div><%= I18n.t("email") %>: <span><%= resource.email %></span></div>
-  <div><%= I18n.t("notification_email") %>: <span><%= resource.notification_email %></span></div>
   <%= link_to I18n.t("edit"), edit_settings_path, :class => "gray_button" %>
 </div>
+
+<table>
+  <tr>
+    <td><%= I18n.t("nickname") %>: </td>
+    <td><%= resource.name %></td>
+  </tr>
+  <tr>
+    <td><%= I18n.t("email") %>: </td>
+    <td><%= resource.email %></td>
+  </tr>
+  <tr>
+    <td><%= I18n.t("notification_email") %>: </td>
+    <td><%= resource.notification_email %></td>
+  </tr>
+</table>
