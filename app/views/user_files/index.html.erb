@@ -14,8 +14,8 @@
     <td><%= att.created_at.strftime("%d.%m.%Y %H:%M") %></td>
     <td>
       <%= link_to I18n.t("edit"), edit_user_file_path(att), :class => "edit" %>
-      <%= link_to "", user_file_path(att),
-          :method => :delete, :confirm => I18n.t("delete_macros"), :class => "delete" %>
+      <%= link_to image_tag("delete.gif"), user_file_path(att),
+          :method => :delete, :confirm => I18n.t("delete_macros"),  :title => I18n.t("delete") %>
 
     </td>
   </tr>
