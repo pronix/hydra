@@ -12,8 +12,10 @@ class UserFilesController < ApplicationController
       render :new
     end
   end
-
   
+  def destroy
+    destroy!(:notice => I18n.t("File was successfully destroyed"))
+  end
   protected
   def begin_of_association_chain
     current_user
