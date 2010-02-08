@@ -10,9 +10,9 @@
        | free_user | secret   | free_user@gmail.com  | false |
        И у пользователя "free_user@gmail.com" есть следующие proxy:
        |        address | country | state   |
-       | 224.34.21.5:80 | en      | Online  |
-       | 234.32.21.5:80 | ru      | Offline |
-       | 234.34.61.5:80 | ua      | Online  |
+       | 24.34.21.5:80  | USA     | Online  |
+       | 34.32.21.5:80  | USA     | Offline |
+       | 34.34.61.5:80  | USA     | Online  |
        И зашел в сервис как "free_user@gmail.com/secret"
 
    Сценарий: Список proxy
@@ -23,21 +23,24 @@
               И должен увидеть дополнительное меню Settings для пользователя
               И должен увидеть список proxy:
                 |        Address | Country | Status  | Actions      |
-                | 234.34.21.5:80 | en      | Online  | edit, delete |
-                | 224.34.21.5:80 | en      | Online  | edit, delete |
-                | 234.32.21.5:80 | ru      | Offline | edit, delete |
-                | 234.34.61.5:80 | ua      | Online  | edit, delete |
+                | 34.34.21.5:80  | USA     | Online  | edit, delete |
+                | 34.32.21.5:80  | USA     | Offline | edit, delete |
+                | 34.34.61.5:80  | USA     | Online  | edit, delete |
 
 
 
 
 
     Сценарий: Редактирование Proxy
-      Допустим Я на странице редактирования proxy
-          Если Я изменил поле "ip" с "24.34.37.34" на "65.54.32.78" 
-               И нажал кнопку "Изменить"
-            То Я должен увидеть сообщение "Proxy изменен"
-               И должен увидеть proxy c "ip" равный "65.54.32.78" 
+      Допустим Я на странице редактирования proxy для "34.34.61.5:80"
+          Если Я изменил поле "proxy[address]" на значение "65.54.32.78:80" 
+               И нажал кнопку "Save"
+            То Я должен увидеть сообщение "Proxy was successfully updated."
+               И должен увидеть список proxy:
+                |        Address | Country | Status  | Actions      |
+                |  34.34.21.5:80 | USA     | Online  | edit, delete |
+                |  34.32.21.5:80 | USA     | Offline | edit, delete |
+                | 65.54.32.78:80 | USA     | Online  | edit, delete |
 
     Сценарий: Удаление Proxy
       Допустим у меня есть список proxy:
