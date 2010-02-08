@@ -6,26 +6,9 @@
   end
 end
 
-
 То /^(?:|[Я|я] )должен увидеть список файлов:$/ do |table|
-  response.should have_tag("table") do 
-    with_tag("tr") do 
-      table.headers.each do |k|
-        with_tag("th", k)
-      end
-    end
-    table.hashes.each do |hash|
-      with_tag("tr") do
-        with_tag("td", hash["Name"])
-        with_tag("td", hash["Uploaded"])      
-        with_tag("td") do 
-          att = current_user.attachment_files.find_by_name(hash["Name"])
-          with_tag("a[href='#{edit_user_file_path(att)}']","Edit" )
-          with_tag("a.delete[href='#{user_file_path(att)}']","" )
-        end
-      end
-    end
-  end
+  # table.diff!(tableish('table.user_files tr', lambda{ |tr| tr.search("td,th").map{ |x| x } }))
+  table.diff!(tableish('table.user_files tr', 'td,th'))
 end
 
 Допустим /^у меня нет не одного файла$/ do
@@ -39,8 +22,9 @@ end
 То /^список моих файлов не должен быть пустым$/ do
   current_user.attachment_files.should_not be_nil
 end
-Если /^Я удаляю "([^\"]*)" файл$/ do |file_name|
-  file = current_user.attachment_files.find_by_name(file_name)
-  file.destroy
-  Допустим %{Я перешел на страницу "user files"}
+
+Если /^Я удаляю "([^\"]*)" файл с именем "([^\"]*)"$/ do |pos, file_name|
+  within("table tr:nth-child(#{pos.to_i+1})") do
+    click_link "Delete"
+  end
 end

@@ -50,6 +50,9 @@ module NavigationHelpers
       login_path
     when /the home\s?page/
       '/'
+    when /the new checker_proxy page/
+      new_checker_proxy_path
+
     when /the new profile_task page/
       new_profile_task_path
 

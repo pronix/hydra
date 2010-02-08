@@ -22,9 +22,11 @@
              И должен увидеть дополнительное меню Tools  
              И должен увидеть ссылку "Add file" 
              И должен увидеть список файлов:
-             | Name       | Uploaded         | Actions      |
-             | file1_name | 01.01.2010 12:06 | edit, delete |
-             | file2_name | 11.01.2010 02:34 | edit, delete |
+             | Name       | Uploaded         | Actions |
+             | file1_name | 01.01.2010 12:06 | Edit    |
+             | file2_name | 11.01.2010 02:34 | Edit    |
+
+
 
 
   Сценарий: Загрузка нового файла
@@ -38,9 +40,13 @@
              И список моих файлов не должен быть пустым 
              
   Сценарий: Удаление файла
-    Допустим Я перешел на страницу "user files"
-        Если Я удаляю "file1_name" файл 
+    Допустим у пользователя "free_user@gmail.com" есть следующие файлы:
+              | name       | created_at       |
+              | file1_name | 01.01.2010 12:06 |
+              | file2_name | 11.01.2010 02:34 |
+             И перешел на страницу "user files"
+        Если Я удаляю "2" файл с именем "file1_name"
           То Я должен увидеть список файлов:
                 | Name       | Uploaded         | Actions      |
                 | file2_name | 11.01.2010 02:34 | edit, delete |
-
+             И должен увидеть сообщение "File was successfully destroyed"

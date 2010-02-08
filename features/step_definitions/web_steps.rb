@@ -190,7 +190,6 @@ Then /^(?:|I )should see "([^\"]*)"$/ do |text|
 end
 
 То /^(?:|[Я|я] )должен увидеть сообщение "([^\"]*)"$/ do |text|
-  puts response.body
   if defined?(Spec::Rails::Matchers)
     response.should contain(text)
   else
