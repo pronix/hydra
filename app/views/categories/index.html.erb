@@ -17,8 +17,8 @@
     <% if current_user && current_user.admin? -%>
     <td>
       <%= link_to I18n.t("edit"), edit_category_path(category) %>
-      <%= link_to I18n.t("delete"), category_path(category),
-          :method => :destroy, :confirm => I18n.t("delete_category") %>
+      <%= link_to "", category_path(category),
+          :method => :destroy, :confirm => I18n.t("delete_category"), :class => "delete" %>
     </td>
     <% end -%>
     
