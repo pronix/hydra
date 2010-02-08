@@ -1,0 +1,7 @@
+<%= head_page "new_macro" %>
+<% semantic_form_for :macro, @macro, :html => { :method => :post, :class => 'base_form' }  do |form| %>
+<%= render :partial => 'form', :object => form %>
+<% form.buttons do -%>
+<%= form.commit_button I18n.t('Create'),  :class => "base_buttons" %>
+<% end -%>
+<% end -%>

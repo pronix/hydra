@@ -1,0 +1,7 @@
+<%= head_page "edit_macro" %>
+<% semantic_form_for :macro, @macro, :url => macro_path, :html => { :method => :put, :class => 'base_form' }  do |form| %>
+<%= render :partial => 'form', :object => form %>
+<% form.buttons do -%>
+<%= form.commit_button I18n.t('save'),  :class => "base_buttons" %>
+<% end -%>
+<% end -%>

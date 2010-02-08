@@ -1,0 +1,30 @@
+<%
+require 'faker'
+User.all.each  do |user|
+ 1.upto(5) do |i| %>
+
+macros_<%= user.id %>_<%= i %>:
+  name: <%= Faker::Lorem .words(1).first %>
+  user_id: <%= user.id %>
+  number_of_frames: 20
+  columns: 20
+  thumb_width: 20
+  thumb_height: 20
+  thumb_quality: 40
+  thumb_frame: <%= true %>
+  frame_size: 2
+  frame_color: "#FFDDEE"
+  thumb_shadow: <%= true %>
+  thumb_padding: "2px 7px 2px 1"
+
+  font: "Arial"
+  font_size: 24
+  font_color: "#EEFFDD"
+  template_background: "#FFFFEE"
+  header_text: "Movie"
+  add_timestamp: <%= true %>
+  position_timestamp: <%= ["left", "right"][rand(2)] %>
+  add_logo: <%= false %>
+  file_format: <%= ["png","jpg", "gif"][rand(3)] %>
+  created_at: <%= Time.now.to_s(:db) %>
+<% end end %>

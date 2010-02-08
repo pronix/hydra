@@ -1,0 +1,27 @@
+<%#= form.inputs %>
+<% form.inputs do  -%>
+<%= form.input :frame_color, :input_html => {:class => "color_field" } %>
+<% end -%>
+
+<script type="text/javascript" charset="utf-8">
+  $(function(){
+    $.each($("input.color_field"),function(i,item){
+      $(item).css({'background-color': '#'+$(item).val()});
+     });
+  
+    $("input.color_field").ColorPicker({
+	          onSubmit: function(hsb, hex, rgb, el) {
+		                   $(el).val(hex);
+                       $(el).css({'background-color': '#'+hex});
+              	       $(el).ColorPickerHide();
+                  	 },
+       	onBeforeShow: function () {
+		                   $(this).ColorPickerSetColor(this.value);
+	                   }
+        })
+       .bind('keyup', function(){
+          	$(this).ColorPickerSetColor(this.value);
+        });
+
+  });
+</script>
