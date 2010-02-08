@@ -13,7 +13,7 @@ ActionController::Routing::Routes.draw do |map|
   # Tools
   map.resources :macros
   map.resources :categories
-  map.resources :user_files
+  map.resources :user_files, :as => :files
   map.resources :profiles
   
   # Settings

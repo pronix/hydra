@@ -1,0 +1,10 @@
+<%
+require 'faker'
+User.all.each  do |user|
+ 1.upto(5) do |i| %>
+ profiles_<%= user.id %>_<%= i %>:
+  name: <%= Faker::Lorem .words(1).first %>
+  user_id: <%= user.id %>
+  login: <%= Faker::Internet.email %>
+  password: <%= Faker::Internet.email  %>
+<% end end %>

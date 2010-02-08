@@ -1,46 +1,54 @@
-Допустим /^у меня есть список profiles Profile1, Profile2$/ do
-  pending # express the regexp above with the code you wish you had
+Допустим /^у пользователя "([^\"]*)" есть следующие profile:$/ do |user_email, table|
+  user = User.find_by_email user_email
+  table.hashes.each do |hash|
+    hash["user_id"] = user.id
+    Factory(:profile, hash)  
+  end
+
 end
 
-Если /^Я перешел на страницу Profiles$/ do
-  pending # express the regexp above with the code you wish you had
+
+
+То /^(?:|[Я|я] )должен увидеть список profiles:$/ do |table|
+  response.should have_tag("table") do 
+    with_tag("tr") do 
+      table.headers.each do |k|
+        with_tag("th", k)
+      end
+    end
+    table.hashes.each do |hash|
+      with_tag("tr") do
+        with_tag("td", hash["Name"])
+        with_tag("td", hash["Created"])      
+        with_tag("td") do 
+          profile = current_user.profiles.find_by_name(hash["Name"])
+          
+          with_tag("a.edit[href='#{edit_profile_path(profile)}']","Edit" )
+          with_tag("a.delete[href='#{profile_path(profile)}']","" )
+        end
+      end
+    end
+  end
 end
 
-То /^должен увидеть список profile:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
-end
-
-Допустим /^Я на странице нового profile$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Допустим /^у меня пока нет profile$/ do
-  pending # express the regexp above with the code you wish you had
+Допустим /^у меня пока нет profiles$/ do
+ current_user.profiles.destroy_all
 end
 
 То /^список profiles не должен быть пустым$/ do
-  pending # express the regexp above with the code you wish you had
+  current_user.reload
+  current_user.profiles.should_not be_empty
 end
-
-Допустим /^Я на странице редактирования profile1$/ do
-  pending # express the regexp above with the code you wish you had
+Допустим /^Я на странице редактирования "([^\"]*)"$/ do |profile|
+  visit path_to("edit profile for #{profile}")
 end
-
-То /^в списке profiles должен быть profile с "([^\"]*)" "([^\"]*)"$/ do |arg1, arg2|
-  pending # express the regexp above with the code you wish you had
+То /^значение поля "([^\"]*)" профайла "([^\"]*)" должно быть "([^\"]*)"$/ do |field, profile_name, new_value|
+  current_user.profiles.reload
+  profile = current_user.profiles.find_by_name profile_name
+  profile.send(field.to_sym).should == new_value
 end
-
-Допустим /^у меня есть следующие profile:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
-end
-
-Если /^Я удаляю profile2$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-То /^должен увидеть следующий список profile:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
+Если /^Я удаляю профайл "([^\"]*)"$/ do |profile_name|
+  profile  = current_user.profiles.find_by_name profile_name
+  profile.destroy
+  Допустим %{Я перешел на страницу "profiles"}
 end

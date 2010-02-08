@@ -122,7 +122,20 @@ div.users .login{ width:31%; }
 		div.users .login a:hover{ color:#7382df; }
 a.user { background:url('../images/user.gif') no-repeat ; float:left; width:22px; height:21px; margin-right:4px;}
 
+
 /* Macros */
 div.macros { width:65%; }
 div.macros .brown td { width:23%; }
 
+/* Files */
+div.user_files { width:65%; }
+div.user_files .brown td { width:23%; }
+
+
+/* Categories */
+div.categories { width:65%; }
+div.categories .brown td { width:23%; }
+
+/* Categories */
+div.profiles { width:65%; }
+div.profiles .brown td { width:23%; }

@@ -7,6 +7,26 @@ module NavigationHelpers
   #
   def path_to(page_name)
     case page_name
+    when /^delete profile (.*)$/
+      @profile = current_user.profile.find_by_name $1
+      profile_path(@profile, :delete)
+    when /^edit profile for (.*)$/
+      @profile = current_user.profiles.find_by_name $1
+      edit_profile_path(@profile)
+    when /^new profile/
+      new_profile_path
+    when /^profiles/
+      profiles_path
+      
+    when /^new file/
+      new_user_file_path
+    when /^user files/
+      user_files_path
+      
+    when /^edit proxy for (.*)$/
+      @proxy = current_user.proxies.find_by_address $1
+      edit_proxy_path(@proxy)
+      
     when /^proxies/
       proxies_path
       

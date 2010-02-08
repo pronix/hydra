@@ -4,45 +4,51 @@
   Как пользователь
   Должен иметь возможность просматривать, редактировать, удалить и добавлять свои profiles.
 
+  Предыстория:
+    Допустим в сервисе зарегистрированы следующие пользователи:
+      | nickname  | password | email                | admin |
+      | admin     | secret   | admin_user@gmail.com | true  |
+      | free_user | secret   | free_user@gmail.com  | false |
+      И у пользователя "free_user@gmail.com" есть следующие profile:
+      | name     | created_at       | login     | password |
+      | profile1 | 23.01.2010 12:06 | free_user |   123456 |
+      | profile2 | 11.01.2010 02:34 | paid_user |   123456 |
+      И я зашел в сервис как "free_user@gmail.com/secret"
+
   Сценарий: Список Profiles
-    Допустим у меня есть список profiles Profile1, Profile2
-        Если Я перешел на страницу Profiles
+    Допустим Я перешел на страницу "profiles"
           То Я должен увидеть главное меню
              И должен увидеть панель пользователя
-             И должен увидеть дополнительное меню "Tools"  
+             И должен увидеть дополнительное меню Tools  
              И должен увидеть ссылку "Create profile"
-             И должен увидеть список profile:
-                | name      |    created | actions      |
-                | profile 1 | 23.01.2010 | edit, delete |
-                | profile 2 | 11.01.2010 | edit, delete |
+             И должен увидеть список profiles:
+                | Name     | Created          | Actions      |
+                | profile1 | 23.01.2010 12:06 | edit, delete |
+                | profile2 | 11.01.2010 02:34 | edit, delete |
 
   Сценарий: Добавление Profiles
-    Допустим Я на странице нового profile
-             И у меня пока нет profile
-        Если Я заполнил поле "name" значением "free"
-             И заполнил поле "login" значением "free_login"
-             И заполнил поле "password" значением "free_secret"
+    Допустим Я на странице "new profile"
+             И у меня пока нет profiles
+        Если Я заполнил поле "profile[name]" значением "free"
+             И заполнил поле "profile[login]" значением "free_login"
+             И заполнил поле "profile[password]" значением "free_secret"
              И нажал кнопку "Create"
-          То Я должен увидеть сообщение "New profile free has been created"
+          То Я должен увидеть сообщение "Profile was successfully created."
              И список profiles не должен быть пустым
 
   Сценарий: Редактирование Profiles
-    Допустим Я на странице редактирования profile1
-        Если Я изменил поле "name" на значение "new_profile"
-             И нажал кнопку "Updated"
-          То Я должен увидеть сообщение "Profile new_profile has been updated"
-             И в списке profiles должен быть profile с "name" "new_profile"
+    Допустим Я на странице редактирования "profile1"
+        Если Я изменил поле "profile[name]" на значение "new_profile"
+             И нажал кнопку "Save"
+          То Я должен увидеть сообщение "Profile was successfully updated."
+             И значение поля "name" профайла "new_profile" должно быть "new_profile"
 
-  Сценарий: Удаление Profiles
-    Допустим у меня есть следующие profile:
-             | name     |
-             | profile1 |
-             | profile2 |
-             | profile3 | 
-      Если Я удаляю profile2
-        То Я должен увидеть сообщение "Profile profile2 has been deleted"
-           И должен увидеть следующий список profile:
-           | name     |
-           | profile1 |
-           | profile3 |
+
+  Сценарий: Удаление Profiles 
+  Допустим Я перешел на страницу "profiles"
+      Если Я удаляю профайл "profile2"
+        То Я должен увидеть список profiles:
+                | Name     | Created          | Actions      |
+                | profile1 | 23.01.2010 12:06 | edit, delete |
+
 
