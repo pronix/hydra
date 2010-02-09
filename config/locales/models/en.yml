@@ -1,2 +1,10 @@
 en:
-  hello: "Hello world"
+  activerecord:
+    models:
+      task: Tasks
+    attributes:
+      task:
+        name: Task name
+        links: Add links
+        use_password: Password protected
+
