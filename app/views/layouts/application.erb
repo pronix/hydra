@@ -5,8 +5,9 @@
   <head>
     <title><%= I18n.t("hydra") %></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <%= stylesheet_link_tag 'style', 'formtastic','formtastic_changes', 'colorpicker' %>
-    <%= javascript_include_tag  'application', 'jquery', 'jquery-ui', 'colorpicker' %>
+    <%= stylesheet_link_tag 'style', 'formtastic','formtastic_changes', 'colorpicker', 'jquery-ui' %>
+    <%= javascript_include_tag  'jquery', 'jquery-ui', 'colorpicker' %>
+    <%= javascript_include_tag  'application' %>
   </head>
 
   <body>
@@ -14,15 +15,15 @@
     <ul class="user_panel">
       <li><%= current_user.name || current_user.email %></li>
       <li>
-        <%= link_to I18n.t("sign out"), logout_path %>        
+        <%= link_to I18n.t("sign out"), logout_path %>
       </li>
     </ul>
     <div>
       <%= flash[:notice] %>
     </div>
     <%= link_to I18n.t("create_task"), new_task_path, :class => "gray_button" %>
-  
-    <%= render "shared/main_menu" %>  
+
+    <%= render "shared/main_menu" %>
     <%= render "shared/sub_menu" %>
     <div class="content">
       <div class="<%= params[:controller] %>">
