@@ -1,5 +1,5 @@
 <% form.inputs do %>
-<%= form.input :name %>
+<%= form.input :title %>
 <%= form.input :description, :as => :text, :input_html => {:rows => 7} %>
-<%= form.input :file, :as => :file %>
+<%= form.input :attachment, :as => :file if @user_file.new_record? %>
 <% end -%>

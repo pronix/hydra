@@ -7,10 +7,10 @@
     <th><%= I18n.t("uploaded") %></th>
     <th><%= I18n.t("actions") %></th>
   </tr>
-  
-  <% @attachment_files.each do |att| -%>
+
+  <% @user_files.each do |att| -%>
   <tr>
-    <td><%= att.name %></td>
+    <td><%= att.title %></td>
     <td><%= att.created_at.strftime("%d.%m.%Y %H:%M") %></td>
     <td>
       <%= link_to I18n.t("edit"), edit_user_file_path(att), :class => "edit" %>
