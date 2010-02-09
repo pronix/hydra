@@ -1,17 +1,17 @@
 # language: ru
 Функционал: Управление задачами - Tasks
-  Для работы с задачами 
+  Для работы с задачами
   Как пользователь
   Я должен создавать и управлять задачами
 
 =begin
  aria2c - менеджер закачек который будем использовать для скачивания файлов. (http://aria2.sourceforge.net/aria2c.1.html)
           Есть callback начало и окончания загрузки, есть возможность получать статус скачивания по RPC.
-           
+
  Выполнение заданий:
  Список задач - это упрощенно очередь задач, у каждого пользователя свои задачи -  своя очередь.
 
- Из задач пользователя самая ранняя со статусом new будет передаваться aria для загрузки файлов, 
+ Из задач пользователя самая ранняя со статусом new будет передаваться aria для загрузки файлов,
  остальные задачи этого пользователя будут ждать окончания выполняемой задачи.
  Получаеться что из задач каждого пользователя будет одновременно выполняться только одна задача.
 
@@ -20,12 +20,12 @@
  1 - Создание задачи, заполнение нужных параметров(название, описание, ссылки на файлы, параметры для скрин лист),
      статус - Queued
  2 - Передача задачи на скачивание, статус - DOWNLOADING
- 3 - После скачивание, скаченные файлы поподают на распаковку, статус -  EXTRACTING. 
+ 3 - После скачивание, скаченные файлы поподают на распаковку, статус -  EXTRACTING.
        Выполняеться только после завершение скачивания
  4 - После завершения распаковки файлов, запускаеться генерация скрин листов, статус - GENERATION.
        Кол-во картинок(фреймов) на скрин листе будет равно  количеству картинок заданное в макросе умноженное
         на кол-во видео файлов в архиве.(в макросе указано 10, в архиве 3 видео файла = 30 картинок на скрин листе)
-       Пользователь может запустить повторно генерацию со статуса FINISHED. 
+       Пользователь может запустить повторно генерацию со статуса FINISHED.
        Таким образом генерация скрин листов доступна после завершения EXTRACTING или на стадии FINISHED.
  5 - После завершения генерации скрин листов, запускаеться переименовывание файлов (если указано в задаче),
        статус - RENAMING. Выполняеться только после завершение генерации скрин листов
@@ -35,54 +35,54 @@
         Пользователь может повторий закачку файлов после завершения из состояния задачи: FINISHED или COMPLETED
  8 - После завершения закачивание файлов, задача переходит в статус FINISHED
      И удаляем скаченные файлы с удаленных хостов.
-     При статусе FINISHED пользователь при просмотрет задачи видит ссылки на ссылки на сгененрированные скрин листы 
+     При статусе FINISHED пользователь при просмотрет задачи видит ссылки на ссылки на сгененрированные скрин листы
      и на файлы, а также кнопку повторной генерации скрин листов и кнопку завершения задачи COMPLETED.
      Также будет видеть кнопку повторой закачки файлов.
 
  9 - Из статуса FINISHED задача может быть пользователем переведена в состояние COMPLETED
      И удаляем видео файл.
-     Пользоватлеь здесь видит  ссылки на ссылки на сгененрированные скрин листы 
+     Пользоватлеь здесь видит  ссылки на ссылки на сгененрированные скрин листы
      и на файлы, а также кнопку повторной генерации скрин листов и кнопку повторой закачки файлов.
- 
+
 10 - При возникновение ошибки, задача из любого состояния переходить в статус ERROR, с указанием ошибки.
 
 
 =end
 
   Предыстория:
-    Допустим у нас есть следующие пользователи
-        | nickname   | password | admin |
-        | admin      | secret   | true  |
-        | free_user  | secret   | false |
-        | other_user | secret   | false |
-       И у пользователь "free_user" есть активные задачи:
-        | name  | category | status               |
-        | task1 | alpha    | Finished             |
-        | task2 | zeta     | Finished             |
-        | task3 | gamma    | Stopped - error code |
-       И у пользователь "free_user" есть завершенные задачи:
-        | name  | category | status   |
-        | task4 | gamma    | Complete |
-        | task5 | alpha    | Complete |
-        | task6 | zeta     | Complete |
+    Допустим в сервисе зарегистрированы следующие пользователи:
+       | nickname  | password | email                | admin |
+       | admin     | secret   | admin_user@gmail.com | true  |
+       | free_user | secret   | free_user@gmail.com  | false |
+       И у пользователя "free_user@gmail.com" есть следующие активные задачи:
+        | name  | category | state    | links                                                           | created_at |
+        | task1 | alpha    | finished | http://media.railscasts.com/videos/200_rails_3_beta_and_rvm.mov | 01.01.2010 |
+        | task2 | zeta     | finished | http://media.railscasts.com/videos/199_mobile_devices.mov       | 11.02.2010 |
+       И у пользователя "free_user@gmail.com" есть завершенные задачи:
+ | name  | category | state     | links                                                                   | created_at |
+ | task3 | gamma    | error     | http://media.railscasts.com/videos/197_nested_model_form_part_2.mov     | 01.01.2010 |
+ | task4 | gamma    | completed | http://media.railscasts.com/videos/195_my_favorite_web_apps_in_2009.mov | 01.02.2010 |
+ | task5 | alpha    | completed | http://media.railscasts.com/videos/194_mongodb_and_mongomapper.mov      | 02.02.2010 |
+ | task6 | zeta     | completed | http://media.railscasts.com/videos/192_authorization_with_cancan.mov    | 02.03.2010 |
+
+
 
 
   Сценарий: Список активных задач
-    Допустим Я зашел в сервис как "free_user"
-        Если Я перешел на страницу задач "tasks"
+    Допустим Я зашел в сервис как "free_user@gmail.com/secret"
+        Если Я перешел на страницу "active tasks"
           То Я должен увидеть главное меню
-             И должен увидеть дополнительное меню "tasks"
+             И должен увидеть дополнительное меню Tasks
              И должен увидеть панель пользователя
              И должен увидеть ссылку "Create task"
-             И должен увидеть таблицу активный задач:
-               | category | name  | status               | actions |
-               | gamma    | task3 | Stopped - error code | delete  |
-               | alpha    | task1 | Finished             | delete  |
-               | zeta     | task2 | Finished             | delete  |
-             И должен увидеть фильтр "Category"
+             И должен увидеть таблицу задач:
+               | Category | Name  | Status   | Actions |
+               | zeta     | task2 | Finished | Delete  |
+               | alpha    | task1 | Finished | Delete  |
+             И должен увидеть фильтр Category
 
   Сценарий: Удаление активной задачи
-    Допустим Я зашел в сервис как "free_user"
+    Допустим Я зашел в сервис как "free_user@gmail.com/secret"
              И перешел на страницу задач "tasks"
              И у меня есть следующие активные задачи:
                | category | name  | status               | actions |
@@ -97,20 +97,20 @@
             И должен удалить скаченные файлы, сгенерированные "scree list"
 
 
-
   Сценарий: Список завершенных задач
-    Допустим Я зашел в сервис как "free_user"
-        Если Я перешел на страницу задач "completed tasks"
+    Допустим Я зашел в сервис как "free_user@gmail.com/secret"
+        Если Я перешел на страницу "completed tasks"
           То Я должен увидеть главное меню
-             И должен увидеть дополнительное меню "tasks"
+             И должен увидеть дополнительное меню Tasks
              И должен увидеть панель пользователя
              И должен увидеть ссылку "Create task"
-             И должен увидеть таблицу завершенных задач:
-               | category | name  | status   | actions |
-               | gamma    | task4 | Complete | delete  |
-               | alpha    | task5 | Complete | delete  |
-               | zeta     | task6 | Complete | delete  |
-             И должен увидеть фильтр "Category"
+             И должен увидеть таблицу задач:
+               | Category | Name  | Status    | Actions |
+               | zeta     | task6 | Completed | Delete  |
+               | alpha    | task5 | Completed | Delete  |
+               | gamma    | task4 | Completed | Delete  |
+               | gamma    | task3 | Error     | Delete  |
+             И должен увидеть фильтр Category
 
   Сценарий: Удаление завершенной задачи
     Допустим Я зашел в сервис как "free_user"
@@ -132,8 +132,8 @@
              И у меня нет задач
              И нахожусь на странице "new task"
         Если Я заполнил поле "Name" значение "Donwload all internet"
-             И заполнил поле "Category" значение "alpha" 
-             И включил флажок "Use proxy"                
+             И заполнил поле "Category" значение "alpha"
+             И включил флажок "Use proxy"
              И заполний поле "Description" значением "Download all internet"
              И заполнил поле "Links" значением "http://login:pwd@domain.com/file.rar, http://www.domain.com/file.rar, ftp://login:pwd@domain.com/file.rar, ftp://domain.com/file.rar"
              И включил флажок "Password"
@@ -141,8 +141,8 @@
              # Add files
              И добавил файл обложки "test_cover.png"
              И добавил файл обложки "test_cover1.png"
-             И включил флажок  "Add screen list to arhive" 
-             И включел флажок "Add covers to arhive"       
+             И включил флажок  "Add screen list to arhive"
+             И включел флажок "Add covers to arhive"
              И добавил дополнительный файл "test_attachment.txt"
              И добавил дополнительный файл "test_attachment1.txt"
              # job_list
@@ -150,7 +150,7 @@
              И включил флажок "Rename"
              И выбрал переключатель "rename arhive"
              И заполнил поле "arhive name" значением "new_file"
-             И заполнил поле "text"              
+             И заполнил поле "text"
              И заполнил поле "macros" значением "[file_name]"
              И включил флажок "Create screen list"
              И выбрал значение "Macros1" поля "screen_list_macros"
@@ -159,7 +159,7 @@
              И включил флажок "Create arhive"
              И заполнил поле "arhive_size" значением "100"
              И заполнил поле "password_arhive" значением "secret_arhive"
-          То Я должен увидеть "Create new task."            
+          То Я должен увидеть "Create new task."
              И теперь у меня должно быть одна активная задача
 
   Сценарий: Завершение задачи
@@ -175,4 +175,4 @@
              И должен увидеть следующий список завершенных задач:
              | alpha | task1 | Complete | delete |
 
-   
+

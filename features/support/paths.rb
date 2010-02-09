@@ -7,6 +7,10 @@ module NavigationHelpers
   #
   def path_to(page_name)
     case page_name
+    when /^completed tasks/
+      tasks_path(:status => :completed)
+    when /^active tasks/
+      tasks_path(:status => :active )
     when /^delete profile (.*)$/
       @profile = current_user.profile.find_by_name $1
       profile_path(@profile, :delete)
@@ -17,23 +21,23 @@ module NavigationHelpers
       new_profile_path
     when /^profiles/
       profiles_path
-      
+
     when /^new file/
       new_user_file_path
     when /^user files/
       user_files_path
-      
+
     when /^edit proxy for (.*)$/
       @proxy = current_user.proxies.find_by_address $1
       edit_proxy_path(@proxy)
-      
+
     when /^proxies/
       proxies_path
-      
+
     when /^edit user for (.*)$/
       @user = User.find_by_email $1
       edit_user_path(@user)
-      
+
     when /^new user/
       new_user_path
     when /^users/
@@ -70,11 +74,11 @@ module NavigationHelpers
 
     when /^new categories/
       new_category_path
-      
+
     when /^edit category for (.*)$/
       @category = Category.find_by_name $1
       edit_category_path(@category)
-        
+
     when /the new profiles page/
       new_profiles_path
 
@@ -102,7 +106,7 @@ module NavigationHelpers
     when /the new frooble page/
       new_frooble_path
 
-    
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #
