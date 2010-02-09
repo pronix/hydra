@@ -20,6 +20,6 @@ class MacrosController < ApplicationController
     current_user
   end
   def load_data
-    @logos = current_user.attachment_files.images
+    @logos = current_user.user_files.images
   end
 end
