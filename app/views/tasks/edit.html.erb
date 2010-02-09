@@ -1,2 +1,7 @@
-<h1>Tasks#edit</h1>
-<p>Find me in app/views/tasks/edit.html.erb</p>
+<%= head_page "edit_task" %>
+<% semantic_form_for :task, @task, :url => task_path, :html => { :method => :put, :class => 'base_form' }  do |form| %>
+<%= render :partial => 'form', :object => form %>
+<% form.buttons do -%>
+<%= form.commit_button I18n.t('save'),  :class => "base_buttons" %>
+<% end -%>
+<% end -%>

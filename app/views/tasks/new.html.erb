@@ -1,2 +1,8 @@
-<h1>Tasks#new</h1>
-<p>Find me in app/views/tasks/new.html.erb</p>
+<%= head_page "create_task" %>
+<% semantic_form_for :task, @task,:url => tasks_path,  :html => { :method => :post, :class => 'base_form' }  do |form| %>
+<%= render :partial => 'form', :object => form %>
+<% form.buttons do -%>
+<%= form.commit_button I18n.t('Create'),  :class => "base_buttons" %>
+<% end -%>
+<% end -%>
+

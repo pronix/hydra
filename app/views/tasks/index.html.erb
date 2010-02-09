@@ -1,2 +1,36 @@
-<h1>Tasks#index</h1>
-<p>Find me in app/views/tasks/index.html.erb</p>
+<%= head_page session[:task_status]["active"] ? "active_tasks" : "completed_tasks" %>
+<div id="load_content">
+<form class="categories" action="#" method="post">
+<%= select_tag :category,options_for_select([[I18n.t("all_categories"),nil]]+Category.all.map{|x| [x.name, x.id]},
+    session[:task_category].to_i), :class => "categories" %>
+</form>
+
+<table class="brown tasks">
+  <tr>
+		<th><%= I18n.t("category") %></th>
+		<th><%= I18n.t("name") %></th>
+		<th><%= I18n.t("status") %></th>
+    <th><%= I18n.t("actions") %></th>
+  </tr>
+  <% @tasks.each do |task| -%>
+  <tr>
+    <td><%= task.category.name  %></td>
+    <td><%= task.name  %></td>
+    <td><%= I18n.t(task.aasm_current_state.to_s) %></td>
+    <td><%= link_to I18n.t("delete"),  "" %></td>
+  </tr>
+  <% end -%>
+</table>
+
+
+<script type="text/javascript" charset="utf-8">
+  $(function(){
+    $("#category").change(function(){
+       var _url = "<%= tasks_path(:format=> :js, :category => :id)%>";
+       if ($(this).val()) { _url = _url.replace("id", $(this).val());
+       } else { _url = _url.replace("id", "-1"); };
+      $("#load_content").load(_url)
+     });
+   });
+</script>
+</div>

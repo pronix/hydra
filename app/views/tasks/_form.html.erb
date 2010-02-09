@@ -1,0 +1,16 @@
+<% form.inputs do  -%>
+<%= form.input :name %>
+<%= form.input :category, :include_blank => false %>
+<%= form.input :description, :input_html => {:rows => 7 } %>
+<%= form.input :links, :input_html => {:rows => 7 } %>
+<%= form.input :use_password %>
+<%= form.input :password %>
+<% end -%>
+<% form.inputs :name => I18n.t("covers") do  -%>
+
+<% end -%>
+<% form.inputs :name => I18n.t("arhive_attachments") do  -%>
+
+<% end -%>
+<%#= form.inputs  -%>
+
