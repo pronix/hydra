@@ -1,11 +1,8 @@
 <%= head_page "dashboard" %>
-<%= content_tag :h2, I18n.t("active_tasks"), :class => "brown" %>
-
+<div id="load_content">
 <form class="categories" action="#" method="post">
-<select class="categories">
-<option>All categories</option>
-<option>2</option>
-</select>
+<%= select_tag :category,options_for_select([[I18n.t("all_categories"),nil]]+Category.all.map{|x| [x.name, x.id]},
+    session[:task_category].to_i), :class => "categories" %>
 </form>
 
 <table class="brown">
@@ -22,3 +19,14 @@
   </tr>
   <% end -%>
 </table>
+<script type="text/javascript" charset="utf-8">
+  $(function(){
+    $("#category").change(function(){
+       var _url = "<%= dashboards_path(:format=> :js, :category => :id)%>";
+       if ($(this).val()) { _url = _url.replace("id", $(this).val());
+       } else { _url = _url.replace("id", "-1"); };
+      $("#load_content").load(_url)
+     });
+   });
+</script>
+</div>
