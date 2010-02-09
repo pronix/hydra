@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  task_id: 1
+  job: MyString
+  startup: 2010-02-09 20:05:58
+  stop_time: 2010-02-09 20:05:58
+  comment: MyText
+
+two:
+  task_id: 1
+  job: MyString
+  startup: 2010-02-09 20:05:58
+  stop_time: 2010-02-09 20:05:58
+  comment: MyText
