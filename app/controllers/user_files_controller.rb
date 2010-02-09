@@ -1,18 +1,17 @@
 class UserFilesController < ApplicationController
-  inherit_resources 
-  defaults :resource_class => AttachmentFile, :collection_name => 'attachment_files', :instance_name => 'attachment_file'
-  
+  inherit_resources
+  defaults :resource_class => UserFile, :collection_name => 'user_files', :instance_name => 'user_file'
   def create
-    @attachment_file = current_user.attachment_files.new params[:attachment_file]
-    @attachment_file.write_attribute(:type, "AttachmentFile")
-    if @attachment_file.save
-      flash[:notice] = 'File was downloaded.' 
-      redirect_to user_files_path   
-    else
-      render :new
+    create!(:notice => I18n.t("File was downloaded")) do |success, failure|
+      success.html { redirect_to user_files_path }
     end
   end
-  
+  def update
+    update! do |success, failure|
+      success.html { redirect_to user_files_path }
+    end
+  end
+
   def destroy
     destroy!(:notice => I18n.t("File was successfully destroyed"))
   end
