@@ -1,7 +1,7 @@
 <ul class="sub_menu">
-  <li <%= "class='active'" if params[:controller]["tasks"] && session[:task_status]['active'] && !params[:action][/new|create/] %>>
+  <li <%= "class='active'" if params[:controller]["tasks"] && (session[:task_status]['active'] rescue false) && !params[:action][/new|create/] %>>
     <%= link_to I18n.t("active_tasks"), tasks_path(:status => :active) %></li>
-  <li <%= "class='active'" if params[:controller]["tasks"] && session[:task_status]['completed'] && !params[:action][/new|create/] %>>
+  <li <%= "class='active'" if params[:controller]["tasks"] && (session[:task_status]['completed'] rescue false) && !params[:action][/new|create/] %>>
     <%= link_to I18n.t("completed_tasks"), tasks_path(:status => :completed) %></li>
   <li <%= "class='active'" if params[:controller]["tasks"] && params[:action][/new|create/] %>>
     <%= link_to I18n.t("create_task"), new_task_path %></li>
