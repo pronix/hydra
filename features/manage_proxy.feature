@@ -22,25 +22,22 @@
               И должен увидеть ссылку "Add proxy"
               И должен увидеть дополнительное меню Settings для пользователя
               И должен увидеть список proxy:
-                |        Address | Country | Status  | Actions      |
-                | 34.34.21.5:80  | USA     | Online  | edit, delete |
-                | 34.32.21.5:80  | USA     | Offline | edit, delete |
-                | 34.34.61.5:80  | USA     | Online  | edit, delete |
-
-
-
+                |       Address | Country | Status  | Actions |
+                | 34.34.61.5:80 | USA     | Online  | Edit    |
+                | 34.32.21.5:80 | USA     | Offline | Edit    |
+                | 24.34.21.5:80 | USA     | Online  | Edit    |
 
 
     Сценарий: Редактирование Proxy
       Допустим Я на странице редактирования proxy для "34.34.61.5:80"
-          Если Я изменил поле "proxy[address]" на значение "65.54.32.78:80" 
+          Если Я изменил поле "proxy[address]" на значение "65.54.32.78:80"
                И нажал кнопку "Save"
             То Я должен увидеть сообщение "Proxy was successfully updated."
                И должен увидеть список proxy:
-                |        Address | Country | Status  | Actions      |
-                |  34.34.21.5:80 | USA     | Online  | edit, delete |
-                |  34.32.21.5:80 | USA     | Offline | edit, delete |
-                | 65.54.32.78:80 | USA     | Online  | edit, delete |
+                |        Address | Country | Status  | Actions |
+                | 65.54.32.78:80 | USA     | Online  | Edit    |
+                |  34.32.21.5:80 | USA     | Offline | Edit    |
+                |  24.34.21.5:80 | USA     | Online  | Edit    |
 
     Сценарий: Удаление Proxy
       Допустим у меня есть список proxy:

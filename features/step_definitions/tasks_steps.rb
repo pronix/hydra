@@ -19,8 +19,9 @@ end
 
 
 То /^(?:|[Я|я] )должен увидеть таблицу задач:$/ do |table|
- table.diff!(tableish('table.tasks tr', 'td,th'))
+ table.diff!(tableish('table tr', 'td,th'))
 end
+
 То /^должен увидеть фильтр Category$/ do
   response.should have_tag("select") do
     Category.all.each do |t|

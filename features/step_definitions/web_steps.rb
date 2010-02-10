@@ -318,6 +318,16 @@ Then /^(?:|I )should be on (.+)$/ do |page_name|
   end
 end
 
+То /^(?:|[Я|я] )должен оказаться на страницу "([^\"]*)"$/ do |page_name|
+  current_path = URI.parse(current_url).select(:path, :query).compact.join('?')
+  if defined?(Spec::Rails::Matchers)
+    current_path.should == path_to(page_name)
+  else
+    assert_equal path_to(page_name), current_path
+  end
+end
+
+
 Then /^show me the page$/ do
   save_and_open_page
 end
