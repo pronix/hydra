@@ -13,9 +13,9 @@
   </tr>
   <% @tasks.each do |task| -%>
   <tr>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td><%= task.category.name %></td>
+    <td><%= link_to task.name, task_path(task) %></td>
+    <td><%= I18n.t(task.aasm_current_state) %></td>
   </tr>
   <% end -%>
 </table>
