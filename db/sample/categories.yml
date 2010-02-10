@@ -1,4 +1,6 @@
 film:
+  id: 1
   name: Film
 cartoon:
+  id: 2
   name: Cartoon

@@ -1,0 +1,20 @@
+<%
+require 'faker'
+links = %w(
+           http://media.railscasts.com/videos/199_mobile_devices.mov
+           http://media.railscasts.com/videos/194_mongodb_and_mongomapper.mov
+           http://media.railscasts.com/videos/200_rails_3_beta_and_rvm.mov
+           http://media.railscasts.com/videos/200_rails_3_beta_and_rvm.mov
+           http://media.railscasts.com/videos/199_mobile_devices.mov
+           )
+states = %w( queued downloading extracting generation renaming packing
+             uploading finished completed error )
+User.all.each  do |user|
+ 1.upto(15) do |i| %>
+task_<%= user.id %>_<%= i %>:
+  user_id: <%= user.id %>
+  category_id: <%= rand(2)+1 %>
+  name: <%= Faker::Lorem .words(1).first %>
+  links: <%= [links[rand(links.size)], links[rand(links.size)]].join(' ') %>
+  state: <%= states[rand(states.size)] %>
+<% end end %>
