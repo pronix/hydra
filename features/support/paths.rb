@@ -7,6 +7,8 @@ module NavigationHelpers
   #
   def path_to(page_name)
     case page_name
+    when /^new task/
+      new_task_path
     when /^completed tasks/
       tasks_path(:status => :completed)
     when /^active tasks/

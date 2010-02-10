@@ -83,17 +83,15 @@
 
   Сценарий: Удаление активной задачи
     Допустим Я зашел в сервис как "free_user@gmail.com/secret"
-             И перешел на страницу задач "tasks"
-             И у меня есть следующие активные задачи:
-               | category | name  | status               | actions |
-               | gamma    | task3 | Stopped - error code | delete  |
-               | alpha    | task1 | Finished             | delete  |
-               | zeta     | task2 | Finished             | delete  |
-       Если Я удаляю 3 задачу
-         То Я должен увидеть оставшиеся задачи:
-               | category | name  | status               | actions |
-               | alpha    | task1 | Finished             | delete  |
-               | zeta     | task2 | Finished             | delete  |
+             И перешел на страницу "active tasks"
+             И должен увидеть таблицу задач:
+              | Category | Name   | Status      | Actions |
+              | zeta     | task2  | Finished    | Delete  |
+              | alpha    | task1  | Finished    | Delete  |
+       Если Я удаляю задачу "2" с названием "task1"
+         То Я должен увидеть таблицу задач:
+               | Category | Name  | Status   | Actions |
+               | zeta     | task2 | Finished | Delete  |
             И должен удалить скаченные файлы, сгенерированные "scree list"
 
 
@@ -113,41 +111,55 @@
              И должен увидеть фильтр Category
 
   Сценарий: Удаление завершенной задачи
-    Допустим Я зашел в сервис как "free_user"
-             И перешел на страницу задач "completed tasks"
-             И у меня есть следующие завершенные задачи:
-               | category | name  | status   | actions |
-               | gamma    | task4 | Complete | delete  |
-               | alpha    | task5 | Complete | delete  |
-               | zeta     | task6 | Complete | delete  |
-       Если Я удаляю 6 задачу
-       То я должен увидеть оставшиеся задачи:
-               | category | name  | status   | actions |
-               | gamma    | task4 | Complete | delete  |
-               | alpha    | task5 | Complete | delete  |
+    Допустим Я зашел в сервис как "free_user@gmail.com/secret"
+             И перешел на страницу "completed tasks"
+             И должен увидеть таблицу задач:
+              | Category | Name  | Status    | Actions |
+              | zeta     | task6 | Completed | Delete  |
+              | alpha    | task5 | Completed | Delete  |
+              | gamma    | task4 | Completed | Delete  |
+              | gamma    | task3 | Error     | Delete  |
+       Если Я удаляю задачу "1" с названием "task6"
+       То я должен увидеть таблицу задач:
+              | Category | Name  | Status    | Actions |
+              | alpha    | task5 | Completed | Delete  |
+              | gamma    | task4 | Completed | Delete  |
+              | gamma    | task3 | Error     | Delete  |
 
-
-  Сценарий: Добаление задач
-    Допустим Я зашел в сервис как "free_user"
+  Сценарий: Добавление задач
+    Допустим Я зашел в сервис как "free_user@gmail.com/secret"
              И у меня нет задач
-             И нахожусь на странице "new task"
-        Если Я заполнил поле "Name" значение "Donwload all internet"
-             И заполнил поле "Category" значение "alpha"
-             И включил флажок "Use proxy"
-             И заполний поле "Description" значением "Download all internet"
-             И заполнил поле "Links" значением "http://login:pwd@domain.com/file.rar, http://www.domain.com/file.rar, ftp://login:pwd@domain.com/file.rar, ftp://domain.com/file.rar"
-             И включил флажок "Password"
-             И заполнил поле "Password" значением "secret"
+             И в сервисе уже есть следующие категории:
+               | name      | created_at |
+               | alpha     | 01.01.2010 |
+               | gamma     | 11.01.2010 |
+               | zeta      | 05.01.2010 |
+             И я перешел на страницу "new task"
+        Если Я заполнил поле "task[name]" значением "Donwload all internet"
+             И выбрал "alpha" из "task[category_id]"
+             И включил флажок "task[proxy]"
+             И заполнил поле "task[description]" значением "Download all internet"
+             И заполнил поле "task[links]" значением
+             """
+               http://media.railscasts.com/videos/197_nested_model_form_part_2.mov
+               http://media.railscasts.com/videos/195_my_favorite_web_apps_in_2009.mov
+               http://media.railscasts.com/videos/194_mongodb_and_mongomapper.mov
+               http://media.railscasts.com/videos/192_authorization_with_cancan.mov
+             """
+             И включил флажок "task[use_password]"
+             И заполнил поле "task[password]" значением "secret"
              # Add files
-             И добавил файл обложки "test_cover.png"
-             И добавил файл обложки "test_cover1.png"
-             И включил флажок  "Add screen list to arhive"
-             И включел флажок "Add covers to arhive"
-             И добавил дополнительный файл "test_attachment.txt"
-             И добавил дополнительный файл "test_attachment1.txt"
+             И выбрал в поле "task[covers]" файл "spec/factories/test_files/cover_01.jpg"
+             # И добавил файл обложки "test_cover.png"
+             # И добавил файл обложки "test_cover1.png"
+             И включил флажок "task[add_screens_to_arhive]"
+             И включил флажок "task[add_covers_to_arhive]"
+             И выбрал в поле "task[attachment_files]" файл "spec/factories/test_files/attachment_01.jpg"
+             # И добавил дополнительный файл "test_attachment.txt"
+             # И добавил дополнительный файл "test_attachment1.txt"
              # job_list
-             И включил флажок "Extracting files"
-             И включил флажок "Rename"
+             И включил флажок "task[extracting_files]"
+             И включил флажок "task[rename]"
              И выбрал переключатель "rename arhive"
              И заполнил поле "arhive name" значением "new_file"
              И заполнил поле "text"

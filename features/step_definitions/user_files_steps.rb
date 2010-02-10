@@ -14,7 +14,7 @@ end
 Допустим /^у меня нет не одного файла$/ do
  current_user.user_files.destroy_all
 end
-Если /^Я выбрал в поле "([^\"]*)" файл "([^\"]*)"$/ do |field, path|
+Если /^(?:|[Я|я] )выбрал в поле "([^\"]*)" файл "([^\"]*)"$/ do |field, path|
  attach_file(field, File.join(RAILS_ROOT, path))
 
 end

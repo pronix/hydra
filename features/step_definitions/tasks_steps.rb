@@ -6,7 +6,6 @@
     hash.delete("category")
     Factory(:task, hash)
   end
-
 end
 Допустим /^у пользователя "([^\"]*)" есть завершенные задачи:$/ do |user_email, table|
   user = User.find_by_email user_email
@@ -19,7 +18,7 @@ end
 end
 
 
-То /^должен увидеть таблицу задач:$/ do |table|
+То /^(?:|[Я|я] )должен увидеть таблицу задач:$/ do |table|
  table.diff!(tableish('table.tasks tr', 'td,th'))
 end
 То /^должен увидеть фильтр Category$/ do
@@ -28,4 +27,13 @@ end
       with_tag("option", t.name)
     end
   end
+end
+
+Если /^Я удаляю задачу "([^\"]*)" с названием "([^\"]*)"$/ do |pos, task_name|
+  within("table tr:nth-child(#{pos.to_i+1})") do
+    click_link "Delete"
+  end
+end
+Допустим /^у меня нет задач$/ do
+  current_user.tasks.destroy_all
 end

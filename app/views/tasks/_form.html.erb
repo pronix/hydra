@@ -5,12 +5,18 @@
 <%= form.input :links, :input_html => {:rows => 7 } %>
 <%= form.input :use_password %>
 <%= form.input :password %>
+<%= form.input :proxy %>
 <% end -%>
 <% form.inputs :name => I18n.t("covers") do  -%>
-
+<%= form.input :covers, :as => :file %>
 <% end -%>
 <% form.inputs :name => I18n.t("arhive_attachments") do  -%>
-
+  <%= form.input :add_screens_to_arhive %>
+  <%= form.input :add_covers_to_arhive %>
+  <%= form.input :attachment_files, :as => :file %>
+<% end -%>
+<% form.inputs :name => I18n.t("jobs_list") do  -%>
+<%= form.input :extracting_files %>
 <% end -%>
 <%#= form.inputs  -%>
 
