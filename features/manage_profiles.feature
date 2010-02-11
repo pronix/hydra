@@ -10,21 +10,21 @@
       | admin     | secret   | admin_user@gmail.com | true  |
       | free_user | secret   | free_user@gmail.com  | false |
       И у пользователя "free_user@gmail.com" есть следующие profile:
-      | name     | created_at       | login     | password |
-      | profile1 | 23.01.2010 12:06 | free_user |   123456 |
-      | profile2 | 11.01.2010 02:34 | paid_user |   123456 |
+      | name     | created_at       | login     | password | host         |
+      | profile1 | 23.01.2010 12:06 | free_user |   123456 | imagebam.com |
+      | profile2 | 11.01.2010 02:34 | paid_user |   123456 | imagebam.com |
       И я зашел в сервис как "free_user@gmail.com/secret"
 
   Сценарий: Список Profiles
     Допустим Я перешел на страницу "profiles"
           То Я должен увидеть главное меню
              И должен увидеть панель пользователя
-             И должен увидеть дополнительное меню Tools  
+             И должен увидеть дополнительное меню Tools
              И должен увидеть ссылку "Create profile"
              И должен увидеть список profiles:
-                | Name     | Created          | Actions      |
-                | profile1 | 23.01.2010 12:06 | edit, delete |
-                | profile2 | 11.01.2010 02:34 | edit, delete |
+                | Name     | Hosting      | Created          | Actions      |
+                | profile1 | imagebam.com | 23.01.2010 12:06 | edit, delete |
+                | profile2 | imagebam.com | 11.01.2010 02:34 | edit, delete |
 
   Сценарий: Добавление Profiles
     Допустим Я на странице "new profile"
@@ -44,11 +44,11 @@
              И значение поля "name" профайла "new_profile" должно быть "new_profile"
 
 
-  Сценарий: Удаление Profiles 
+  Сценарий: Удаление Profiles
   Допустим Я перешел на страницу "profiles"
       Если Я удаляю профайл "profile2"
         То Я должен увидеть список profiles:
-                | Name     | Created          | Actions      |
-                | profile1 | 23.01.2010 12:06 | edit, delete |
+                | Name     | Hosting      | Created          | Actions      |
+                | profile1 | imagebam.com | 23.01.2010 12:06 | edit, delete |
 
 

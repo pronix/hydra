@@ -1,4 +1,29 @@
 module Common
+  module Host
+    MEDIAVALISE    = "mediavalise.com"
+    IMAGEVENUE     = "imagevenue.com"
+    IMAGEBAM       = "imagebam.com"
+    PIXHOST        = "pixhost.org"
+    STOOORAGE      = "stooorage.com"
+
+    def self.options_for_select
+      [
+       [MEDIAVALISE, MEDIAVALISE],
+       [IMAGEVENUE, IMAGEVENUE ],
+       [IMAGEBAM,   IMAGEBAM ],
+       [PIXHOST,    PIXHOST ],
+       [STOOORAGE,  STOOORAGE ],
+
+      ]
+    end
+    def self.valid_options
+      [
+       MEDIAVALISE, IMAGEVENUE, IMAGEBAM, PIXHOST, STOOORAGE
+      ]
+    end
+  end
+
+
   module PositionTimestamp
     LEFT='left'
     RIGHT='right'
@@ -9,7 +34,7 @@ module Common
       [LEFT, RIGHT]
     end
   end
-  
+
   module FileFormat
     JPG="jpg"
     PNG="png"
@@ -20,5 +45,5 @@ module Common
       [JPG, PNG ]
     end
   end
-    
+
 end
