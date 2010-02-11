@@ -1,3 +1,5 @@
 <% form.inputs do -%>
-<%= form.inputs :name, :login, :password %>
+<%= form.input :name %>
+<%= form.input :host, :as => :select, :collection => Common::Host::options_for_select, :include_blank => false %>
+<%= form.inputs :login, :password %>
 <% end -%>

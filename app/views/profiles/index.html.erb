@@ -3,12 +3,14 @@
 <table class="brown profiles">
   <tr>
     <th><%= I18n.t("name") %></th>
+    <th><%= I18n.t("hosting") %></th>
     <th><%= I18n.t("created") %></th>
     <th><%= I18n.t("actions") %></th>
   </tr>
   <% @profiles.each do |profile| -%>
   <tr>
     <td><%= profile.name %></td>
+    <td><%= profile.host %></td>
     <td><%= profile.created_at.strftime("%d.%m.%Y %H:%M") %></td>
     <td>
       <%= link_to I18n.t("edit"), edit_profile_path(profile), :class => "edit" %>
