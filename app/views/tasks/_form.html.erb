@@ -17,6 +17,31 @@
 <% end -%>
 <% form.inputs :name => I18n.t("jobs_list") do  -%>
 <%= form.input :extracting_files %>
+
+
+  <% form.inputs :name => I18n.t("rename file") do  -%>
+    <%= form.input :rename, :as => :boolean %>
+    <%= form.input :that_rename, :as => :radio, :collection => Common::ThatRename.options_for_select, :label => nil  %>
+    <%= form.input :rename_file_name %>
+    <%= form.input :rename_text %>
+    <%= form.input :macro_renaming %>
+  <% end %>
+
+  <% form.inputs  do  -%>
+    <%= form.input :screen_list, :as => :boolean %>
+    <%= form.input :screen_list_macro_id , :collection => current_user.macros%>
+
+    <%= form.input :upload_images, :as => :boolean %>
+    <%= form.input :upload_images_profile_id , :collection => current_user.profiles.without_mediavalise %>
+    <%= form.input :mediavalise, :as => :boolean %>
+    <%= form.input :mediavalise_profile_id , :collection => current_user.profiles.mediavalise %>
+
+
+    <%= form.input :create_arhive, :as => :boolean %>
+    <%= form.input :password_arhive %>
+    <%= form.input :part_size %>
+  <% end -%>
+
 <% end -%>
 <%#= form.inputs  -%>
 

@@ -22,6 +22,15 @@ class Task < ActiveRecord::Base
   validates_presence_of :name, :links
   validates_associated  :category
   validates_presence_of :password, :if => lambda{ |t| t.use_password }
+
+  # validations переименовывание файла
+  validates_presence_of  :that_rename, :if => lambda { |t| t.rename? }
+  validates_presence_of  :macro_renaming, :if => lambda { |t| t.rename? }
+  validates_presence_of  :rename_file_name, :if => lambda { |t| t.rename? }
+  validates_inclusion_of :that_rename, :in => Common::ThatRename.valid_options, :if => lambda { |t| t.rename? }
+
+
+
   validate :links_checking
   def links_checking
     errors.add(:links, :invalid) if extract_link.blank?

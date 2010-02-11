@@ -170,6 +170,9 @@ end
 When /^(?:|I )choose "([^\"]*)"$/ do |field|
   choose(field)
 end
+Если /^(?:|[Я|я] )выбрал переключатель "([^\"]*)"$/ do |field|
+  choose(field)
+end
 
 # Adds support for validates_attachment_content_type. Without the mime-type getting
 # passed to attach_file() you will get a "Photo file is not one of the allowed file types."

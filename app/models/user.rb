@@ -23,11 +23,17 @@ class User < ActiveRecord::Base
   has_many :tasks, :dependent => :nullify
   has_many :proxies
   has_many :macros, :class_name => "Macros"
-
   has_many :user_files, :as => :assetable, :dependent => :destroy
 
 
-  has_many :profiles
+  has_many :profiles do
+    def mediavalise
+      all :conditions => { :host => Common::Host::MEDIAVALISE}
+    end
+    def without_mediavalise
+    all :conditions => [ " host not in(?) ", Common::Host::MEDIAVALISE]
+    end
+  end
 
   def admin?
     has_role? :admin
