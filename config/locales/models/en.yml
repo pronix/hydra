@@ -7,4 +7,10 @@ en:
         name: Task name
         links: Add links
         use_password: Password protected
+        rename_file_name: Name
+        rename_text: Text
+        macro_renaming: Macro of link appearance
+        screen_list: Create screen list
+        that_rename: Select rename objects
+
 
