@@ -1,4 +1,16 @@
 module Common
+  module ThatRename
+    ARHIVE, FILE = %w(arhive file)
+    def self.options_for_select
+      [ [I18n.t("rename_arhive"), ARHIVE],
+        [I18n.t("rename_extracted_file"), FILE ] ]
+    end
+
+    def self.valid_options
+      [ ARHIVE, FILE]
+    end
+  end
+
   module Host
     MEDIAVALISE    = "mediavalise.com"
     IMAGEVENUE     = "imagevenue.com"
