@@ -18,6 +18,20 @@ class Task < ActiveRecord::Base
   aasm_state :completed
   aasm_state :error
 
+
+  # associations
+  has_many :job_loggings
+  belongs_to :category
+
+  # files
+
+  has_many :covers , :as => :assetable, :dependent => :destroy
+  has_many :attachment_files , :as => :assetable, :dependent => :destroy
+
+  belongs_to :screen_list_macro,     :class_name => "Macros"
+  belongs_to :upload_images_profile, :class_name => "Profile"
+  belongs_to :mediavalise_profile,   :class_name => "Profile"
+
   # validations
   validates_presence_of :name, :links
   validates_associated  :category
@@ -29,12 +43,19 @@ class Task < ActiveRecord::Base
   validates_presence_of  :rename_file_name, :if => lambda { |t| t.rename? }
   validates_inclusion_of :that_rename, :in => Common::ThatRename.valid_options, :if => lambda { |t| t.rename? }
 
+  # validations закачка файлов
+  validates_presence_of :screen_list_macro_id, :if => lambda{ |t| t.screen_list? }
+  validates_presence_of :upload_images_profile_id, :if => lambda{ |t| t.upload_images? }
+  validates_presence_of :mediavalise_profile_id, :if => lambda{ |t| t.mediavalise? }
+
+  validates_numericality_of :part_size, :allow_nil => true, :only_integer => true, :if => lambda{ |t| !t.part_size.blank? }
 
 
   validate :links_checking
   def links_checking
     errors.add(:links, :invalid) if extract_link.blank?
   end
+
 
   # name scope
   named_scope :active, :conditions => [" state not in(?) ", %w(completed error)]
@@ -45,15 +66,22 @@ class Task < ActiveRecord::Base
       :conditions => [cond,argv],
     }}
 
-  # associations
-  has_many :job_loggings
-  belongs_to :category
 
-  # files
-  has_many :covers, :as => :assetable, :dependent => :destroy
-  has_many :attachment_files, :as => :assetable, :dependent => :destroy
 
   def extract_link(text_links=self.links)
     !text_links.blank? ? URI.extract(text_links) : false
   end
+
+  def covers=(attr)
+    attr.each do |cover|
+      covers.build(cover)
+    end
+  end
+  def attachment_files=(attr)
+    attr.each do |attachment_file|
+      attachment_files.build(attachment_file)
+    end
+  end
+
+
 end
