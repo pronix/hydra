@@ -8,12 +8,11 @@
 <%= form.input :proxy %>
 <% end -%>
 <% form.inputs :name => I18n.t("covers") do  -%>
-<%= form.input :covers, :as => :file %>
+<%= form.input :covers, :as => :file, :input_html => {:name => "task[covers][][attachment]"} %>
+<%= form.input :add_covers_to_arhive %>
 <% end -%>
 <% form.inputs :name => I18n.t("arhive_attachments") do  -%>
-  <%= form.input :add_screens_to_arhive %>
-  <%= form.input :add_covers_to_arhive %>
-  <%= form.input :attachment_files, :as => :file %>
+  <%= form.input :attachment_files, :as => :file, :input_html => {:name => "task[attachment_files][][attachment]"} %>
 <% end -%>
 <% form.inputs :name => I18n.t("jobs_list") do  -%>
 <%= form.input :extracting_files %>
@@ -29,6 +28,7 @@
 
   <% form.inputs  do  -%>
     <%= form.input :screen_list, :as => :boolean %>
+    <%= form.input :add_screens_to_arhive %>
     <%= form.input :screen_list_macro_id , :collection => current_user.macros%>
 
     <%= form.input :upload_images, :as => :boolean %>
