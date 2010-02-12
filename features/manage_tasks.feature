@@ -149,10 +149,10 @@
              И включил флажок "task[use_password]"
              И заполнил поле "task[password]" значением "secret"
              # Add files
-             И выбрал в поле "task[covers]" файл "spec/factories/test_files/cover_01.jpg"
+             # И выбрал в поле "task[covers][][attachment]" файл "spec/factories/test_files/cover_01.jpg"
              И включил флажок "task[add_screens_to_arhive]"
              И включил флажок "task[add_covers_to_arhive]"
-             И выбрал в поле "task[attachment_files]" файл "spec/factories/test_files/attachment_01.jpg"
+             # И выбрал в поле "task[attachment_files][][attachment]" файл "spec/factories/test_files/attachment_01.jpg"
 
              И включил флажок "task[extracting_files]"
              И включил флажок "task[rename]"
@@ -160,17 +160,17 @@
              И заполнил поле "task[rename_file_name]" значением "new_file"
              И заполнил поле "task[rename_text]" значением "foto_1200"
              И заполнил поле "task[macro_renaming]" значением "[file_name].[text].[ext]"
-             И включил флажок "task[screen_list]"
+             # И включил флажок "task[screen_list]"
              # И выбрал "macros1" из "task[screen_list_macro_id]"
-             И включил флажок "task[upload_images]"
+             # И включил флажок "task[upload_images]"
              # И выбрал "imagehostin1" из "task[upload_images_profile_id]"
-             И включил флажок "task[mediavalise]"
+             # И включил флажок "task[mediavalise]"
              # И выбрал "mediavalise1" из "task[mediavalise_profile_id]"
-             И включил флажок "task[create_arhive]"
-             И заполнил поле "task[part_size]" значением "100"
-             И заполнил поле "task[password_arhive]" значением "secret_arhive"
+             # И включил флажок "task[create_arhive]"
+             # И заполнил поле "task[part_size]" значением "100"
+             # И заполнил поле "task[password_arhive]" значением "secret_arhive"
              И нажал кнопку "Create"
-          То Я должен увидеть "Create new task."
+          То Я должен увидеть сообщение " Tasks was successfully created."
              И теперь у меня должно быть одна активная задача
 
   Сценарий: Завершение задачи

@@ -10,9 +10,9 @@
       | admin     | secret   | admin_user@gmail.com | true  |
       | free_user | secret   | free_user@gmail.com  | false |
       И у пользователя "free_user@gmail.com" есть следующие profile:
-      | name     | created_at       | login     | password | host         |
-      | profile1 | 23.01.2010 12:06 | free_user |   123456 | imagebam.com |
-      | profile2 | 11.01.2010 02:34 | paid_user |   123456 | imagebam.com |
+      | name     | created_at       | login     | password | host         | content_type_id             |
+      | profile1 | 23.01.2010 12:06 | free_user |   123456 | imagebam.com | Common::ContentType::ADULT  |
+      | profile2 | 11.01.2010 02:34 | paid_user |   123456 | imagebam.com | Common::ContentType::FAMILY |
       И я зашел в сервис как "free_user@gmail.com/secret"
 
   Сценарий: Список Profiles
@@ -22,9 +22,9 @@
              И должен увидеть дополнительное меню Tools
              И должен увидеть ссылку "Create profile"
              И должен увидеть список profiles:
-                | Name     | Hosting      | Created          | Actions      |
-                | profile1 | imagebam.com | 23.01.2010 12:06 | edit, delete |
-                | profile2 | imagebam.com | 11.01.2010 02:34 | edit, delete |
+                | Name     | Hosting      | Content type  | Created          | Actions      |
+                | profile1 | imagebam.com | Adult content | 23.01.2010 12:06 | edit, delete |
+                | profile2 | imagebam.com | Family safe   | 11.01.2010 02:34 | edit, delete |
 
   Сценарий: Добавление Profiles
     Допустим Я на странице "new profile"

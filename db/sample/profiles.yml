@@ -5,6 +5,7 @@ User.all.each  do |user|
  profiles_<%= user.id %>_<%= i %>:
   name: <%= Faker::Lorem .words(1).first %>
   host: <%= Common::Host::valid_options.rand %>
+  content_type_id: <%= Common::ContentType.valid_options.rand %>
   user_id: <%= user.id %>
   login: <%= Faker::Internet.email %>
   password: <%= Faker::Internet.email  %>
@@ -13,6 +14,7 @@ User.all.each  do |user|
  profiles_mediavalise_<%= user.id %>_<%= i %>:
   name: <%= Faker::Lorem.words(1).first %>
   host: <%= Common::Host::MEDIAVALISE %>
+  content_type_id: <%= Common::ContentType.valid_options.rand %>
   user_id: <%= user.id %>
   login: <%= Faker::Internet.email %>
   password: <%= Faker::Internet.email  %>

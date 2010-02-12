@@ -1,4 +1,25 @@
 module Common
+  module ContentType
+    ADULT = 1
+    FAMILY = 2
+    def self.options_for_select
+      [
+       [I18n.t("adult_content"),ADULT],
+       [I18n.t("family_safe"),FAMILY],
+      ]
+    end
+    def self.valid_options
+      [ ADULT, FAMILY]
+    end
+    def self.values
+      {
+        ADULT   => I18n.t("adult_content"),
+        FAMILY  => I18n.t("family_safe")
+      }
+
+    end
+  end
+
   module ThatRename
     ARHIVE, FILE = %w(arhive file)
     def self.options_for_select

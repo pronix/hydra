@@ -15,7 +15,19 @@ end
  current_user.user_files.destroy_all
 end
 Если /^(?:|[Я|я] )выбрал в поле "([^\"]*)" файл "([^\"]*)"$/ do |field, path|
- attach_file(field, File.join(RAILS_ROOT, path))
+  type =  case path.split(".")[1]
+          when "jpg"
+            "image/jpg"
+          when "jpeg"
+            "image/jpeg"
+          when "png"
+            "image/png"
+          when "gif"
+            "image/gif"
+            else
+            "text/txt"
+          end
+  attach_file(field, File.join(RAILS_ROOT, path), type)
 
 end
 
