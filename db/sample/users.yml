@@ -10,20 +10,10 @@ user_<%= i %>:
   password_salt: MBdB_21h3IDzr63RDxIb
   crypted_password: 92c8e189627993f5698af73641cc273db0eb4c70bde1a56a30a7612a62bbbeb8163793d1e9447f9ea1c7f6bedf199eff4d713bccdd8fe33638ae42e79db5623c
 <% end %>
-<%
- user_role = Role.find_by_name "user"
- if user_role
-  User.all.each { |u| u.has_role! user_role.name.to_sym } 
- end
-%>
 user_admin:
   email: "hydra@gmail.com"
   notification_email: "hydra@gmail.com"
   name:  <%= Faker::Name.name %>
   password_salt: MBdB_21h3IDzr63RDxIb
   crypted_password: 92c8e189627993f5698af73641cc273db0eb4c70bde1a56a30a7612a62bbbeb8163793d1e9447f9ea1c7f6bedf199eff4d713bccdd8fe33638ae42e79db5623c
-<%
-admin_role = Role.find_by_name "admin"
-admin_user = User.find_by_email "hydra@gmail.com"
-admin_user.has_role! admin_role.name.to_sym
-%>
+
