@@ -19,6 +19,7 @@ class TasksController < ApplicationController
     end
   end
 
+
   protected
   def collection
     session[:task_status]   ||= "active"
