@@ -1,11 +1,16 @@
 development:
   command: "aria2c --enable-xml-rpc"
-  --xml-rpc-listen-port: "6800"
-  --xml-rpc-user: "hydra"
-  --xml-rpc-passwd: "hydra"
+  server: "localhost"
+  port: "6800"
+  path: "/rpc"
+  user: "hydra"
+  password: "hydra"
 
 production:
   command: "aria2c --enable-xml-rpc"
-  --xml-rpc-listen-port: "6800"
-  --xml-rpc-user: "hydra"
-  --xml-rpc-passwd: "hydra"
+  server: "localhost"
+  port: "6800"
+  path: "/rpc"
+  user: "hydra"
+  password: "hydra"
+
