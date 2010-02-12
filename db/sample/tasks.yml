@@ -15,6 +15,7 @@ task_<%= user.id %>_<%= i %>:
   user_id: <%= user.id %>
   category_id: <%= rand(2)+1 %>
   name: <%= Faker::Lorem .words(1).first %>
+  description: <%= Faker::Lorem.paragraph %>
   links: <%= [links[rand(links.size)], links[rand(links.size)]].join(' ') %>
   state: <%= states[rand(states.size)] %>
 <% end end %>
