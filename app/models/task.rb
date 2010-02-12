@@ -7,7 +7,7 @@ class Task < ActiveRecord::Base
   aasm_column :state
   aasm_initial_state :queued
 
-  aasm_state :queued
+  aasm_state :queued, :enter => :event
   aasm_state :downloading
   aasm_state :extracting
   aasm_state :generation
@@ -18,9 +18,31 @@ class Task < ActiveRecord::Base
   aasm_state :completed
   aasm_state :error
 
+  aasm_event :start_downloading do
+    transitions :to => :downloading, :from => :queued
+  end
 
+  aasm_event :start_extracting do
+    transitions :to => :extracting, :from => :downloading
+  end
+
+  def event(comment="")
+    job_loggings.logger(comment)
+  end
   # associations
-  has_many :job_loggings
+  has_many :job_loggings do
+
+    def logger(comment = "")
+      if @job = find_by_job(proxy_owner.aasm_current_state.to_s)
+        @job.update_attributes!({ :stop_time => Time.now.to_s(:db), :comment => comment })
+      else
+        @job = create(:job => proxy_owner.aasm_current_state.to_s, :startup => Time.now.to_s(:db))
+      end
+      @job
+    end
+
+  end
+
   belongs_to :category
 
   # files
