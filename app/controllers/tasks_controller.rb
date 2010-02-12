@@ -13,7 +13,8 @@ class TasksController < ApplicationController
 
   def create
     create! do |success, failure|
-      success.html { redirect_to categories_path }
+      session[:task_status] = "active"
+      success.html { redirect_to tasks_path }
       failure.html { render :new }
     end
   end
