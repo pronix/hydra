@@ -1,14 +1,20 @@
 class Task < ActiveRecord::Base
+  ROOT_PATH_DOWNLOAD = File.join(RAILS_ROOT, "data", "download")
   include AASM
   default_scope :order => "created_at DESC"
 
+
+  after_create :new_task
   # aasm
 
   aasm_column :state
   aasm_initial_state :queued
 
-  aasm_state :queued, :enter => :event
-  aasm_state :downloading
+  aasm_state :queued                              # новая задача
+
+  aasm_state :downloading,   :enter => :to_aria   # скачивание
+  aasm_state :download                            # скачан
+
   aasm_state :extracting
   aasm_state :generation
   aasm_state :renaming
@@ -18,33 +24,38 @@ class Task < ActiveRecord::Base
   aasm_state :completed
   aasm_state :error
 
+
+  # скачивание
   aasm_event :start_downloading do
-    transitions :to => :downloading, :from => :queued
+    transitions :to => :downloading, :from => :queued, :guard => :aria_ping?
   end
 
-  aasm_event :start_extracting do
-    transitions :to => :extracting, :from => :downloading
+
+  aasm_event :stop_downloading do
+    transitions :to => :download, :from => :downloading
   end
 
-  def event(comment="")
-    job_loggings.logger(comment)
+  aasm_event :to_error do
+    transitions :to => :error, :from => [ :queued, :downloading, :download,
+                                          :extracting, :generation, :renaming,
+                                          :packing, :uploading, :finished,
+                                          :completed, :error ]
   end
+
+
   # associations
   has_many :job_loggings do
-
-    def logger(comment = "")
-      if @job = find_by_job(proxy_owner.aasm_current_state.to_s)
-        @job.update_attributes!({ :stop_time => Time.now.to_s(:db), :comment => comment })
-      else
-        @job = create(:job => proxy_owner.aasm_current_state.to_s, :startup => Time.now.to_s(:db))
-      end
-      @job
+    def start_job(comment = "")
+      @job = create(:job => proxy_owner.aasm_current_state.to_s, :startup => Time.now.to_s(:db))
     end
-
+    def end_job(comment = "")
+      @job = find_by_job(proxy_owner.aasm_current_state.to_s)
+      @job.update_attributes!({ :stop_time => Time.now.to_s(:db), :comment => comment })
+    end
   end
 
   belongs_to :category
-
+  belongs_to :user
   # files
 
   has_many :covers , :as => :assetable, :dependent => :destroy
@@ -81,6 +92,9 @@ class Task < ActiveRecord::Base
 
   # name scope
   named_scope :active, :conditions => [" state not in(?) ", %w(completed error)]
+  named_scope :active_without_self, lambda { |t| {
+      :conditions => [" tasks.state not in(?) and tasks.id not in (?) ", %w(completed error), t.read_attribute(:id) ]
+    }}
   named_scope :completed, :conditions => [" state in (?) ", %w(completed error)]
   named_scope :filter, lambda{ |cond, argv|
     raise "Пустые параметры поиска" if cond.blank?
@@ -91,7 +105,7 @@ class Task < ActiveRecord::Base
 
 
   def extract_link(text_links=self.links)
-    !text_links.blank? ? URI.extract(text_links) : false
+    !text_links.blank? ? URI.extract(text_links).uniq : false
   end
 
   def covers=(attr)
@@ -105,5 +119,37 @@ class Task < ActiveRecord::Base
     end
   end
 
+
+  def start_job(comment="")
+    job_loggings.start_job(comment)
+  end
+  def end_job(comment="")
+    job_loggings.end_job(comment)
+  end
+
+
+  # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  def aria_ping?
+    Aria2cRcp.ping
+  end
+
+  # если активнх задач нету отправляем задачу на скачивания
+  def new_task
+    unless user.tasks.active_without_self(self).count > 0
+      start_downloading!
+    end
+  end
+
+  # Создаем путь к файлам
+  def to_aria
+    job_loggings.start_job("")
+    @path = File.join(ROOT_PATH_DOWNLOAD, user.id.to_s, self.id.to_s)
+    FileUtils.mkdir_p(File.dirname(@path))
+    @options={ "dir" => @path }
+    self.gid = Aria2cRcp.add_uri(self.extract_link, @options)
+    save! if self.gid
+  rescue
+    to_error!
+  end
 
 end

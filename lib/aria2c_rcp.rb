@@ -1,8 +1,14 @@
 require 'xmlrpc/client'
 
 module Aria2cRcp
+  def self.ping
+    client.call("aria2.getSessionInfo")
+  rescue Errno::ECONNREFUSED
+    Rails.logger.error ' [ aria2c rcp ] нет связи с сервером rcp'
+    false
+  end
   def self.add_list_uri(resources, options)
-    client.call()
+    client
   end
   def self.add_uri(resources, options)
     client.call("aria2.addUri", resources, options)
@@ -40,7 +46,5 @@ module Aria2cRcp
                              :password => options["password"]})
     end
     @_client
-  rescue
-    false
   end
 end
