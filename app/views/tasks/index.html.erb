@@ -13,7 +13,7 @@
     <th><%= I18n.t("actions") %></th>
   </tr>
   <% @tasks.each do |task| -%>
-  <tr>
+  <tr >
     <td><%= task.category.name  %></td>
     <td><%= link_to task.name, task_path(task)  %></td>
     <td><%= I18n.t(task.aasm_current_state.to_s) %></td>
@@ -26,11 +26,20 @@
 <script type="text/javascript" charset="utf-8">
   $(function(){
     $("#category").change(function(){
-       var _url = "<%= tasks_path(:format=> :js, :category => :id)%>";
+       var _url = "<%= tasks_path(:format=> :js, :category => :id)%> ";
        if ($(this).val()) { _url = _url.replace("id", $(this).val());
        } else { _url = _url.replace("id", "-1"); };
       $("#load_content").load(_url)
      });
+
+  <% if session[:task_status]["active"] -%>
+    $(document).everyTime(15000,'indicate_timer' ,function(i) {
+       var _url = "<%= tasks_path %> ";
+           console.log("update_page");
+           $("#load_content").load(_url);
+      });
+  <% end %>
+
    });
 </script>
 </div>

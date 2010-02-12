@@ -1,2 +1,38 @@
-<h1>Tasks#show</h1>
-<p>Find me in app/views/tasks/show.html.erb</p>
+<%= head_page [I18n.t("task"), @task.name ].join(": ") %>
+<div class="task_info">
+    <div>
+    <span>Дата </span><br />
+    <%= @task.created_at %>
+  </div>
+  <div>
+    <span>Описание</span><br />
+    <%= h @task.description %>
+  </div>
+  <div>
+    <span>Ссылки</span><br />
+  <%= h @task.links %>
+  </div>
+
+</div>
+<div>
+  <table class="brown">
+    <tr>
+      <th>current state</th>
+      <th colspan=3><%= @task.aasm_current_state %></th>
+    </tr>
+    <tr>
+      <th>Job</th>
+      <th>Start time</th>
+      <th>Stop time</th>
+      <th>Result</th>
+    </tr>
+    <% @task.job_loggings.each do |l| -%>
+    <tr>
+      <td><%= l.job %></td>
+      <td><%= l.startup %></td>
+      <td><%= l.stop_time %></td>
+      <td><%= l.comment %></td>
+    </tr>
+    <% end -%>
+  </table>
+</div>
