@@ -64,6 +64,7 @@ class Task < ActiveRecord::Base
   belongs_to :screen_list_macro,     :class_name => "Macros"
   belongs_to :upload_images_profile, :class_name => "Profile"
   belongs_to :mediavalise_profile,   :class_name => "Profile"
+  has_many :downloading_files
 
   # validations
   validates_presence_of :name, :links
@@ -103,6 +104,11 @@ class Task < ActiveRecord::Base
     }}
 
 
+
+  def speed
+    return 0 if downloading_files.blank?
+    downloading_files.sum(:speed)/ downloading_files.count
+  end
 
   def extract_link(text_links=self.links)
     !text_links.blank? ? URI.extract(text_links).uniq : false
@@ -146,10 +152,11 @@ class Task < ActiveRecord::Base
     @path = File.join(ROOT_PATH_DOWNLOAD, user.id.to_s, self.id.to_s)
     FileUtils.mkdir_p(File.dirname(@path))
     @options={ "dir" => @path }
-    self.gid = Aria2cRcp.add_uri(self.extract_link, @options)
-    save! if self.gid
-  rescue
-    to_error!
+
+    self.extract_link.each do |uri|
+      @gid = Aria2cRcp.add_uri([uri], @options)
+      downloading_files.create(:gid => @gid) if @gid
+    end
   end
 
 end
