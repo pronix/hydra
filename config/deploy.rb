@@ -70,7 +70,7 @@ namespace :sqlite3 do
   end
 end
 
-after "deploy", "sqlite3:build_configuration", "sqlite3:link_configuration_file", "deploy:symlinks"
+after "deploy" , "sqlite3:build_configuration", "sqlite3:link_configuration_file", "deploy:symlinks"
 after  "deploy",   "deploy:link_current_to_appache_folder", "deploy:symlinks"
 
 
