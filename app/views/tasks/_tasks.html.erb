@@ -9,8 +9,8 @@
   </tr>
   <% tasks.each do |task| -%>
   <tr>
-    <td><%= task.category.name  %></td>
-    <td><%= link_to task.name, task_path(task)  %></td>
+    <td><%= h task.category.name  %></td>
+    <td><%= link_to h(task.name), task_path(task)  %></td>
     <td class="state_task_<%= task.aasm_current_state%>"><%= I18n.t(task.aasm_current_state.to_s) %>
       <% if task.downloading? -%>
         <span class='downloading_monitor'>

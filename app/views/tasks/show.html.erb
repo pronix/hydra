@@ -1,16 +1,21 @@
-<%= head_page [I18n.t("task"), @task.name ].join(": ") %>
+<%= head_page [I18n.t("task") ].join(": ") %>
+
 <div class="task_info">
     <div>
-    <span>Дата </span><br />
-    <%= @task.created_at %>
-  </div>
+      <span><%= I18n.t("created_at") %></span><br />
+      <%= @task.created_at.to_s(:long) %>
+    </div>
+    <div>
+      <span><%= I18n.t("name") %></span><br />
+      <%= h @task.name %>
+    </div>
   <div>
-    <span>Описание</span><br />
+    <span><%= I18n.t("description") %></span><br />
     <%= h @task.description %>
   </div>
   <div>
-    <span>Ссылки</span><br />
-  <%= h @task.links %>
+    <span><%= I18n.t("links") %></span><br />
+    <%=  @task.extract_link.map{|x| "<div>#{x}</div>"} %>
   </div>
 
 </div>
