@@ -5,20 +5,8 @@
     session[:task_category].to_i), :class => "categories" %>
 </form>
 
-<table class="brown">
-  <tr>
-		<th><%= I18n.t("category") %></th>
-		<th><%= I18n.t("name") %></th>
-		<th><%= I18n.t("status") %></th>
-  </tr>
-  <% @tasks.each do |task| -%>
-  <tr>
-    <td><%= task.category.name %></td>
-    <td><%= link_to task.name, task_path(task) %></td>
-    <td><%= I18n.t(task.aasm_current_state) %></td>
-  </tr>
-  <% end -%>
-</table>
+<%= render :partial => 'tasks/tasks', :object => @tasks %>
+
 <script type="text/javascript" charset="utf-8">
   $(function(){
     $("#category").change(function(){

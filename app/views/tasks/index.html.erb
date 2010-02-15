@@ -4,24 +4,7 @@
 <%= select_tag :category,options_for_select([[I18n.t("all_categories"),nil]]+Category.all.map{|x| [x.name, x.id]},
     session[:task_category].to_i), :class => "categories" %>
 </form>
-
-<table class="brown tasks">
-  <tr>
-		<th><%= I18n.t("category") %></th>
-		<th><%= I18n.t("name") %></th>
-		<th><%= I18n.t("status") %></th>
-    <th><%= I18n.t("actions") %></th>
-  </tr>
-  <% @tasks.each do |task| -%>
-  <tr >
-    <td><%= task.category.name  %></td>
-    <td><%= link_to task.name, task_path(task)  %></td>
-    <td><%= I18n.t(task.aasm_current_state.to_s) %></td>
-    <td><%= link_to I18n.t("delete"),  task_path(task), :method => :delete, :confirm => I18n.t("delete_task"), :title => I18n.t("delete")  %></td>
-  </tr>
-  <% end -%>
-</table>
-
+<%= render :partial => 'tasks', :object => @tasks %>
 
 <script type="text/javascript" charset="utf-8">
   $(function(){
