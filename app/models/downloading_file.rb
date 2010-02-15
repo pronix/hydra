@@ -30,16 +30,15 @@ class DownloadingFile < ActiveRecord::Base
 
   class << self
     def process
-      @tell = Aria2cRcp.tell
+      @tell = Aria2cRcp.tell_active
 
       # Записываем статус скачивания
-
-      @active = @tell[:active].map {|x|
+      @active = @tell.map {|x|
         { :gid => x["gid"],                    :speed => x["downloadSpeed"],
           :total_length => x["totalLength"] ,  :completed_length => x["completedLength"]}}
 
 
-      DownloadingFile.transaction do
+      !@active.blank? && DownloadingFile.transaction do
         @active.each {|x|
           @dwn_file = find_by_gid(x[:gid])
           @dwn_file.update_attributes({ :speed => x[:speed],
