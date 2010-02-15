@@ -11,7 +11,7 @@ class DaemonMonitorDownloading < DaemonSpawn::Base
       begin
         DownloadingFile.process
       rescue
-        STDERR.puts "Monitor Downloading start :error"
+        STDERR.puts  " #{$!.inspect} "
       end
       sleep(SLEEP)
     end
