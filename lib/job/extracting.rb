@@ -7,7 +7,7 @@ module Job
 
     def process_of_unpacking
       @path = unpacked_path
-      FileUtils.mkdir_p(File.dirname(@path))
+      FileUtils.mkdir_p(@path)
 
       # Если есть файлы в архиве gzip or bzip2 распакуем их сначала
       Dir.glob(downloding_path + "**/**").each do |task_file|
@@ -34,10 +34,18 @@ module Job
             %(rar e -y -inul #{task_file}  #{@path}/)
           Open3.popen3(command){ |rar_in, rar_out, rar_err| result = rar_err.gets; raise result unless result.blank?  }
         when /tar/i
-          command = %(tar xf #{task_file} -C #{path})
+          command = %(tar xf #{task_file} -C #{@path})
           Open3.popen3(command){ |tar_in, tar_out, tar_err| result = tar_err.gets; raise result unless result.blank?  }
         else
-          raise "archive type is not defined or not supported"
+          # Определили что распоковать файл не сможем
+          # но вдруг файл просто видео то копируем его
+          type_file = nil
+          Open3.popen3("file -i #{task_file}") {|i,o,e| type_file =  o.gets }
+          if !type_file.blank? && Common::Video.mime_type.include?(type_file.scan(/video\/\w+/).first)
+            system(%(cp #{task_file} #{@path}/))
+          else
+            raise "archive type is not defined or not supported"
+          end
         end
       end
 
