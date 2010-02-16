@@ -2,6 +2,7 @@ class Task < ActiveRecord::Base
   include AASM
   include Job::Downloading
   include Job::Extracting
+  include Job:: GenerationScreenList
 
   ROOT_PATH_DOWNLOAD = File.join(RAILS_ROOT, "data", "task_files")
   default_scope :order => "created_at DESC"
@@ -207,6 +208,10 @@ class Task < ActiveRecord::Base
     File.join(task_path, 'unpacked')
   end
 
+  # Путь куда будут формироваться скринлисты
+  def screen_list_path
+    File.join(task_path, 'screen_list')
+  end
 
   # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   # Распаковка файлов
@@ -221,12 +226,9 @@ class Task < ActiveRecord::Base
   # Генерация скрин листа
   # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   def queued_to_generation_screen_list
+    job_loggings.create(:job => :generation.to_s, :startup => Time.now.to_s(:db) )
     self.send_later(:process_of_generation_screen_list)
   end
 
-  def process_of_generation_screen_list
-    job_loggings.create(:job => :generation.to_s, :startup => Time.now.to_s(:db) )
-
-  end
 
 end
