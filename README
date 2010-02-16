@@ -7,6 +7,9 @@
     - unzip - для распаковки zip архивов
     - tar
 
+    FFMpeg
+    ffmpeg-ruby (headers libavformat)
+
 Скрипты:
    - ./script/monitor_downloading.rb start
    - ./script/delayed_job start
