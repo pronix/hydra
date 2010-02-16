@@ -1,7 +1,9 @@
-require 'open3'
 class Task < ActiveRecord::Base
-  ROOT_PATH_DOWNLOAD = File.join(RAILS_ROOT, "data", "task_files")
   include AASM
+  include Job::Downloading
+  include Job::Extracting
+
+  ROOT_PATH_DOWNLOAD = File.join(RAILS_ROOT, "data", "task_files")
   default_scope :order => "created_at DESC"
 
 
@@ -189,7 +191,7 @@ class Task < ActiveRecord::Base
   end
 
   # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  # Скачивание фалов
+  # Пути задачи
   # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   def task_path
@@ -205,34 +207,6 @@ class Task < ActiveRecord::Base
     File.join(task_path, 'unpacked')
   end
 
-  # Создаем путь к файлам и отправляем файлы на скачивание
-  def to_aria
-    @path = downloding_path
-    FileUtils.mkdir_p(File.dirname(@path))
-    @options={ "dir" => @path }
-
-    self.extract_link.each do |uri|
-      @gid = Aria2cRcp.add_uri([uri], @options)
-      downloading_files.create(:gid => @gid) if @gid
-    end
-  end
-
-  # Проверка загружены ли все файлы по задаче
-  def check_downloading
-    if downloading_files.all?{|x| x.complete? }
-      end_job("Count files: #{downloading_files.count}")
-      write_attribute(:percentage, 100)
-      write_attribute(:speed, (downloading_files.sum(:speed)/ downloading_files.count)/1.kilobyte )
-      save
-      downloading_files.destroy_all
-      start_extracting!
-      job_loggings.create(:job => "extracting", :startup => Time.now.to_s(:db) )
-    elsif downloading_files.any?{|x| x.error? }
-      end_job("Error: #{downloading_files.error.first.comment}")
-      erroneous!
-      start_job("Error: #{downloading_files.error.first.comment}")
-    end
-  end
 
   # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   # Распаковка файлов
@@ -241,72 +215,6 @@ class Task < ActiveRecord::Base
   def queued_to_extracting
     self.send_later(:process_of_unpacking)
   end
-
-  def process_of_unpacking
-    @path = unpacked_path
-    FileUtils.mkdir_p(File.dirname(@path))
-
-    # Если есть файлы в архиве gzip or bzip2 распакуем их сначала
-    Dir.glob(downloding_path + "**/**").each do |task_file|
-      case IO.popen(%(file -b #{task_file})).readline
-      when /^gzip/i
-        command = %(gunzip -f #{task_file})
-        raise "Error: gzip" unless system(command)
-      when /^bzip2/i
-        command = %(bunzip2 -f #{task_file})
-        raise "Error: bunzip2" unless system(command)
-      end
-    end
-
-    Dir.glob(downloding_path + "**/**").each do |task_file|
-      case IO.popen(%(file -b #{task_file})).readline
-      when /^zip/i
-        command =  use_password? ? %(unzip -o -P #{password}  #{task_file} -d #{@path}/ ) :
-          %(unzip -o  #{task_file} -d #{@path}/ )
-        unless system(command)
-          test_result = []
-          test_commad = use_password? ? %(unzip -to -P #{password}  #{task_file}  ) :
-            %(unzip -to  #{task_file}  )
-          IO.popen(message_command) { |i| i.each {|l| test_result << l.strip }}
-          raise "Error: #{test_result.join('.')}"
-        end
-
-      when /^rar/i
-        test_command = use_password? ? "rar t -inul -p#{password} #{task_file}" : "rar t -inul #{task_file}"
-        message_command = use_password? ? "rar t -idc -p#{password} #{task_file}" : "rar t -idc #{task_file}"
-        command = use_password? ? %(rar e -y -p#{password} -inul #{task_file}  #{@path}/) :
-          %(rar e -y -inul #{task_file}  #{@path}/)
-        test_result = []
-        unless system(test_command)
-          IO.popen(message_command) { |i| i.each {|l| test_result << l.strip }}
-          test_result.delete("")
-          raise "Error: #{test_result[-2..-1].join('. ')}"
-        else
-           system(command)
-        end
-
-      when /tar/i
-        command = %(tar xf #{task_file} -C #{path})
-        result = []
-        unless system(command)
-          Open3.popen3(command){ |tar_in, tar_out, tar_err| result << tar_err.gets }
-          raise "Error: #{result.join('.')}"
-        end
-      else
-        raise "Error: archive type is not defined or not supported"
-
-      end
-    end
-
-    end_job("Count files: #{Dir.glob(@path+ "**/**").size}")
-    start_generation!
-
-  rescue => ex
-    end_job(ex.message)
-    erroneous!
-    start_job(ex.message)
-  end
-
 
 
   # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
