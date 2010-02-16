@@ -17,13 +17,15 @@ Rails::Initializer.run do |config|
   # Specify gems that this application depends on and have them installed with rake gems:install
   config.gem "formtastic"
   config.gem 'authlogic'
-  config.gem 'ttilley-aasm',:lib => 'aasm'
+  config.gem 'ttilley-aasm',:lib => 'aasm', :source => 'http://gemcutter.org'
   config.gem "acl9", :source => "http://gemcutter.org", :lib => "acl9"
   config.gem "geoip"
   config.gem 'paperclip', :source => 'http://gemcutter.org'
   config.gem "inherited_resources", :version => '=1.0.3'
-  config.gem "daemon-spawn"
+  config.gem "daemon-spawn", :source => 'http://gemcutter.org'
   config.gem 'collectiveidea-delayed_job', :lib => 'delayed_job', :source => 'http://gemcutter.org'
+  config.gem "httparty", :source => 'http://gemcutter.org'
+
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
