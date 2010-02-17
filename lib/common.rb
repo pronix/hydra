@@ -1,4 +1,22 @@
 module Common
+  module Font
+
+    def self.list
+      unless @font_list
+        @font_list = IO.popen("identify -list font").readlines.select {|x| x[/Font/]}.map{|x| x[/Font: (.*)/] && $1 }
+      end
+      @font_list
+    end
+
+    def self.options_for_select
+      list.map{ |x| [x,x]}
+    end
+    def self.valid_options
+      list
+    end
+
+  end
+
   module Video
     def self.mime_type
       [
@@ -108,6 +126,12 @@ module Common
     end
     def self.valid_options
       [LEFT, RIGHT]
+    end
+    def self.values
+      {
+        LEFT =>  "SouthWest",
+        RIGHT => "SouthEast"
+      }
     end
   end
 
