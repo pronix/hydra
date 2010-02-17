@@ -17,7 +17,6 @@ class Task < ActiveRecord::Base
   aasm_state :queued                              # новая задача
 
   aasm_state :downloading,   :enter => :to_aria   # скачивание
-  aasm_state :download                            # скачан
 
   aasm_state :extracting,    :enter => :queued_to_extracting
   aasm_state :generation,    :enter => :queued_to_generation_screen_list
@@ -26,7 +25,7 @@ class Task < ActiveRecord::Base
   aasm_state :uploading
   aasm_state :finished
   aasm_state :completed
-  aasm_state :error
+  aasm_state :error,        :enter => :process_error
 
 
   # скачивание
@@ -44,7 +43,7 @@ class Task < ActiveRecord::Base
   end
 
   aasm_event :erroneous do
-    transitions :to => :error, :from => [ :queued, :downloading, :download,
+    transitions :to => :error, :from => [ :queued, :downloading,
                                           :extracting, :generation, :renaming,
                                           :packing, :uploading, :finished,
                                           :completed, :error ]
@@ -57,7 +56,8 @@ class Task < ActiveRecord::Base
       @job = create(:job => proxy_owner.reload.aasm_current_state.to_s, :startup => Time.now.to_s(:db))
     end
     def end_job(comment = "")
-      @job = find_by_job(proxy_owner.reload.aasm_current_state.to_s) || create(:job => proxy_owner.reload.aasm_current_state.to_s)
+      @job = find_by_job(proxy_owner.reload.aasm_current_state.to_s) ||
+        create(:job => proxy_owner.reload.aasm_current_state.to_s)
       @job.update_attributes!({ :stop_time => Time.now.to_s(:db), :comment => comment })
     end
   end
@@ -107,9 +107,7 @@ class Task < ActiveRecord::Base
   named_scope :completed, :conditions => [" state in (?) ", %w(completed error)]
   named_scope :filter, lambda{ |cond, argv|
     raise "Пустые параметры поиска" if cond.blank?
-    {
-      :conditions => [cond,argv],
-    }}
+    { :conditions => [cond,argv] }}
 
 
   # callback
@@ -126,16 +124,36 @@ class Task < ActiveRecord::Base
       Rails.logger.info "[ clear task ] - remove job aria ##{file.gid}"
       Aria2cRcp.remove(file.gid.to_s) rescue nil
     end
+
+    # Удаляем задачу и отправляем следующию на выполнение
+    @_task = user.tasks.queued.last
+    if @task &&  user.tasks.active_without_self(self).blank?
+      @_task.end_job
+      @_task.start_downloading!
+      sleep(1)
+      @_task.start_job
+    end
   end
 
   # если активнх задач нету отправляем задачу на скачивания
   def new_task
     start_job
-    unless user.tasks.active_without_self(self).count > 0
+    if user.tasks.active_without_self(self).blank?
       end_job
       start_downloading!
       sleep(1)
       start_job
+    end
+  end
+
+  # Если задача завершаеться с ошибкой то  отправляем следующию задачу на выполнение
+  def process_error
+    @_task = user.tasks.queued.last
+    if @task &&  user.tasks.active_without_self(self).blank?
+      @_task.end_job
+      @_task.start_downloading!
+      sleep(1)
+      @_task.start_job
     end
   end
 
