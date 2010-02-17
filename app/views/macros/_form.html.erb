@@ -7,12 +7,13 @@
 <%= form.input :frame_color, :input_html => {:class => "color_field" } %>
 <%= form.input :thumb_shadow, :as => :boolean %>
 <%= form.input :thumb_padding %>
-<%= form.inputs :font, :font_size %>
+<%= form.input :font, :as => :select,  :collection => Common::Font::options_for_select, :include_blank => false  %>
+<%= form.input :font_size %>
 <%= form.input :font_color,  :input_html => {:class => "color_field" } %>
 <%= form.input :template_background,  :input_html => {:class => "color_field" } %>
 <%= form.input :header_text %>
 <%= form.input :add_timestamp, :as => :boolean %>
-<%= form.input :position_timestamp, :as => :select, :collection => Common::PositionTimestamp::options_for_select %>
+<%= form.input :position_timestamp, :as => :select, :collection => Common::PositionTimestamp::options_for_select, :include_blank => false %>
 <%= form.input :add_logo, :as => :boolean %>
 <%= form.input :logo, :as => :select, :collection => @logos.map{|x| [x.title, x.id]}   %>
 <%= form.input :file_format, :as => :select, :collection => Common::FileFormat::options_for_select, :include_blank => false  %>
