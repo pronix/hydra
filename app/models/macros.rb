@@ -1,5 +1,5 @@
 class Macros < ActiveRecord::Base
-  belongs_to :logo, :class_name => UserFile
+  belongs_to :logo, :class_name => "UserFile"
   validates_inclusion_of :font, :in => Common::Font.valid_options
   validates_inclusion_of :position_timestamp,
                          :in => Common::PositionTimestamp.valid_options,
