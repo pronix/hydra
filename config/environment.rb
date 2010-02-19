@@ -17,7 +17,8 @@ Rails::Initializer.run do |config|
   # Specify gems that this application depends on and have them installed with rake gems:install
   config.gem "formtastic"
   config.gem 'authlogic'
-  config.gem 'ttilley-aasm',:lib => 'aasm', :source => 'http://gemcutter.org'
+  # config.gem 'ttilley-aasm',:lib => 'aasm', :source => 'http://gemcutter.org'
+  config.gem "workflow", :source => 'http://gemcutter.org'
   config.gem "acl9", :source => "http://gemcutter.org", :lib => "acl9"
   config.gem "geoip"
   config.gem 'paperclip', :source => 'http://gemcutter.org'
