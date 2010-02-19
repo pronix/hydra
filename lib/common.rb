@@ -1,4 +1,14 @@
 module Common
+  module RenameMacros
+    # ["[file_name]", "[text]", "[part_number]", "[ext]"]
+    FILE_NAME = "[file_name]"
+    TEXT= "[text]"
+    PART_NUMBER = "[part_number]"
+    EXT = "[ext]"
+    def self.list
+      [FILE_NAME, TEXT, PART_NUMBER, EXT]
+    end
+  end
   module Font
 
     def self.list
@@ -82,14 +92,14 @@ module Common
   end
 
   module ThatRename
-    ARHIVE, FILE = %w(arhive file)
+    ARCHIVE, FILE = %w(arhive file)
     def self.options_for_select
-      [ [I18n.t("rename_arhive"), ARHIVE],
+      [ [I18n.t("rename_arhive"), ARCHIVE],
         [I18n.t("rename_extracted_file"), FILE ] ]
     end
 
     def self.valid_options
-      [ ARHIVE, FILE]
+      [ ARCHIVE, FILE]
     end
   end
 
