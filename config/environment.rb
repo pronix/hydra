@@ -25,7 +25,7 @@ Rails::Initializer.run do |config|
   config.gem "daemon-spawn", :source => 'http://gemcutter.org'
   config.gem 'collectiveidea-delayed_job', :lib => 'delayed_job', :source => 'http://gemcutter.org'
   config.gem "httparty", :source => 'http://gemcutter.org'
- config.gem 'ffmpeg-ruby', :source => 'http://gemcutter.org'
+  config.gem 'ffmpeg-ruby', :source => 'http://gemcutter.org'
 
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
