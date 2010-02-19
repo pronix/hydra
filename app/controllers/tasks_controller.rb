@@ -36,9 +36,9 @@ class TasksController < ApplicationController
     @conditions, @arguments = [], { }
     @conditions << case session[:task_status]
                    when /active/
-                     " state not in ( :completed_state ) "
+                     " workflow_state not in ( :completed_state ) "
                    when /completed/
-                     " state in ( :completed_state ) "
+                     " workflow_state in ( :completed_state ) "
                    end
     @arguments.merge!({ :completed_state => %w(completed error )})
     @conditions << " category_id = :category " if session[:task_category]

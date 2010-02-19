@@ -10,33 +10,44 @@ class DownloadingFile < ActiveRecord::Base
     "7" => "If there are unfinished downloads. This error is only reported if all finished downloads are successful and there are unfinished downloads in a queue when aria2 exits by pressing Ctrl-C by an user or sending TERM or INT signal."
   }
 
-  include AASM
+  # include AASM
   belongs_to :task
-  aasm_column :status
+  # aasm_column :status
 
-  aasm_initial_state :active
-  aasm_state :active
-  aasm_state :error
-  aasm_state :complete
+  # aasm_initial_state :active
+  # aasm_state :active
+  # aasm_state :error
+  # aasm_state :complete
 
-  aasm_event :completed do
-    transitions :to => :complete, :from => :active
+  # aasm_event :completed do
+  #   transitions :to => :complete, :from => :active
+  # end
+
+  # aasm_event :erroneous do
+  #   transitions :to => :error, :from => :active
+  # end
+
+  include Workflow
+  workflow do
+    state :active do
+      event :completed, :transitions_to => :complete
+      event :erroneous, :transitions_to => :error
+    end
+    state :error
+    state :complete
   end
 
-  aasm_event :erroneous do
-    transitions :to => :error, :from => :active
-  end
-
+  self.workflow_spec.states.keys.each {  |state|
+    named_scope state, :conditions => { :workflow_state => state.to_s }
+  }
 
   class << self
     def process
       @tell = Aria2cRcp.tell_active
 
       # Записываем статус скачивания
-      @active = @tell.map {|x|
-        { :gid => x["gid"],                    :speed => x["downloadSpeed"],
+      @active = @tell.map {|x|{ :gid => x["gid"], :speed => x["downloadSpeed"],
           :total_length => x["totalLength"] ,  :completed_length => x["completedLength"]}}
-
 
       !@active.blank? && DownloadingFile.transaction do
         @active.each {|x|

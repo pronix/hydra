@@ -11,7 +11,7 @@
   <tr>
     <td><%= h task.category.name  %></td>
     <td><%= link_to h(task.name), task_path(task)  %></td>
-    <td class="state_task_<%= task.aasm_current_state%>"><%= I18n.t(task.aasm_current_state.to_s) %>
+    <td class="state_task_<%= task.state %>"><%= I18n.t task.state.to_s %>
       <% if task.downloading? -%>
         <span class='downloading_monitor'>
           [ <%= number_to_percentage(task.percentage.to_i, :precision => 0) -%> | <%= task.speed -%>kb/sec ]

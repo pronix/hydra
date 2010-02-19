@@ -49,13 +49,9 @@ module Job
         end
       end
 
-      end_job("Count files: #{Dir.glob(@path+ "**/**").size}")
-      start_generation!
-
+      job_completion!("Count files: #{Dir.glob(@path+ "**/**").size}")
     rescue => ex
-      end_job("Error:#{ex.message}")
-      erroneous!
-      start_job("Error:#{ex.message}")
+      erroneous!("#{ex.message}")
     end
 
   end

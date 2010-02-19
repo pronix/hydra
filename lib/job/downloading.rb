@@ -7,7 +7,6 @@ module Job
     # Создаем путь к файлам и отправляем файлы на скачивание
     def to_aria
       @proxies = user.proxies.online.map{ |x| { :free => true , :address => x.address }} if proxy?
-       # options["http-proxy"]=val
       @path = downloding_path
 
       FileUtils.mkdir_p(File.dirname(@path))
@@ -32,17 +31,11 @@ module Job
     # Проверка загружены ли все файлы по задаче
     def check_downloading
       if downloading_files.all?{|x| x.complete? }
-        end_job("Count files: #{downloading_files.count}")
         write_attribute(:percentage, 100)
         write_attribute(:speed, (downloading_files.sum(:speed)/ downloading_files.count)/1.kilobyte )
-        save
-        downloading_files.destroy_all
-        start_extracting!
-        job_loggings.create(:job => "extracting", :startup => Time.now.to_s(:db) )
+        job_completion! "Count files: #{downloading_files.count}"
       elsif downloading_files.any?{|x| x.error? }
-        end_job("Error: #{downloading_files.error.first.comment}")
-        erroneous!
-        start_job("Error: #{downloading_files.error.first.comment}")
+        erroneous! "Error: #{downloading_files.error.first.comment}"
       end
     end
 

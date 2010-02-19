@@ -157,14 +157,11 @@ module Job
       # Удаляем временные файлы
       FileUtils.rm_rf(@path_tmp)
       FileUtils.rm_rf(@tmp_logo)
-      end_job("Count files: #{Dir.glob(@path+ "**/**").size}")
+      job_completion!("Count files: #{Dir.glob(@path+ "**/**").size}")
 
     rescue => ex
       log ex.message, :error
-      end_job("Error:#{ex.message}")
-      erroneous!
-      start_job("Error:#{ex.message}")
-
+      erroneous!("#{ex.message}")
     end
 
     private

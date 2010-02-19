@@ -1,65 +1,30 @@
 class Task < ActiveRecord::Base
-  include AASM
+
+  include Workflow
   include Job::Downloading
   include Job::Extracting
-  include Job:: GenerationScreenList
+  include Job::GenerationScreenList
+  include Job::Rename
 
   ROOT_PATH_DOWNLOAD = File.join(RAILS_ROOT, "data", "task_files")
+
   default_scope :order => "created_at DESC"
 
 
 
-  # aasm
-
-  aasm_column :state
-  aasm_initial_state :queued
-
-  aasm_state :queued                              # новая задача
-
-  aasm_state :downloading,   :enter => :to_aria   # скачивание
-
-  aasm_state :extracting,    :enter => :queued_to_extracting
-  aasm_state :generation,    :enter => :queued_to_generation_screen_list
-  aasm_state :renaming
-  aasm_state :packing
-  aasm_state :uploading
-  aasm_state :finished
-  aasm_state :completed
-  aasm_state :error,        :enter => :process_error
-
-
-  # скачивание
-  aasm_event :start_downloading do
-    transitions :to => :downloading, :from => :queued, :guard => :aria_ping?
-  end
-
-
-  aasm_event :start_extracting do
-    transitions :to => :extracting, :from => :downloading
-  end
-
-  aasm_event :start_generation do
-    transitions :to => :generation, :from => :extracting
-  end
-
-  aasm_event :erroneous do
-    transitions :to => :error, :from => [ :queued, :downloading,
-                                          :extracting, :generation, :renaming,
-                                          :packing, :uploading, :finished,
-                                          :completed, :error ]
-  end
-
-
   # associations
   has_many :job_loggings, :dependent => :delete_all do
+
     def start_job(comment = "")
-      @job = create(:job => proxy_owner.reload.aasm_current_state.to_s, :startup => Time.now.to_s(:db))
+      create(:job => proxy_owner.reload.current_state.to_s, :startup => Time.now.to_s(:db))
     end
+
     def end_job(comment = "")
-      @job = find_by_job(proxy_owner.reload.aasm_current_state.to_s) ||
-        create(:job => proxy_owner.reload.aasm_current_state.to_s)
-      @job.update_attributes!({ :stop_time => Time.now.to_s(:db), :comment => comment })
+      (find_by_job(proxy_owner.reload.current_state.to_s) ||
+       create(:job => proxy_owner.reload.current_state.to_s)).
+        update_attributes!({ :stop_time => Time.now.to_s(:db), :comment => comment })
     end
+
   end
 
   belongs_to :category
@@ -85,6 +50,12 @@ class Task < ActiveRecord::Base
   validates_presence_of  :rename_file_name, :if => lambda { |t| t.rename? }
   validates_inclusion_of :that_rename, :in => Common::ThatRename.valid_options, :if => lambda { |t| t.rename? }
 
+  # validate :macro_renaming_checking
+  # def macro_renaming_checking
+  #   errors.add(:macro_renaming, :invalid) if rename? && !macro_renaming.split('.').all? {|x|
+  #     Common::RenameMacros.list.include?(x) }
+  # end
+
   # validations закачка файлов
   validates_presence_of :screen_list_macro_id, :if => lambda{ |t| t.screen_list? }
   validates_presence_of :upload_images_profile_id, :if => lambda{ |t| t.upload_images? }
@@ -100,11 +71,11 @@ class Task < ActiveRecord::Base
 
 
   # name scope
-  named_scope :active, :conditions => [" state not in(?) ", %w(completed error)]
+  named_scope :active, :conditions => [" workflow_state not in(?) ", %w(completed error)]
   named_scope :active_without_self, lambda { |t| {
-      :conditions => [" tasks.state not in(?) and tasks.id not in (?) ", %w(completed error), t.read_attribute(:id) ]
+      :conditions => [" tasks.workflow_state not in(?) and tasks.id not in (?) ", %w(completed error), t.read_attribute(:id) ]
     }}
-  named_scope :completed, :conditions => [" state in (?) ", %w(completed error)]
+  named_scope :completed, :conditions => [" workflow_state in (?) ", %w(completed error)]
   named_scope :filter, lambda{ |cond, argv|
     raise "Пустые параметры поиска" if cond.blank?
     { :conditions => [cond,argv] }}
@@ -126,24 +97,22 @@ class Task < ActiveRecord::Base
     end
 
     # Удаляем задачу и отправляем следующию на выполнение
-    @_task = user.tasks.queued.last
-    if @task &&  user.tasks.active_without_self(self).blank?
-      @_task.end_job
-      @_task.start_downloading!
-      sleep(1)
-      @_task.start_job
+    @_task = user.tasks.queued.first
+    if @_task && user.tasks.active_without_self(self).blank?
+      begin
+        @_task.start_downloading!
+      rescue Workflow::TransitionHalted => ex
+        @_task.error_start_downloading!(ex.message)
+      end
     end
   end
 
   # если активнх задач нету отправляем задачу на скачивания
   def new_task
     start_job
-    if user.tasks.active_without_self(self).blank?
-      end_job
-      start_downloading!
-      sleep(1)
-      start_job
-    end
+    start_downloading! if user.tasks.active_without_self(self).blank?
+  rescue Workflow::TransitionHalted => ex
+    error_start_downloading!(ex.message)
   end
 
   # Если задача завершаеться с ошибкой то  отправляем следующию задачу на выполнение
@@ -231,22 +200,194 @@ class Task < ActiveRecord::Base
     File.join(task_path, 'screen_list')
   end
 
-  # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  # Распаковка файлов
-  # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  def queued_to_extracting
-    self.send_later(:process_of_unpacking)
+
+
+  workflow do
+
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    # Новая задач (в очереди )
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    state :queued do
+
+      event :start_downloading, :transitions_to => :downloading do
+        halt!("Нет ответа от сервера закачек") unless aria_ping?
+        end_job
+      end
+      event :error_start_downloading, :transitions_to => :error do |*message|
+        end_job(message.first)
+      end
+    end
+
+
+    state :job_finish do
+
+      on_entry do |prior_state, triggering_event, *event_args|
+        case prior_state.to_sym
+        when :downloading
+          write_attribute(:previous_state, "Completed donwloading")
+          extracting_files? ? start_extracting! : start_renaming!
+        when :extracting
+          write_attribute(:previous_state, "Completed extracting")
+          screen_list? ? start_generation! : start_renaming!
+        when :generation
+          write_attribute(:previous_state, "Completed generation screen list")
+          start_renaming!
+        when :renaming
+          write_attribute(:previous_state, "Completed renaming")
+          start_packing!
+        when :packing
+          write_attribute(:previous_state, "Completed packing")
+          start_uploading!
+        end
+      end
+
+
+      event :start_extracting, :transitions_to => :extracting
+      event :start_renaming,   :transitions_to => :renaming
+      event :start_generation, :transitions_to => :generation
+      event :start_renaming,   :transitions_to => :renaming
+      event :start_packing,    :transitions_to => :packing
+      event :start_uploading,  :transitions_to => :uploading
+
+    end
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    # Ошибка
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    state :error do
+      on_entry { |prior_state, triggering_event, *event_args| start_job }
+    end
+
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    # Скачивание
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    state :downloading do
+
+      on_entry { |prior_state, triggering_event, *event_args|
+        start_job
+        to_aria
+      }
+      event :job_completion, :transitions_to => :job_finish do |*message|
+        downloading_files.destroy_all
+        end_job(message.first)
+      end
+      event :erroneous, :transitions_to => :error do |*message|
+        end_job(message.first)
+      end
+    end
+
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    # Распаковка файлов
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    state :extracting do
+      event :job_completion, :transitions_to => :job_finish do |*message|
+        end_job(message.first)
+      end
+      event :erroneous, :transitions_to => :error do |*message|
+        end_job(message.first)
+      end
+      on_entry { |prior_state, triggering_event, *event_args|
+        start_job
+        self.send_later(:process_of_unpacking)
+      }
+    end
+
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    # Генерация скрин листов
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    state :generation do
+      event :job_completion, :transitions_to => :job_finish do |*message|
+        end_job(message.first)
+      end
+      event :erroneous, :transitions_to => :error do |*message|
+        end_job(message.first)
+      end
+      on_entry { |prior_state, triggering_event, *event_args|
+        start_job
+        self.send_later(:process_of_generation_screen_list)
+      }
+    end
+
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    # Переименовыание файлов
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    state :renaming do
+      event :job_completion, :transitions_to => :job_finish do |*message|
+        end_job(message.first)
+      end
+      event :erroneous, :transitions_to => :error do |*message|
+        end_job(message.first)
+      end
+      on_entry { |prior_state, triggering_event, *event_args|
+        start_job
+        self.send_later(:process_renaming)
+      }
+    end
+
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    # Упаковка файлов
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    state :packing do
+      event :job_completion, :transitions_to => :job_finish do |*message|
+        end_job(message.first)
+      end
+      event :erroneous, :transitions_to => :error do |*message|
+        end_job(message.first)
+      end
+      on_entry { |prior_state, triggering_event, *event_args|
+        start_job
+        self.send_later(:process_packing)
+      }
+
+    end
+
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    # Загрузка файлов на сервисы
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    state :uploading do
+      event :job_completion, :transitions_to => :job_finish do |*message|
+        end_job(message.first)
+      end
+      event :erroneous, :transitions_to => :error do |*message|
+        end_job(message.first)
+      end
+      on_entry { |prior_state, triggering_event, *event_args|
+        start_job
+        # self.send_later(:process_packing)
+      }
+
+    end
+
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    # Завершение задачи
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    state :finished do
+
+    end
+
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    # Закрытие задачи
+    # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    state :completed do
+
+    end
+
+
   end
 
+  # state named scope
+  (self.workflow_spec.states.keys).each {  |state|
+    named_scope state, :conditions => { :workflow_state => state.to_s }
+  }
 
-  # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  # Генерация скрин листа
-  # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  def queued_to_generation_screen_list
-    job_loggings.create(:job => :generation.to_s, :startup => Time.now.to_s(:db) )
-    self.send_later(:process_of_generation_screen_list)
+
+  def state
+    if job_finish? && !previous_state.blank?
+      read_attribute("previous_state")
+    else
+      current_state.to_s
+    end
   end
-
 
 end
+
