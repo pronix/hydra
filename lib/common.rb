@@ -104,25 +104,25 @@ module Common
   end
 
   module Host
-    MEDIAVALISE    = "mediavalise.com"
-    IMAGEVENUE     = "imagevenue.com"
-    IMAGEBAM       = "imagebam.com"
-    PIXHOST        = "pixhost.org"
-    STOOORAGE      = "stooorage.com"
+    MEDIAVALISE        = RAILS_ENV["production"] ? "mediavalise.com" : "hadoop.adenin.ru"
+    IMAGEVENUE         = "imagevenue.com"
+    # IMAGEBAM           = "imagebam.com"
+    # PIXHOST            = "pixhost.org"
+    # STOOORAGE          = "stooorage.com"
 
     def self.options_for_select
       [
        [MEDIAVALISE, MEDIAVALISE],
        [IMAGEVENUE, IMAGEVENUE ],
-       [IMAGEBAM,   IMAGEBAM ],
-       [PIXHOST,    PIXHOST ],
-       [STOOORAGE,  STOOORAGE ],
+       # [IMAGEBAM,   IMAGEBAM ],
+       # [PIXHOST,    PIXHOST ],
+       # [STOOORAGE,  STOOORAGE ],
 
       ]
     end
     def self.valid_options
       [
-       MEDIAVALISE, IMAGEVENUE, IMAGEBAM, PIXHOST, STOOORAGE
+       MEDIAVALISE, IMAGEVENUE #, IMAGEBAM, PIXHOST, STOOORAGE
       ]
     end
   end
