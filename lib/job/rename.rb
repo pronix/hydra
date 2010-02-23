@@ -8,7 +8,8 @@ module Job
       if  rename? && extracting_files? && that_rename[Common::ThatRename::FILE] && !macro_renaming.blank?
         @unpacked_files = Dir.glob(unpacked_path + "**/**")
 
-        @unpacked_files.each_with_index do |unpacked_file, i|
+        !@unpacked_files.blank? &&
+          @unpacked_files.each_with_index do |unpacked_file, i|
 
           file_name_witout_ext = File.basename(unpacked_file, File.extname(unpacked_file))
           new_file = macro_renaming.
@@ -25,9 +26,8 @@ module Job
           `#{command}`
 
         end
-
+        job_completion!("Rename file: #{@unpacked_files.size}")
       end
-      job_completion!("Rename file: #{@unpacked_files.size}")
     rescue => ex
       erroneous!(ex.message)
     end

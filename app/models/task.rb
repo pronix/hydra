@@ -5,6 +5,8 @@ class Task < ActiveRecord::Base
   include Job::Extracting
   include Job::GenerationScreenList
   include Job::Rename
+  include Job::Packing
+  include Job::Uploading
 
   ROOT_PATH_DOWNLOAD = File.join(RAILS_ROOT, "data", "task_files")
 
@@ -181,26 +183,16 @@ class Task < ActiveRecord::Base
   # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   # Пути задачи
   # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
   def task_path
     File.join(ROOT_PATH_DOWNLOAD, user.id.to_s, self.id.to_s)
   end
-  # Путь куда скачиваються файлы этой задачи
-  def downloding_path
-    File.join(task_path, 'download')
+
+  [[:downloding_path,'download'], [ :unpacked_path,'unpacked'], [:screen_list_path,'screen_list'],
+   [ :packed_path,'packed'], [ :uploading_path,'uploading'] ].each do |method|
+    define_method(method.first) do
+      File.join(task_path, method.last)
+    end
   end
-
-  # Путь куда будут распаковываться файлы
-  def unpacked_path
-    File.join(task_path, 'unpacked')
-  end
-
-  # Путь куда будут формироваться скринлисты
-  def screen_list_path
-    File.join(task_path, 'screen_list')
-  end
-
-
 
 
   workflow do
@@ -223,22 +215,48 @@ class Task < ActiveRecord::Base
     state :job_finish do
 
       on_entry do |prior_state, triggering_event, *event_args|
+        write_attribute(:previous_state, I18n.t("completed_#{:previous_state.to_s}"))
+
         case prior_state.to_sym
-        when :downloading
-          write_attribute(:previous_state, "Completed donwloading")
-          extracting_files? ? start_extracting! : start_renaming!
-        when :extracting
-          write_attribute(:previous_state, "Completed extracting")
-          screen_list? ? start_generation! : start_renaming!
-        when :generation
-          write_attribute(:previous_state, "Completed generation screen list")
-          start_renaming!
-        when :renaming
-          write_attribute(:previous_state, "Completed renaming")
-          start_packing!
-        when :packing
-          write_attribute(:previous_state, "Completed packing")
+        when :downloading # завершилось скачивание
+          case
+          when extracting_files?                                then start_extracting!
+          when screen_list?                                     then start_generation!
+          when rename? && that_rename[Common::ThatRename::FILE] then start_renaming!
+          when create_archive?                                  then start_packing!
+          else
+            start_uploading!
+          end
+
+        when :extracting # завершилось распаковка
+          case
+          when screen_list?                                     then start_generation!
+          when rename? && that_rename[Common::ThatRename::FILE] then start_renaming!
+          when create_archive?                                  then start_packing!
+          else
+            start_uploading!
+          end
+
+        when :generation #
+          case
+          when rename? && that_rename[Common::ThatRename::FILE] then start_renaming!
+          when create_archive?                                  then start_packing!
+          else
+            start_uploading!
+          end
+
+        when :renaming #
+          case
+          when create_archive? then start_packing!
+          else
+            start_uploading!
+          end
+
+        when :packing #
           start_uploading!
+
+        when :uploading #
+          start_finished!
         end
       end
 
@@ -246,16 +264,19 @@ class Task < ActiveRecord::Base
       event :start_extracting, :transitions_to => :extracting
       event :start_renaming,   :transitions_to => :renaming
       event :start_generation, :transitions_to => :generation
-      event :start_renaming,   :transitions_to => :renaming
       event :start_packing,    :transitions_to => :packing
       event :start_uploading,  :transitions_to => :uploading
+      event :start_finished,   :transitions_to => :finished
 
     end
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     # Ошибка
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     state :error do
-      on_entry { |prior_state, triggering_event, *event_args| start_job }
+      on_entry { |prior_state, triggering_event, *event_args|
+        start_job
+        Notification.deliver_stopped_task(self)
+      }
     end
 
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -267,6 +288,16 @@ class Task < ActiveRecord::Base
         start_job
         to_aria
       }
+
+      # При выходе копируем скачанные файлы в папку для закачки
+      on_exit do |new_state, triggering_event, *event_args|
+        FileUtils.rm_f(uploading_path)
+        FileUtils.mkdir_p(uploading_path)
+        Dir.glob(downloding_path + "**/**").each do |task_file|
+          `cp  '#{task_file}' '#{File.join(uploading_path, File.basename(task_file))}'`
+        end
+      end
+
       event :job_completion, :transitions_to => :job_finish do |*message|
         downloading_files.destroy_all
         end_job(message.first)
@@ -274,6 +305,7 @@ class Task < ActiveRecord::Base
       event :erroneous, :transitions_to => :error do |*message|
         end_job(message.first)
       end
+
     end
 
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -339,6 +371,14 @@ class Task < ActiveRecord::Base
         self.send_later(:process_packing)
       }
 
+      # При выходе копируем упакованные файлы в папку для закачки
+      on_exit do |new_state, triggering_event, *event_args|
+        FileUtils.rm_f(uploading_path)
+        FileUtils.mkdir_p(uploading_path)
+        Dir.glob(packed_path + "**/**").each do |task_file|
+          `cp  '#{task_file}' '#{File.join(uploading_path, File.basename(task_file))}'`
+        end
+      end
     end
 
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -353,7 +393,7 @@ class Task < ActiveRecord::Base
       end
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
-        # self.send_later(:process_packing)
+        self.send_later(:process_uploading)
       }
 
     end
@@ -362,7 +402,10 @@ class Task < ActiveRecord::Base
     # Завершение задачи
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     state :finished do
-
+      on_entry { |prior_state, triggering_event, *event_args|
+        start_job
+        Notification.deliver_completed_task(self)
+      }
     end
 
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
