@@ -12,6 +12,7 @@ module Job
     def process_of_generation_screen_list
       @macro = screen_list_macro
       @number_of_frames = @macro.number_of_frames
+      list_screens.destroy_all # удаляем скринлисты сгенерированные в прошлый раз
 
       @path = screen_list_path
       @path_tmp = File.join(screen_list_path, 'tmp')
@@ -151,7 +152,8 @@ module Job
           log command
           output = `#{command}`
 
-
+          list_screens.build :screen => Screen.create!(:attachment => File.open(out_file))
+          save
         end
       end
       # Удаляем временные файлы
@@ -168,19 +170,6 @@ module Job
     def escape_file_name(s)
       s.to_s.gsub(/\\|\n|\r/, '').gsub(/\s+/, " ")
     end
-
-    def log(message, level = :info)
-      if Rails.logger.level == 0 && level == :info
-        Rails.logger.info '-'*90
-        Rails.logger.info " [ generate list ] #{message}"
-        Rails.logger.info '-'*90
-      elsif [:debug,:warn, :error, :fatal ].include? level
-        Rails.logger.send(level, '-'*90)
-        Rails.logger.send(level, " [ generate list (#{level}) ] #{message}")
-        Rails.logger.send(level, '-'*90)
-      end
-    end
-
 
     def second_to_s(second)
       [second/3600, second/60 % 60, second % 60].map{|t| t.to_s.rjust(2,'0')}.join(':')
