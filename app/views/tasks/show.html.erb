@@ -21,38 +21,10 @@
     <span><%= I18n.t("links") %></span><br />
     <%=  @task.extract_link.map{|x| "<div>#{x}</div>"} %>
   </div>
-
   <div>
-    <h3>Screen list</h3>
-
-    <% @task.list_screens.each do |sc|  %>
-    <div><%= link_to image_tag(sc.screen.attachment.url(:thumb)) , image_path(sc.screen.attachment.url) %></div>
-    <div><%= sc.links  %></div>
-    <% end -%>
+    <%= render :partial => 'screen_list', :object => @task.list_screens unless @task.list_screens.blank? %>
   </div>
-
-</div>
-
-
-<div>
-  <table class="brown">
-    <tr>
-      <th>current state</th>
-      <th colspan=3><%= @task.state %></th>
-    </tr>
-    <tr>
-      <th>Job</th>
-      <th>Start time</th>
-      <th>Stop time</th>
-      <th>Result</th>
-    </tr>
-    <% @task.job_loggings.each do |l| -%>
-    <tr>
-      <td><%= l.job %></td>
-      <td><%= l.startup %></td>
-      <td><%= l.stop_time %></td>
-      <td><%= l.comment %></td>
-    </tr>
-    <% end -%>
-  </table>
+  <div>
+    <%= render :partial => 'logs', :object => @task.job_loggings unless @task.job_loggings.blank? %>
+  </div>
 </div>

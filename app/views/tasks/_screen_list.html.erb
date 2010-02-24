@@ -1,0 +1,14 @@
+<h3>Screen list</h3>
+
+<% screen_list.each do |sc|  %>
+<div><%= link_to image_tag(sc.screen.attachment.url(:thumb)) , image_path(sc.screen.attachment.url) %></div>
+<ul>
+  <% sc.links && sc.links.each do |link|  %>
+  <li>
+    <div><%=h link.first %></div>
+    <div><%= text_area_tag "", link.last , :cols => 120, :rows => 2 %></div>
+  </li>
+  <% end -%>
+</ul>
+<% end -%>
+

@@ -1,10 +1,12 @@
 <%= head_page session[:task_status]["active"] ? "active_tasks" : "completed_tasks" %>
-<div id="load_content">
+
 <form class="categories" action="#" method="post">
 <%= select_tag :category,options_for_select([[I18n.t("all_categories"),nil]]+Category.all.map{|x| [x.name, x.id]},
     session[:task_category].to_i), :class => "categories" %>
 </form>
-<%= render :partial => 'tasks', :object => @tasks %>
+<div id="load_content">
+  <%= render :partial => 'tasks', :object => @tasks %>
+</div>
 
 <script type="text/javascript" charset="utf-8">
   $(function(){
@@ -17,12 +19,11 @@
 
   <% if session[:task_status]["active"] -%>
     $(document).everyTime(15000,'indicate_timer' ,function(i) {
-       var _url = "<%= tasks_path %> ";
-           console.log("update_page");
-           $("#load_content").load(_url);
+       var _url = "<%= tasks_path :format => :js %> ";
+           $("#load_content").load(""+_url+"");
       });
   <% end %>
 
    });
 </script>
-</div>
+
