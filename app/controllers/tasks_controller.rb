@@ -19,10 +19,21 @@ class TasksController < ApplicationController
     end
   end
 
-
+  # Завершение задачи
   def complete
     @task = current_user.tasks.find params[:id]
+    # Task.send_later(:comlete!, @task)
+    @task.complete! if @task.finished?
+    flash[:notice] = 'Start completed'
     redirect_to task_path(@task)
+  end
+
+  # Повторная генерация скрин листов
+  def regenerate
+  end
+
+  # Повторная загрузка изображений
+  def reuploading
   end
 
   protected

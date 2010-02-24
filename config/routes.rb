@@ -8,7 +8,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :dashboards, :only => [:show]
 
   # Tasks
-  map.resources :tasks, :member => { :complete => :get }
+  map.resources :tasks, :member => {
+    :complete => :get,
+    :regenerate => :get,
+    :reuploading => :get
+  }
 
   # Tools
   map.resources :macros

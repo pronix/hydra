@@ -215,8 +215,9 @@ class Task < ActiveRecord::Base
 
     state :job_finish do
 
+
       on_entry do |prior_state, triggering_event, *event_args|
-        write_attribute(:previous_state, I18n.t("completed_#{:previous_state.to_s}"))
+        write_attribute(:previous_state, I18n.t("completed_#{prior_state.to_s}"))
 
         case prior_state.to_sym
         when :downloading # завершилось скачивание
@@ -292,11 +293,7 @@ class Task < ActiveRecord::Base
 
       # При выходе копируем скачанные файлы в папку для закачки
       on_exit do |new_state, triggering_event, *event_args|
-        FileUtils.rm_f(uploading_path)
-        FileUtils.mkdir_p(uploading_path)
-        Dir.glob(downloding_path + "**/**").each do |task_file|
-          `cp  '#{task_file}' '#{File.join(uploading_path, File.basename(task_file))}'`
-        end
+        copy_file_to_uploading(downloding_path)
       end
 
       event :job_completion, :transitions_to => :job_finish do |*message|
@@ -321,7 +318,7 @@ class Task < ActiveRecord::Base
       end
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
-        self.send_later(:process_of_unpacking)
+        process_of_unpacking
       }
     end
 
@@ -337,7 +334,7 @@ class Task < ActiveRecord::Base
       end
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
-        self.send_later(:process_of_generation_screen_list)
+        process_of_generation_screen_list
       }
     end
 
@@ -353,7 +350,7 @@ class Task < ActiveRecord::Base
       end
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
-        self.send_later(:process_renaming)
+        process_renaming
       }
 
       # При выходе копируем переименовыванные файлы файлы в папку для закачки
@@ -370,12 +367,14 @@ class Task < ActiveRecord::Base
       event :job_completion, :transitions_to => :job_finish do |*message|
         end_job(message.first)
       end
+
       event :erroneous, :transitions_to => :error do |*message|
         end_job(message.first)
       end
+
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
-        self.send_later(:process_packing)
+        process_packing
       }
 
       # При выходе копируем упакованные файлы в папку для закачки
@@ -394,9 +393,10 @@ class Task < ActiveRecord::Base
       event :erroneous, :transitions_to => :error do |*message|
         end_job(message.first)
       end
+
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
-        self.send_later(:process_uploading)
+        process_uploading
       }
 
     end
@@ -404,9 +404,24 @@ class Task < ActiveRecord::Base
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     # Завершение задачи
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
     state :finished do
+
+      event :complete, :transitions_to => :completed do |*message|
+        end_job(message.first)
+      end
+
+      event :erroneous, :transitions_to => :error do |*message|
+        end_job(message.first)
+      end
+
+      event :regenerate, :transitions_to => :generation
+
+      event :reuploading, :transitions_to => :uploading
+
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
+        FileUtils.rm_rf(downloding_path)
         Notification.deliver_completed_task(self)
       }
     end
@@ -415,7 +430,9 @@ class Task < ActiveRecord::Base
     # Закрытие задачи
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     state :completed do
-
+      on_entry { |prior_state, triggering_event, *event_args|
+        start_job
+      }
     end
 
 
@@ -437,8 +454,8 @@ class Task < ActiveRecord::Base
 
 
   def copy_file_to_uploading(dest_path)
-    if  File.exist?(dest_path) && !Dir.glob(unpacked_path + "**/**").blank?
-      FileUtils.rm_f(uploading_path)
+    if  File.exist?(dest_path) && !Dir.glob(dest_path + "**/**").blank?
+      FileUtils.rm_rf(uploading_path)
       FileUtils.mkdir_p(uploading_path)
       Dir.glob(dest_path + "**/**").each do |task_file|
         `cp  '#{task_file}' '#{File.join(uploading_path, File.basename(task_file))}'`
