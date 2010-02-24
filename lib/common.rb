@@ -106,7 +106,7 @@ module Common
   module Host
     MEDIAVALISE        = RAILS_ENV["production"] ? "mediavalise.com" : "hadoop.adenin.ru"
     IMAGEVENUE         = "imagevenue.com"
-    # IMAGEBAM           = "imagebam.com"
+    IMAGEBAM           = "imagebam.com"
     # PIXHOST            = "pixhost.org"
     # STOOORAGE          = "stooorage.com"
 
@@ -114,7 +114,7 @@ module Common
       [
        [MEDIAVALISE, MEDIAVALISE],
        [IMAGEVENUE, IMAGEVENUE ],
-       # [IMAGEBAM,   IMAGEBAM ],
+       [IMAGEBAM,   IMAGEBAM ],
        # [PIXHOST,    PIXHOST ],
        # [STOOORAGE,  STOOORAGE ],
 
@@ -122,7 +122,7 @@ module Common
     end
     def self.valid_options
       [
-       MEDIAVALISE, IMAGEVENUE #, IMAGEBAM, PIXHOST, STOOORAGE
+       MEDIAVALISE, IMAGEVENUE, IMAGEBAM #, PIXHOST, STOOORAGE
       ]
     end
   end
