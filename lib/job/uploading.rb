@@ -3,6 +3,7 @@ module Job
   module Uploading
 
     def process_uploading
+
       # Загрузка полученный файлов на mediavalise
       if mediavalise?
         begin
@@ -22,25 +23,30 @@ module Job
       # Загрузка скрин листов на imagehosting
       if upload_images?
         begin
+
+
+          !list_screens.blank? && list_screens.each do |sc|
           _options = {
-            :login => upload_images_profile.login,
-            :password => upload_images_profile.password,
-            :content_type => upload_images_profile.content_type_id
+              :login => upload_images_profile.login,
+              :password => upload_images_profile.password,
+              :content_type => upload_images_profile.content_type_id,
+              :file_path=> sc.screen.attachment.path,
+              :file_name => sc.screen.attachment.original_filename
           }
-
-          case upload_images_profile.host
-          when Common::Host::IMAGEVENUE
-            log "start job:uploading IMAGEVENUE "
-            !list_screens.blank? && list_screens.each do |sc|
+            case upload_images_profile.host
+            when Common::Host::IMAGEVENUE
+              log "start job:uploading IMAGEVENUE "
               log "IMAGEVENUE upload file #{sc.screen.attachment.original_filename}"
-              sc.links = ImageHosting::Imagevenue.send_image(_options.merge({
-                                                                              :file_path=> sc.screen.attachment.path,
-                                                                              :file_name => sc.screen.attachment.original_filename}))
+              sc.links = ImageHosting::Imagevenue.send_image(_options)
               sc.save
-            end
-
-            log "stop job:uploading IMAGEVENUE "
-
+              log "stop job:uploading IMAGEVENUE "
+            when Common::Host::IMAGEBAM
+              log "start job:uploading IMAGEVENUE "
+              log "IMAGEVENUE upload file #{sc.screen.attachment.original_filename}"
+              sc.links = ImageHosting::Imagebam.send_image(_options)
+              sc.save
+              log "stop job:uploading IMAGEVENUE "
+          end
           end
         rescue => ex
           raise " #{upload_images_profile.host} : #{ex.message}"
