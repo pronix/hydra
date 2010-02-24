@@ -1,5 +1,9 @@
 <%= head_page [I18n.t("task") ].join(": ") %>
-
+<% if @task.finished? -%>
+<div>
+  <%= link_to I18n.t("complete_task"), complete_task_path(@task) %>
+</div>
+<% end -%>
 <div class="task_info">
     <div>
       <span><%= I18n.t("created_at") %></span><br />
@@ -18,7 +22,18 @@
     <%=  @task.extract_link.map{|x| "<div>#{x}</div>"} %>
   </div>
 
+  <div>
+    <h3>Screen list</h3>
+
+    <% @task.list_screens.each do |sc|  %>
+    <div><%= link_to image_tag(sc.screen.attachment.url(:thumb)) , image_path(sc.screen.attachment.url) %></div>
+    <div><%= sc.links  %></div>
+    <% end -%>
+  </div>
+
 </div>
+
+
 <div>
   <table class="brown">
     <tr>

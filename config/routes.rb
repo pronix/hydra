@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :dashboards, :only => [:show]
 
   # Tasks
-  map.resources :tasks
+  map.resources :tasks, :member => { :complete => :get }
 
   # Tools
   map.resources :macros

@@ -20,6 +20,11 @@ class TasksController < ApplicationController
   end
 
 
+  def complete
+    @task = current_user.tasks.find params[:id]
+    redirect_to task_path(@task)
+  end
+
   protected
   def collection
     session[:task_status]   ||= "active"
