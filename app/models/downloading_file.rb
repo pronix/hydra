@@ -10,22 +10,8 @@ class DownloadingFile < ActiveRecord::Base
     "7" => "If there are unfinished downloads. This error is only reported if all finished downloads are successful and there are unfinished downloads in a queue when aria2 exits by pressing Ctrl-C by an user or sending TERM or INT signal."
   }
 
-  # include AASM
+
   belongs_to :task
-  # aasm_column :status
-
-  # aasm_initial_state :active
-  # aasm_state :active
-  # aasm_state :error
-  # aasm_state :complete
-
-  # aasm_event :completed do
-  #   transitions :to => :complete, :from => :active
-  # end
-
-  # aasm_event :erroneous do
-  #   transitions :to => :error, :from => :active
-  # end
 
   include Workflow
   workflow do
