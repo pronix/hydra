@@ -1,26 +1,27 @@
 class Proxy < ActiveRecord::Base
   GEOPATH = "#{RAILS_ROOT}/data/GeoLiteCity.dat"
-  include AASM
+
+  include Workflow
 
   attr_accessor :proxies
   validates_presence_of :address
   validates_uniqueness_of :address, :scope => :user_id
 
   belongs_to :user
-
   named_scope :proxy_adresses, :select => "DISTINCT address"
-  aasm_column :state
-  aasm_initial_state :offline
 
-  aasm_state :offline
-  aasm_state :online
+  workflow do
+    state :offline do
+      event :fix, :transitions_to => :online
+    end
+    state :online do
+      event :break, :transitions_to => :offline
+    end
+  end
+  self.workflow_spec.states.keys.each {  |state|
+    named_scope state, :conditions => { :workflow_state => state.to_s }
+  }
 
-  aasm_event :fix do
-    transitions :to => :online, :from => :offline
-  end
-  aasm_event :break do
-    transitions :to => :offline, :from => :online
-  end
 
 
   before_save :update_proxy
@@ -40,7 +41,9 @@ class Proxy < ActiveRecord::Base
       create(@list_proxies.map{ |x|
                { :address => x, :user => user,
                  :country => (geo.city(x)[3].upcase rescue nil),
-                 :country_code => (geo.city(x)[2].downcase rescue nil)
+                 :country_code => (geo.city(x)[2].downcase rescue nil),
+                 :workflow_state => "offline"
+
                }
              })
     end
@@ -72,8 +75,8 @@ class Proxy < ActiveRecord::Base
 
       end
 
-      update_all "state = 'online'",  [" address in (?) ", @result[true] ]
-      update_all "state = 'offline'", [" address in (?) ", @result[false] ]
+      update_all "workflow_state = 'online'",  [" address in (?) ", @result[true] ]
+      update_all "workflow_state = 'offline'", [" address in (?) ", @result[false] ]
 
     end
 
