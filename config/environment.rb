@@ -7,7 +7,7 @@ RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
 require File.join(File.dirname(__FILE__), 'boot')
 
 Rails::Initializer.run do |config|
-
+  config.middleware.use "Download"
   # Specify gems that this application depends on and have them installed with rake gems:install
   config.gem "formtastic"
   config.gem 'authlogic'
