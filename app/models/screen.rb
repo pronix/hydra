@@ -1,6 +1,6 @@
 class Screen < Asset
   has_attached_file :attachment,
-  :styles => { :thumb => "200x100>" },
+  :styles => { :thumb => "300x300>" },
   :path => ":rails_root/data/screen/:attachment/:id/:style.:extension",
   :url => "assets/screen/:attachment/:id/:style.:extension"
 
