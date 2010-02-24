@@ -5,7 +5,15 @@ class ImageHosting::Imagevenue < ImageHosting
     self.class
   end
 
+
   class << self
+    def description
+      %(
+         Image Types Allowed: jpeg, jpg
+          maximum file size: 3 Megs
+       )
+    end
+
     def login(user, password)
       post "/process_logon.php", {
         :body=> { :user => user, :password => password, :action => 1}
@@ -38,12 +46,15 @@ class ImageHosting::Imagevenue < ImageHosting
 
       self.default_cookies.add_cookies(response_login.headers["set-cookie"][0])
       response = post "/upload.php",{ :body => form.read,
+        :timeout => 60.seconds,
         :headers => {
           'Content-Length' => form.length.to_s,
           'Content-Type' => "multipart/form-data; boundary=#{boundary}" } }
-
       doc = Nokogiri.parse(response)
-      return doc.css("form").to_s
+      result =  doc.css("form").map { |x| [ x.inner_html.split("<br>").first, x.css("textarea").inner_html ] }
+      return result
+
+
     rescue => ex
       raise "Uploading image to Imagevenue: #{ex.message}"
     ensure
@@ -53,4 +64,3 @@ class ImageHosting::Imagevenue < ImageHosting
   end
 
 end
-
