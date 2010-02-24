@@ -97,7 +97,7 @@ module Job
           @options = [@tile, @quality, @border, @shadow, @background, @geometry].join(' ')
           input_files = ""
           input_files = out_files.map{|x| "'#{x[:file]}'" }.join(' ')
-          out_file = File.join(@path, [File.basename(video_file), @macro.file_format].join('.') )
+          out_file = File.join(@path, [File.basename(video_file, File.extname(video_file)), @macro.file_format ].join('.') )
           montage_command = %( montage #{input_files} #{@options} '#{out_file}')
           log montage_command
           output=`#{montage_command}`
