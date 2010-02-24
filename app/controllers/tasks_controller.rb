@@ -7,7 +7,7 @@ class TasksController < ApplicationController
   def index
     index! do |format|
       format.html { render :action => :index }
-      format.js { render :action => :index, :layout => false }
+      format.js { render :partial => "tasks", :layout => false, :object => @tasks }
     end
   end
 
