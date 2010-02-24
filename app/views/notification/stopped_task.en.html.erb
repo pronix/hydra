@@ -1,6 +1,4 @@
-
-# Шаблон для нотификации на e-mail об остановке задания из-за ошибки
-# Hello,
-# Your task has been stopped.
-# Error [task_error]
-# Link: [task_link]
+<%= I18n.t("Hello") %>, <br/
+<%= I18n.t("your_task_has_been_stopped") %>.
+<%= I18n.t("error") %>: <%= @task_error %>
+<%= I18n.t("link") %> : <%= @task_url %>
