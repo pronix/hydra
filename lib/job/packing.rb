@@ -17,9 +17,11 @@ module Job
         `cp '#{x.attachment.path}' '#{File.join(@_tmp_packed_path,x.attachment.original_filename )}'`
       }
 
-      # Добавляем скрин листы в архив
-      screen_list? && add_screens_to_arhive? &&
-        Dir.glob(screen_list_path + "*").map { |x| `cp '#{x}' '#{File.join(@_tmp_packed_path,x)}'` }
+      # Добавляем скрин листы в архивu
+      screen_list? && add_screens_to_arhive? && !list_screens.blank? &&
+        list_screens.each { |x|
+        `cp '#{x.screen.attachment.path}' '#{File.join(@_tmp_packed_path,x.screen.attachment.original_filename)}'` }
+
 
 
       @_out_file = Dir.glob(unpacked_path + "**").map { |x| x }.first
