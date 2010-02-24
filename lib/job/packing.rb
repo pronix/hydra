@@ -6,6 +6,7 @@ module Job
     def process_packing
       @_tmp_packed_path = File.join(task_path, 'tmp_packed_path')
       FileUtils.mkdir_p(@_tmp_packed_path)
+      FileUtils.mkdir_p(packed_path)
 
       # Добавляем обложки в архив
       add_covers_to_arhive? && covers.each { |x|
@@ -24,7 +25,7 @@ module Job
 
 
 
-      @_out_file = Dir.glob(unpacked_path + "**").map { |x| x }.first
+      @_out_file = Dir.glob(unpacked_path + "**/**").map { |x| x }.first
       @_out_file = [(@_out_file.blank? ? "arhive" :
                      (File.basename(@_out_file, File.extname(@_out_file)))), 'rar' ].join('.')
       @_out_file = File.join(packed_path, @_out_file)
@@ -36,14 +37,14 @@ module Job
                  ].flatten
 
 
-      command = %(rar a -inul )
-      command << "-v#{part_size.to_s}" unless part_size.blank?
-      command << "-p#{password_arhive.to_s}" unless password_arhive.blank?
-      command << %('#{@_out_file}' #{@_files.map{ |x| "''#{x}'"}.join(' ') })
-      output = `#{command.join(' ')}`
+      command = %(rar a -inul -ep )
+      command << " -v#{part_size.to_s} " unless part_size.blank?
+      command << " -p#{password_arhive.to_s} " unless password_arhive.blank?
+      command << %( '#{@_out_file}' #{ @_files.map{ |x| "'#{x}'" }.join(' ') } )
+      output = `#{command}`
 
       # Переименовываем архив если включено
-      if rename! && !that_rename.blank? && that_rename[Common::ThatRename::ARCHIVE] &&
+      if rename? && !that_rename.blank? && that_rename[Common::ThatRename::ARCHIVE] &&
           !macro_renaming.blank?
 
         Dir.glob(packed_path + "**/**").each do |_file|
@@ -60,7 +61,7 @@ module Job
             gsub(/^\.|\.$/, '').gsub(/\.\./,'.')
 
 
-          @new_file_name = File.join(File.dirname(_file), new_file)
+          @new_file_name = File.join(File.dirname(_file), @new_file_name)
 
           command = "mv '#{_file}' '#{@new_file_name}'"
         `#{command}`
@@ -70,8 +71,10 @@ module Job
       # Удаляем временные файлы
       FileUtils.rm_rf(@_tmp_packed_path)
       job_completion!
+
     rescue => ex
       erroneous!(ex.message)
     end
+
   end
 end
