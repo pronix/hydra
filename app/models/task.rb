@@ -35,6 +35,7 @@ class Task < ActiveRecord::Base
 
   has_many :covers , :as => :assetable, :dependent => :destroy
   has_many :attachment_files , :as => :assetable, :dependent => :destroy
+  has_many :list_screens, :dependent => :destroy
 
   belongs_to :screen_list_macro,     :class_name => "Macros"
   belongs_to :upload_images_profile, :class_name => "Profile"
@@ -87,25 +88,25 @@ class Task < ActiveRecord::Base
 
   after_create :new_task
   before_destroy :clear_task
-
+  after_destroy :run_next_task
  # Если удаляем задача нужно удалить закачанные файлы
   def clear_task
     @path = task_path
     FileUtils.rm_rf(@path)
-    Rails.logger.info "[ clear task ] - delete task files #{@path}"
+    log "delete task files #{@path}"
     downloading_files.each do |file|
-      Rails.logger.info "[ clear task ] - remove job aria ##{file.gid}"
+      log "remove job aria ##{file.gid}"
       Aria2cRcp.remove(file.gid.to_s) rescue nil
     end
+  end
 
-    # Удаляем задачу и отправляем следующию на выполнение
-    @_task = user.tasks.queued.first
-    if @_task && user.tasks.active_without_self(self).blank?
-      begin
-        @_task.start_downloading!
-      rescue Workflow::TransitionHalted => ex
-        @_task.error_start_downloading!(ex.message)
-      end
+  # После удаления если есть задача в очереди то запускаем ее
+  def run_next_task
+    begin
+      @_task = user.tasks.queued.first
+      @_task && @_task.start_downloading!
+    rescue Workflow::TransitionHalted => ex
+      erroneous!(ex.message)
     end
   end
 
@@ -114,12 +115,12 @@ class Task < ActiveRecord::Base
     start_job
     start_downloading! if user.tasks.active_without_self(self).blank?
   rescue Workflow::TransitionHalted => ex
-    error_start_downloading!(ex.message)
+    erroneous!(ex.message)
   end
 
   # Если задача завершаеться с ошибкой то  отправляем следующию задачу на выполнение
   def process_error
-    @_task = user.tasks.queued.last
+    @_task = user.tasks.queued.first
     if @task &&  user.tasks.active_without_self(self).blank?
       @_task.end_job
       @_task.start_downloading!
@@ -354,6 +355,12 @@ class Task < ActiveRecord::Base
         start_job
         self.send_later(:process_renaming)
       }
+
+      # При выходе копируем переименовыванные файлы файлы в папку для закачки
+      on_exit do |new_state, triggering_event, *event_args|
+        copy_file_to_uploading(unpacked_path)
+
+      end
     end
 
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -373,11 +380,7 @@ class Task < ActiveRecord::Base
 
       # При выходе копируем упакованные файлы в папку для закачки
       on_exit do |new_state, triggering_event, *event_args|
-        FileUtils.rm_f(uploading_path)
-        FileUtils.mkdir_p(uploading_path)
-        Dir.glob(packed_path + "**/**").each do |task_file|
-          `cp  '#{task_file}' '#{File.join(uploading_path, File.basename(task_file))}'`
-        end
+        copy_file_to_uploading(packed_path)
       end
     end
 
@@ -432,5 +435,23 @@ class Task < ActiveRecord::Base
     end
   end
 
+
+  def copy_file_to_uploading(dest_path)
+    if  File.exist?(dest_path) && !Dir.glob(unpacked_path + "**/**").blank?
+      FileUtils.rm_f(uploading_path)
+      FileUtils.mkdir_p(uploading_path)
+      Dir.glob(dest_path + "**/**").each do |task_file|
+        `cp  '#{task_file}' '#{File.join(uploading_path, File.basename(task_file))}'`
+      end
+    end
+  rescue => ex
+    erroneous!(ex.message)
+  end
+
+  def log message, level = :info
+    Rails.logger.send level,
+    "[ Task##{read_attribute(:id)}] [#{Time.now.to_s}] #{message}"
+
+  end
 end
 
