@@ -18,7 +18,9 @@ class Task < ActiveRecord::Base
   has_many :job_loggings, :dependent => :delete_all do
 
     def start_job(comment = "")
-      create(:job => proxy_owner.reload.current_state.to_s, :startup => Time.now.to_s(:db))
+      (find_by_job(proxy_owner.reload.current_state.to_s) ||
+       create(:job => proxy_owner.reload.current_state.to_s)).
+        update_attributes!({:startup => Time.now.to_s(:db), :comment => comment })
     end
 
     def end_job(comment = "")
@@ -415,9 +417,13 @@ class Task < ActiveRecord::Base
         end_job(message.first)
       end
 
-      event :regenerate, :transitions_to => :generation
+      event :regenerate, :transitions_to => :generation do |*message|
+        end_job(I18n.t("restart_generate_screen_list"))
+      end
 
-      event :reuploading, :transitions_to => :uploading
+      event :reuploading, :transitions_to => :uploadingdo do |*message|
+        end_job(I18n.t("restart_uploading"))
+      end
 
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
@@ -432,6 +438,9 @@ class Task < ActiveRecord::Base
     state :completed do
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
+        FileUtils.rm_rf(packed_path)
+        FileUtils.rm_rf(unpacked_path)
+        FileUtils.rm_rf(screen_list_path)
       }
     end
 
