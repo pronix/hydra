@@ -11,7 +11,11 @@
 <%= form.input :font_size %>
 <%= form.input :font_color,  :input_html => {:class => "color_field" } %>
 <%= form.input :template_background,  :input_html => {:class => "color_field" } %>
-<%= form.input :header_text %>
+<%= form.input :header_text,
+    :input_html => {:rows => 8 , :class => "headers",
+    :title => "File name [file_name]<br /> Size [width]x[height] <br /> Duration [duration_time] <br />
+               File size [file_size] <br /> Video codec [video_codec] <br /> Audio codec [audio_codec]"
+ } %>
 <%= form.input :add_timestamp, :as => :boolean %>
 <%= form.input :position_timestamp, :as => :select, :collection => Common::PositionTimestamp::options_for_select, :include_blank => false %>
 <%= form.input :add_logo, :as => :boolean %>
@@ -61,5 +65,7 @@
 
 
       });
+  $('textarea.headers').tinyTips('title');
+
   });
 </script>

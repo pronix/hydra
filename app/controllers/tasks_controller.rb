@@ -31,7 +31,7 @@ class TasksController < ApplicationController
   # Повторная генерация скрин листов
   def regenerate
     @task = current_user.tasks.find params[:id]
-    @task && @task.finished? && @task.send_later(:regenerate!)
+    @task && @task.finished? && @task.regenerate!
     flash[:notice] = I18n.t('restart_generate_screen_list')
     redirect_to task_path(@task)
   end
@@ -39,7 +39,7 @@ class TasksController < ApplicationController
   # Повторная загрузка изображений
   def reuploading
     @task = current_user.tasks.find params[:id]
-    @task && @task.finished? && @task.send_later(:reuploading!)
+    @task && @task.finished? && @task.reuploading!
     flash[:notice] = I18n.t('restart_generate_screen_list')
     redirect_to task_path(@task)
   end

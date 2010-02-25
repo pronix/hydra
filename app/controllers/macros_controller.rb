@@ -3,9 +3,25 @@ class MacrosController < ApplicationController
   defaults :resource_class => Macros, :collection_name => 'macros', :instance_name => 'macro'
   before_filter :load_data
 
+  respond_to :html
+
+  def new
+    new! do |format|
+      format.html { render :action => :new }
+      format.js   { render :action => :new, :layout => false }
+    end
+  end
+
   def create
     create! do |success, failure|
       success.html { redirect_to macros_path }
+    end
+  end
+
+  def edit
+    edit! do |format|
+      format.html { render :action => :edit }
+      format.js   { render :action => :edit, :layout => false }
     end
   end
 

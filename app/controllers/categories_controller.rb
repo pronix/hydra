@@ -5,6 +5,13 @@ class CategoriesController < ApplicationController
 
   respond_to :html, :js
 
+  def new
+    new! do |format|
+      format.html { render :action => :new }
+      format.js   { render :action => :new, :layout => false }
+    end
+  end
+
   def edit
     edit! do |format|
       format.html { render :action => :edit }

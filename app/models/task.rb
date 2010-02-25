@@ -336,7 +336,7 @@ class Task < ActiveRecord::Base
       end
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
-        process_of_generation_screen_list
+        send_later :process_of_generation_screen_list
       }
     end
 
@@ -398,7 +398,7 @@ class Task < ActiveRecord::Base
 
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
-        process_uploading
+        send_later :process_uploading
       }
 
     end
@@ -421,7 +421,7 @@ class Task < ActiveRecord::Base
         end_job(I18n.t("restart_generate_screen_list"))
       end
 
-      event :reuploading, :transitions_to => :uploadingdo do |*message|
+      event :reuploading, :transitions_to => :uploading do |*message|
         end_job(I18n.t("restart_uploading"))
       end
 

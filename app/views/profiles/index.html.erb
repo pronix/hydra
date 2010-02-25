@@ -1,5 +1,6 @@
 <%= head_page "profiles" %>
-<%= link_to I18n.t("create_profile"), new_profile_path , :class=>"gray_button macros" %>
+<%= link_to I18n.t("create_profile"), new_profile_path , :class=>"gray_button macros js_link",
+               :data_size => "340x" %>
 <table class="brown profiles">
   <tr>
     <th><%= I18n.t("name") %></th>
