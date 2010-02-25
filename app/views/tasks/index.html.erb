@@ -9,18 +9,19 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
+
   $(function(){
     $("#category").change(function(){
        var _url = "<%= tasks_path(:format=> :js, :category => :id)%> ";
        if ($(this).val()) { _url = _url.replace("id", $(this).val());
        } else { _url = _url.replace("id", "-1"); };
-      $("#load_content").load(_url)
+       $.ajax({ url: _url, success: function(data){ $("#load_content").html(data); } });
      });
 
   <% if session[:task_status]["active"] -%>
     $(document).everyTime(15000,'indicate_timer' ,function(i) {
        var _url = "<%= tasks_path :format => :js %> ";
-           $("#load_content").load(""+_url+"");
+       $.ajax({ url: _url, success: function(data){ $("#load_content").html(data); } });
       });
   <% end %>
 

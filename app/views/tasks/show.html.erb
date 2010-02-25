@@ -1,9 +1,14 @@
 <%= head_page [I18n.t("task") ].join(": ") %>
+
 <% if @task.finished? -%>
-<div>
-  <%= link_to I18n.t("complete_task"), complete_task_path(@task) %>
+<div class="re_panel">
+  <%= link_to I18n.t("complete_task"), complete_task_path(@task), :class => "gray_button" %>
+  <%= link_to I18n.t("screen_list"), regenerate_task_path(@task), :class => "gray_button"  %>
+  <%= link_to I18n.t("uploading"), reuploading_task_path(@task), :class => "gray_button"  %>
+
 </div>
 <% end -%>
+
 <div class="task_info">
     <div>
       <span><%= I18n.t("created_at") %></span><br />
