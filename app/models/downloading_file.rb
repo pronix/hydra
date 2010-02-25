@@ -45,26 +45,25 @@ class DownloadingFile < ActiveRecord::Base
       end
 
       # Проверка завершено ли скачивания
+      _task =[]
       Task.downloading.each {  |task|
 
         task.downloading_files.map {  |f|
           if file_status = Aria2cRcp.status(f.gid.to_s)
-
             if file_status["status"] && file_status["status"]["complete"]
               f.completed_length = f.total_length
               f.completed! if f.active?
+              _task << task
             elsif file_status["status"] && file_status["status"]["error"]
               f.comment = STATUS_DOWNLOAD[file_status["errorCode"]]
               f.erroneous! if f.active?
             end
 
           end
-        }
+        }}
 
-        task.downloading_files.reload
-        task.check_downloading
-      }
-
+      _task.uniq.each {  |task|  task.check_downloading   }
+      _task = nil
     end
 
   end
