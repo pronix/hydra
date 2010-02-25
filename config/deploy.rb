@@ -9,12 +9,12 @@ set :branch, "master"
 set :user, "root"
 
 set :deploy_via, :remote_cache
-set :deploy_to, "/home/#{application}"
+set :deploy_to, "/var/www/#{application}"
 set :use_sudo, false
 
-role :app, "adenin.ru"
-role :web, "adenin.ru"
-role :db,  "adenin.ru" , :primary => true
+role :app, "#{application}"
+role :web, "#{application}"
+role :db,  "#{application}" , :primary => true
 
 
 set(:shared_database_path) {"#{shared_path}/databases"}
@@ -31,47 +31,50 @@ namespace :deploy do
     desc "#{t} task is a no-op with passenger"
     task t, :roles => :app do ; end
   end
-  task :link_current_to_appache_folder, :roles => :app do
-    run "chown -R apache.apache #{release_path}  && rm -fr /var/www/hydra && ln -s #{current_path} /var/www/hydra && chown -h apache.apache /var/www/hydra"
+
+  task :chown, :roles => :app do
+    run "chown -R apache:apache #{release_path}"
   end
 
   desc "create symlinks on shared resources"
   task :symlinks do
-    %w{assets}.each do |share|
-      # run "rm -r #{release_path}/public/#{share};"
-      run "ln -sf #{shared_path}/#{share} #{release_path}/public/#{share} "
+    %w{task_files covers screen arhive_attahments }.each do |share|
+      run "ln -nfs #{shared_path}/#{share} #{release_path}/data/#{share} "
     end
   end
+
 end
+after  "deploy", "deploy:chown", "deploy:symlinks"
 
-namespace :sqlite3 do
-  desc "Generate a database configuration file"
-  task :build_configuration, :roles => :db do
-    db_options = {
-      "adapter" =>  "postgresql",
-      "encoding" => "unicode",
-      "database" => "hydra",
-      "pool" => 5,
-      "username" => "hydra",
-      "password" => "hydra",
-    }
-    config_options = {"production" => db_options}.to_yaml
-    put config_options, "#{shared_path}/database_config.yml"
-  end
 
-  desc "Links the configuration file"
-  task :link_configuration_file, :roles => :db do
-    run "ln -nsf #{shared_path}/database_config.yml #{current_path}/config/database.yml"
-  end
+# namespace :sqlite3 do
+#   desc "Generate a database configuration file"
+#   task :build_configuration, :roles => :db do
+#     db_options = {
+#       "adapter" =>  "postgresql",
+#       "encoding" => "unicode",
+#       "database" => "hydra",
+#       "pool" => 5,
+#       "username" => "hydra",
+#       "password" => "hydra",
+#     }
+#     config_options = {"production" => db_options}.to_yaml
+#     put config_options, "#{shared_path}/database_config.yml"
+#   end
 
-  desc "Make a shared database folder"
-  task :make_shared_folder, :roles => :db do
-    run "mkdir -p #{shared_database_path}"
-  end
-end
+#   desc "Links the configuration file"
+#   task :link_configuration_file, :roles => :db do
+#     run "ln -nsf #{shared_path}/database_config.yml #{current_path}/config/database.yml"
+#   end
 
-after "deploy" , "sqlite3:build_configuration", "sqlite3:link_configuration_file", "deploy:symlinks"
-after  "deploy",   "deploy:link_current_to_appache_folder", "deploy:symlinks"
+#   desc "Make a shared database folder"
+#   task :make_shared_folder, :roles => :db do
+#     run "mkdir -p #{shared_database_path}"
+#   end
+# end
+
+# after "deploy" , "sqlite3:build_configuration", "sqlite3:link_configuration_file", "deploy:symlinks"
+# after  "deploy",   "deploy:link_current_to_appache_folder", "deploy:symlinks"
 
 
 
