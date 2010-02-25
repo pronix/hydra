@@ -12,14 +12,13 @@ set :deploy_via, :remote_cache
 set :deploy_to, "/var/www/#{application}"
 set :use_sudo, false
 
-role :app, "#{application}"
-role :web, "#{application}"
-role :db,  "#{application}" , :primary => true
+role :app, "adenin.ru"
+role :web, "adenin.ru"
+role :db,  "adenin.ru" , :primary => true
 
 
 set(:shared_database_path) {"#{shared_path}/databases"}
-
-
+set(:ruby_path,"/opt/ruby-enterprise-1.8.7-2010.01/bin")
 
 namespace :deploy do
   desc "Restarting passenger with restart.txt"
@@ -39,12 +38,30 @@ namespace :deploy do
   desc "create symlinks on shared resources"
   task :symlinks do
     %w{task_files covers screen arhive_attahments }.each do |share|
-      run "ln -nfs #{shared_path}/#{share} #{release_path}/data/#{share} "
+      run "mkdir -p #{shared_path}/data/#{share}" unless File.exist?("#{shared_path}/data/#{share}")
+      run "ln -nfs #{shared_path}/data/#{share} #{release_path}/data/#{share} "
     end
+    run "touch #{shared_path}/database.yml"
+    run "ln -nfs #{shared_path}/database.yml #{current_path}/config/database.yml "
+  end
+  desc "start aria server"
+  task :start_aria do
+    run "cd #{current_path} && RAILS_ENV=production #{ruby_path}/rake hydra:aria2c:start "
+  end
+
+  desc "start daemons"
+  task :start_daemons do
+    run "cd #{current_path} && RAILS_ENV=production #{ruby_path}/rake hydra:daemons:start "
+  end
+
+  desc "stop daemons"
+  task :stop_daemons do
+    run "cd #{current_path} && RAILS_ENV=production #{ruby_path}rake hydra:daemons:stop "
   end
 
 end
-after  "deploy", "deploy:chown", "deploy:symlinks"
+# after  "deploy"update_code
+after "deploy:update", "deploy:chown", "deploy:symlinks", "deploy:start_aria"
 
 
 # namespace :sqlite3 do

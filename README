@@ -10,6 +10,8 @@
     FFMpeg
     ffmpeg-ruby (headers libavformat)
 
+    Version: ImageMagick 6.5.1-0 2009-08-27 Q16 OpenMP http://www.imagemagick.org
+
 Скрипты:
    - ./script/monitor_downloading.rb start
    - ./script/delayed_job start
