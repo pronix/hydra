@@ -49,6 +49,18 @@ namespace :deploy do
     run "cd #{current_path} && RAILS_ENV=production #{ruby_path}/rake hydra:aria2c:start "
   end
 
+
+  desc "restart daemons"
+  task :restart_daemons do
+    run "cd #{current_path} && \
+         RAILS_ENV=production #{ruby_path}/ruby script/proxy_checker.rb stop && \
+         RAILS_ENV=production #{ruby_path}/ruby script/monitor_downloading.rb stop && \
+         RAILS_ENV=production #{ruby_path}/ruby script/delayed_job stop && \
+         cd #{current_path} && \
+         RAILS_ENV=production #{ruby_path}/ruby script/proxy_checker.rb start && \
+         RAILS_ENV=production #{ruby_path}/ruby script/monitor_downloading.rb start && \
+         RAILS_ENV=production #{ruby_path}/ruby script/delayed_job start "
+  end
   desc "start daemons"
   task :start_daemons do
     run "cd #{current_path} && RAILS_ENV=production #{ruby_path}/rake hydra:daemons:start "
@@ -56,12 +68,12 @@ namespace :deploy do
 
   desc "stop daemons"
   task :stop_daemons do
-    run "cd #{current_path} && RAILS_ENV=production #{ruby_path}rake hydra:daemons:stop "
+    run "cd #{current_path} && RAILS_ENV=production #{ruby_path}/rake hydra:daemons:stop "
   end
 
 end
 # after  "deploy"update_code
-after "deploy:update", "deploy:chown", "deploy:symlinks", "deploy:start_aria"
+after "deploy:update", "deploy:chown", "deploy:symlinks", "deploy:start_aria", "deploy:restart_daemons"
 
 
 # namespace :sqlite3 do

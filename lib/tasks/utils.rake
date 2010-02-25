@@ -33,7 +33,7 @@ namespace :hydra do
         puts "Start proxy_checker: Fail"
       end
 
-      if system(File.join(RAILS_ROOT, 'script', 'monitor_downloading.rb start'))
+      if system(File.join(RAILS_ROOT, 'script', 'monitor_downloading.rb start '))
         puts "Start monitor_downloading: Ok"
       else
         puts "Start monitor_downloading: Fail"
