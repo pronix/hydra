@@ -13,14 +13,14 @@ macros_<%= user.id %>_<%= i %>:
   thumb_quality: 40
   thumb_frame: <%= true %>
   frame_size: 2
-  frame_color: "#FFDDEE"
+  frame_color: "#<%= rand(0xffffff).to_s(16) %>"
   thumb_shadow: <%= true %>
   thumb_padding: "2px 7px 2px 1"
 
   font: "Arial"
   font_size: 24
-  font_color: "#EEFFDD"
-  template_background: "#FFFFEE"
+  font_color: "#<%= rand(0xffffff).to_s(16) %>"
+  template_background: "#<%= rand(0xffffff).to_s(16) %>"
   header_text: "Movie"
   add_timestamp: <%= true %>
   position_timestamp: <%= ["left", "right"][rand(2)] %>
