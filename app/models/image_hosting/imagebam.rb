@@ -12,7 +12,7 @@ class ImageHosting::Imagebam < ImageHosting
         args[:file_path], args[:file_name], args[:login], args[:password], args[:content_type]
 
       boundary = ActiveSupport::SecureRandom.hex.upcase
-      form = Tempfile.new(Time.now.to_s)
+      form = Tempfile.new(boundary)
 
       form << "--" << boundary << "\r\n"
       form << "Content-Disposition: form-data; "
