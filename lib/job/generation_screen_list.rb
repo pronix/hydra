@@ -16,6 +16,7 @@ module Job
 
       @path = screen_list_path
       @path_tmp = File.join(screen_list_path, 'tmp')
+      FileUtils.rm_rf(@path)
       FileUtils.mkdir_p(@path)
 
 
@@ -151,14 +152,30 @@ module Job
           log "add info"
           log command
           output = `#{command}`
-
-          list_screens.build :screen => Screen.create!(:attachment => File.open(out_file))
-          save
         end
       end
+
       # Удаляем временные файлы
       FileUtils.rm_rf(@path_tmp)
       FileUtils.rm_rf(@tmp_logo)
+
+      # Если получилось несколько скрин листов то объеденяем их в один
+      _files = Dir.glob(@path + "**/**")
+      if _files.size > 1
+        _new_file_name = File.basename(_files.first)
+        _result_file = File.join(File.dirname(_files.first),ActiveSupport::SecureRandom.hex.upcase)
+        cmd = "convert #{ _files.map{ |x| "'#{x}'" }.join(' ') } -append '#{_result_file}'"
+        `#{cmd}`
+        log "append scren list: #{cmd}" if $?.exitstatus != 0
+        _files.each { |x| FileUtils.rm_r(x) }
+        ` mv '#{_result_file}' '#{File.join(File.dirname(_result_file), _new_file_name)}'`
+      end
+
+      Dir.glob(@path + "**/**").each do |ff|
+        list_screens.build :screen => Screen.create!(:attachment => File.open(ff))
+        save
+      end
+
       job_completion!("Count files: #{Dir.glob(@path+ "**/**").size}")
 
     rescue => ex
