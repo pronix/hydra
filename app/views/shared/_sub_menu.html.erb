@@ -1,10 +1,1 @@
-<%= case params[:controller]
-    when /macros|files|profiles|categories/
-    render("shared/tools_sub_menu")
-    when /settings|users|proxies/
-    render("shared/settings_sub_menu")
-    when /tasks/
-    render("shared/tasks_sub_menu")
-    else
-    "<ul class='sub_menu'></ul>"
-    end  %>
+<%= parent_menu && render("shared/#{parent_menu}_sub_menu") %>

@@ -1,13 +1,15 @@
-<%= head_page "profiles" %>
-<%= link_to I18n.t("create_profile"), new_profile_path , :class=>"gray_button macros js_link",
-               :data_size => "340x" %>
-<table class="brown profiles">
-  <tr>
-    <th><%= I18n.t("name") %></th>
-    <th><%= I18n.t("hosting") %></th>
-    <th><%= I18n.t("content_type") %></th>
-    <th><%= I18n.t("created") %></th>
-    <th><%= I18n.t("actions") %></th>
+<div class="overHidden">
+<%= head_page_left I18n.t("profiles") %>
+<%= link_to I18n.t("add_profile"), new_profile_path , :class=>"awesome js_link floatRight", :rel => "#addProfile" %>
+</div>
+
+<table>
+  <tr class="tableTitle">
+    <td><%= I18n.t("name") %></td>
+    <td><%= I18n.t("hosting") %></td>
+    <td><%= I18n.t("content_type") %></td>
+    <td><%= I18n.t("created") %></td>
+    <td><%= I18n.t("actions") %></td>
   </tr>
   <% @profiles.each do |profile| -%>
   <tr>
@@ -16,12 +18,55 @@
     <td><%= Common::ContentType.values[profile.content_type_id] %></td>
     <td><%= profile.created_at.strftime("%d.%m.%Y %H:%M") %></td>
     <td>
-      <%= link_to I18n.t("edit"), edit_profile_path(profile), :class => "edit" %>
-      <%= link_to "", profile_path(profile),
-          :method => :delete, :confirm => I18n.t("delete_macros"), :class => "delete" %>
-
+      <%= link_to I18n.t("edit"), edit_profile_path(profile), :class => "editBut js_link", :rel => "#addProfile" %>
+      <%= link_to I18n.t("delete"), "", :title => I18n.t("Delete_profile"), :rel => "#delete", :class=>"delBut" %>
+      <div style="display:none">
+        <p>Are you sure you want to delete?<br /><%= profile.name %></p>
+        <div class="buttonBlock">
+          <%= link_to I18n.t("yes"),  profile_path(profile), :method => :delete, :class => "awesome floatLeft" %>
+          <a href="#" class="awesome floatRight">No</a>
+        </div>
+      </div>
     </td>
   </tr>
   <% end -%>
 </table>
 
+<div class="apple_overlay" id="delete">
+  <div class="delOver"></div>
+</div>
+<div class="apple_overlay" id="addProfile">
+  <div class="addUserOver"></div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  $(function(){
+
+
+  $(".delBut[rel]").overlay({effect: 'apple', expose: '#000',
+     onBeforeLoad: function() {
+      var wrap = this.getContent().find(".delOver");
+        wrap.html(this.getTrigger().next("div").clone().html());
+      var _close = this.getClosers();
+        wrap.find("a:last").bind("click",function(){ $(_close).trigger("click"); });
+    }
+  });
+
+
+  $(".js_link[rel]").overlay({
+   expose: '#000',
+   effect: 'apple',
+   onBeforeLoad: function() {
+       var wrap = this.getContent().find(".addUserOver");
+      if  (this.getTrigger().hasClass("editBut")){
+         wrap.addClass("editProfile");
+       } else {
+         wrap.removeClass("editProfile");
+        };
+       wrap.load((this.getTrigger().attr("href")+".js"));
+      }
+  });
+
+
+  });
+</script>

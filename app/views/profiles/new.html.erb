@@ -1,8 +1,12 @@
-<%= head_page "new_profile" %>
-<% semantic_form_for :profile, @profile,:url => profiles_path,
-                     :html => { :method => :post, :class => 'base_form' }  do |form| %>
-<%= render :partial => 'form', :object => form %>
-<% form.buttons do -%>
-<%= form.commit_button I18n.t('Create'),  :class => "base_buttons" %>
-<% end -%>
+<h1><%= I18n.t("add_profile") %></h1>
+<% form_for :profile, @profile,:url => profiles_path,
+                     :html => { :method => :post }  do |form| %>
+
+<ul class="tableForm toolsProfiles">
+  <%= render :partial => 'form', :object => form %>
+  <li class="borderNone">
+    <%= submit_tag I18n.t("Save"), :class => "awesome " %>
+  </li>
+</ul>
+
 <% end -%>

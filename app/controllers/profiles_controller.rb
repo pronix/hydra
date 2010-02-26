@@ -14,6 +14,10 @@ class ProfilesController < ApplicationController
   def create
     create! do |success, failure|
       success.html { redirect_to profiles_path }
+      failure.html {
+        flash[:error] = @profile.errors.full_messages.join(', ')
+        render :action => "new"
+      }
     end
   end
   def edit
@@ -26,6 +30,10 @@ class ProfilesController < ApplicationController
   def update
     update! do |success, failure|
       success.html { redirect_to profiles_path }
+      failure.html {
+        flash[:error] = @profile.errors.full_messages.join(', ')
+        render :action => "edit"
+      }
     end
   end
 

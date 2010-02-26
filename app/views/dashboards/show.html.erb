@@ -1,9 +1,11 @@
-<%= head_page "dashboard" %>
-<div id="load_content">
-<form class="categories" action="#" method="post">
+<%= head_page I18n.t("dashboard") %>
+<div class="overHidden">
+<h2 class="floatLeft"><%= I18n.t("active_task") %></h2>
+<form class="categories floatRight" action="#" method="post">
 <%= select_tag :category,options_for_select([[I18n.t("all_categories"),nil]]+Category.all.map{|x| [x.name, x.id]},
     session[:task_category].to_i), :class => "categories" %>
 </form>
+</div>
 
 <%= render :partial => 'tasks/tasks', :object => @tasks %>
 
@@ -17,4 +19,4 @@
      });
    });
 </script>
-</div>
+

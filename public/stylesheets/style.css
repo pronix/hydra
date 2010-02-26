@@ -214,7 +214,7 @@ div.overlay div.close { top: -12px; right: -12px; }
 .addUserOver .awesome { float: right; }
 .addUserOver .rightCell{ left: 136px;}
 .addUserOver li { width: 330px !important; }
-.addUserOver input { width: 184px;}
+.addUserOver input[type=text] { width: 184px;}
 .addUserOver input[type="checkbox"] { width: auto;}
 .addUserOver select { width: 160px;}
 
@@ -232,7 +232,7 @@ div.overlay div.close { top: -12px; right: -12px; }
 #addCategory input { width: 210px; }
 
 /* add profile */
-#addProfile input { width: 184px;}
+#addProfile input[type=text] { width: 170px;}
 #addProfile select { width: 160px;}
 /* footer */
 .footer { height: 100px !important; }

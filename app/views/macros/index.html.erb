@@ -1,10 +1,12 @@
-<%= head_page "macros" %>
-<%= link_to I18n.t("create_macro"), new_macro_path , :class=>"gray_button macros js_link" %>
-<table class="brown macros">
-  <tr>
-    <th><%= I18n.t("name") %></th>
-    <th><%= I18n.t("created") %></th>
-    <th><%= I18n.t("actions") %></th>
+<div class="overHidden">
+<%= head_page_left I18n.t("macros") %>
+<%= link_to I18n.t("create_macro"), new_macro_path , :class=>"awesome js_link floatRight" %>
+</div>
+<table>
+  <tr class="tableTitle">
+    <td><%= I18n.t("name") %></td>
+    <td><%= I18n.t("created") %></td>
+    <td><%= I18n.t("actions") %></td>
   </tr>
   <% @macros.each do |macro| -%>
   <tr>

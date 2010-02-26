@@ -36,10 +36,12 @@
       <div id="alertMessage">
         <div id="jGrowl"></div>
       </div>
-      <div class="<%= params[:controller] %>">
+
+      <div class="<%= parent_menu || 'dashboards' %>">
         <%= yield :head %>
         <%= yield %>
       </div>
+
     </div>
     <div class="footer"></div>
     </div>
