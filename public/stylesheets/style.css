@@ -124,6 +124,18 @@ table .editBut, table .delBut { margin-right: 5px; float: left; }
 
 .submitButton { width: 45px; margin: 0px auto; }
 
+/* settings */
+.settings { width: 645px;}
+.settings .backBut { margin-top: 10px; }
+.settings .tableForm label { width: 132px; }
+.settings .tableForm li { width: 540px; line-height: 25px; }
+.tableForm .rightCell{ left: 148px;}
+.settings .tableForm li .awesome { float: right; margin-right: 50px; }
+.settings input[type="radio"], .tools input[type="checkbox"], #loginForm input[type="checkbox"]  { position: relative; top: 3px; margin-left: 0px; }
+@media all and (-webkit-min-device-pixel-ratio:10000), not all and (-webkit-min-device-pixel-ratio:0) {.tools input[type="radio"] { top: 0px;}}
+.settings .infoIcon {margin: 20px 0px 0px 5px; float: left; }
+
+
 
 
  /* tools */

@@ -1,20 +1,28 @@
-<%= head_page "my_settings" %>
-
-<div>
-  <%= link_to I18n.t("edit"), edit_settings_path, :class => "gray_button js_link" %>
+<div class="overHidden">
+  <h1 class="floatLeft"><%= I18n.t("my_settings") %></h1>
 </div>
 
-<table>
-  <tr>
-    <td><%= I18n.t("nickname") %>: </td>
-    <td><%= resource.name %></td>
-  </tr>
-  <tr>
-    <td><%= I18n.t("email") %>: </td>
-    <td><%= resource.email %></td>
-  </tr>
-  <tr>
-    <td><%= I18n.t("notification_email") %>: </td>
-    <td><%= resource.notification_email %></td>
-  </tr>
-</table>
+<% form_for resource, :url => settings_path, :html => { :method => :put }  do |form| %>
+
+ <ul class="tableForm toolsProfiles">
+   <li><label>Nickname</label><em class="rightCell"></em>
+     <%= form.text_field :name, :size => 27 %>
+   </li>
+   <li><label class="yellowCell">E-mail</label><em class="rightCell"></em>
+     <%= form.text_field :email, :size => 27 %>
+   </li>
+   <li><label>Password</label><em class="rightCell"></em>
+     <%= form.password_field :password, :size => 27 %>
+   </li>
+   <li><label class="yellowCell">Repeat password</label><em class="rightCell"></em>
+     <%= form.password_field :password_confirmation, :size => 27 %>
+   </li>
+   <li><label class="borderNone">E-mail notification</label><em class="rightCell"></em>
+     <%= form.check_box :notification_email, :size => 27 %>
+   </li>
+   <li class="borderNone">
+     <%= submit_tag I18n.t("Save"), :class => "awesome " %>
+   </li>
+ </ul>
+
+<% end -%>
