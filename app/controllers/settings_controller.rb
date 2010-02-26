@@ -15,6 +15,9 @@ class SettingsController < ApplicationController
   def update
     update!(:notice => I18n.t("Settings_was_successfully_updated")) do |success, failure|
       success.html { redirect_to settings_path }
+      failure.html {
+        flash[:error] = resource.errors.full_messages.join(", ")
+        redirect_to settings_path }
     end
   end
 
