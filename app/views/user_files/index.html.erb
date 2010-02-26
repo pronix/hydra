@@ -1,11 +1,12 @@
-<%= head_page "files" %>
-<%= link_to I18n.t("add_file"), new_user_file_path , :class=>"gray_button macros" %>
-
-<table class="brown user_files">
-  <tr>
-    <th><%= I18n.t("name") %></th>
-    <th><%= I18n.t("uploaded") %></th>
-    <th><%= I18n.t("actions") %></th>
+<div class="overHidden">
+<%= head_page_left  I18n.t("files") %>
+<%= link_to I18n.t("upload_file"), new_user_file_path , :class=>"awesome floatRight macros js_link", :rel => "#uploadFile" %>
+</div>
+<table>
+  <tr class="tableTitle">
+    <td><%= I18n.t("name") %></td>
+    <td><%= I18n.t("uploaded") %></td>
+    <td><%= I18n.t("actions") %></td>
   </tr>
 
   <% @user_files.each do |att| -%>
@@ -13,12 +14,68 @@
     <td><%= att.title %></td>
     <td><%= att.created_at.strftime("%d.%m.%Y %H:%M") %></td>
     <td>
-      <%= link_to I18n.t("edit"), edit_user_file_path(att), :class => "edit" %>
-      <%= link_to image_tag("delete.gif"), user_file_path(att),
-          :method => :delete, :confirm => I18n.t("delete_macros"),  :title => I18n.t("delete") %>
+      <%= link_to I18n.t("edit"), edit_user_file_path(att), :class => "editBut" %>
+
+      <%= link_to I18n.t("delete"), "", :title => I18n.t("delete_file"), :rel => "#delete", :class=>"delBut" %>
+      <div style="display:none">
+        <p>Are you sure you want to delete?<br /><%= att.title %></p>
+        <div class="buttonBlock">
+          <%= link_to I18n.t("yes"),  user_file_path(att), :method => :delete, :class => "awesome floatLeft" %>
+          <a href="#" class="awesome floatRight">No</a>
+        </div>
+      </div>
 
     </td>
   </tr>
   <% end -%>
 </table>
 
+<!-- overlay upload file -->
+<div class="apple_overlay" id="uploadFile">
+  <div class="addUserOver">
+  </div>
+</div>
+<!-- end overlay upload file -->
+
+    <!-- overlay delete -->
+    <div class="apple_overlay"  id="delete">
+        <div class="delOver">
+            <p>Are you sure you want to delete?<br />[item_name]</p>
+            <div class="buttonBlock">
+                <a href="#" class="awesome floatLeft">Yes</a>
+                <a href="#" class="awesome floatRight">No</a>
+            </div>
+        </div>
+    </div>
+    <!-- end overlay delete -->
+
+<script type="text/javascript" charset="utf-8">
+
+  $(function(){
+
+  $(".delBut[rel]").overlay({effect: 'apple', expose: '#000',
+     onBeforeLoad: function() {
+      var wrap = this.getContent().find(".delOver");
+        wrap.html(this.getTrigger().next("div").clone().html());
+      var _close = this.getClosers();
+        wrap.find("a:last").bind("click",function(){ $(_close).trigger("click"); });
+    }
+  });
+
+
+  $(".js_link[rel]").overlay({
+   expose: '#000',
+   effect: 'apple',
+   onBeforeLoad: function() {
+       var wrap = this.getContent().find(".addUserOver");
+      if  (this.getTrigger().hasClass("editBut")){
+         wrap.addClass("editUserFile");
+       } else {
+         wrap.removeClass("editUserFile");
+        };
+       wrap.load((this.getTrigger().attr("href")+".js"));
+      }
+  });
+
+  });
+</script>

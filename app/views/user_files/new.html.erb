@@ -1,8 +1,9 @@
-<%= head_page "new_file" %>
-<% semantic_form_for :user_file, @user_file, :url => user_files_path,
-   :html => { :method => :post, :class => 'base_form', :multipart => true }  do |form| %>
-<%= render :partial => 'form', :object => form %>
-<% form.buttons do -%>
-<%= form.commit_button I18n.t('Upload'),  :class => "base_buttons" %>
-<% end -%>
+<%= content_tag :h1, I18n.t("Upload file") %>
+<% form_for :user_file, @user_file, :url => user_files_path, :html => { :method => :post, :multipart => true }  do |form| %>
+<ul class="tableForm toolsProfiles">
+  <%= render :partial => 'form', :object => form %>
+  <li class="borderNone">
+    <%= submit_tag I18n.t("Save"), :class => "awesome " %>
+  </li>
+</ul>
 <% end -%>

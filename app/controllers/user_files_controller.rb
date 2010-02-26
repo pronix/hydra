@@ -1,6 +1,15 @@
 class UserFilesController < ApplicationController
   inherit_resources
   defaults :resource_class => UserFile, :collection_name => 'user_files', :instance_name => 'user_file'
+  respond_to :html, :js
+
+  def new
+    new! do |format|
+      format.html { render :action => :new }
+      format.js   { render :action => :new, :layout => false }
+    end
+  end
+
   def create
     create!(:notice => I18n.t("File was downloaded")) do |success, failure|
       success.html { redirect_to user_files_path }

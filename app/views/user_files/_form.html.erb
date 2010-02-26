@@ -1,5 +1,21 @@
-<% form.inputs do %>
-<%= form.input :title %>
-<%= form.input :description, :as => :text, :input_html => {:rows => 7} %>
-<%= form.input :attachment, :as => :file if @user_file.new_record? %>
-<% end -%>
+<li>
+  <%= form.label :title, I18n.t("file_name") %><em class="rightCell"></em>
+  <%= form.text_field :title, :size => 26 %>
+</li>
+<li>
+  <%= form.label :description, I18n.t("description"), :class => "yellowCell" %>
+  <em class="rightCell"></em>
+  <%= form.text_area :description, :cols => 20, :rows => 2 %>
+</li>
+
+<li>
+  <%= form.label :attachment, I18n.t("file_link"), :class => "borderNoneBtm" %>
+  <em class="rightCell"></em>
+  <% if @user_file.new_record? -%>
+    <%= form.file_field :attachment, :size => 1   %>
+    <% else -%>
+    <%= @user_file.attachment.original_filename %>
+    <% end -%>
+</li>
+
+

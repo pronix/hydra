@@ -212,7 +212,7 @@ div.overlay div.close { top: -12px; right: -12px; }
 #addUser  div.close, #editUser div.close, #addProfile div.close { top: 5px; right: 5px; }
 .addUserOver label { width: 120px }
 .addUserOver .awesome { float: right; }
-.addUserOver .rightCell{ left: 136px;}
+.addUserOver .rightCell{ left: 148px;}
 .addUserOver li { width: 330px !important; }
 .addUserOver input[type=text] { width: 184px;}
 .addUserOver input[type="checkbox"] { width: auto;}
@@ -220,8 +220,8 @@ div.overlay div.close { top: -12px; right: -12px; }
 
 /* upload file */
 #uploadFile .addFileBut { float: left !important; margin-top: 0px; }
-#uploadFile input { width: 184px;}
-#uploadFile textarea { width: 184px;}
+#uploadFile input[type=text] { width: 170px;}
+#uploadFile textarea { width: 170px;}
 
 /* add/edit category */
 .categoryOver h1 { margin-bottom: 10px; }
