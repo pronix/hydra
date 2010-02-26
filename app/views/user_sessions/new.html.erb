@@ -1,14 +1,25 @@
-<% semantic_form_for @user_session, :url => login_path,  :html => { :method => :post, :class => 'login_form' }  do |form| %>
-
-<% form.inputs :class => "base_form"  do -%>
-<%= form.input :email %>
-<%= form.input :password %>
-<%= form.input :remember_me, :as => :boolean %>
-<% end -%>
-
-
-<% form.buttons do -%>
-<%= form.commit_button I18n.t('login'),  :class => "base_buttons" %>
-<% end -%>
-
+<h1><%= I18n.t("login") %></h1>
+<% form_for @user_session, :url => login_path do |form| %>
+<%= error_message_on @user_session, :base, :css_class =>  "login_error" %>
+<ul class="tableForm">
+  <li>
+    <label><%= I18n.t("login") %></label>
+    <em class="rightCell"></em>
+    <%= form.text_field :email, :size => 26 %>
+    <%= error_message_on @user_session, :email, :css_class =>  "login_error" %>
+  </li>
+  <li>
+    <label  class="yellowCell"><%= I18n.t("password") %></label>
+    <%= form.password_field :password, :size => 26 %>
+    <%= error_message_on @user_session, :password, :css_class => "login_error" %>
+  </li>
+  <li class="borderNone">
+    <label for="user_session_remember_me"><%= I18n.t("remember_me") %></label><em class="rightCell"></em>
+      <input name="user_session[remember_me]" value="0" type="hidden">
+      <input name="user_session[remember_me]" value="1" type="checkbox">
+  </li>
+  <li class="borderNone">
+    <%= submit_tag I18n.t("Save"), :class => "awesome borderNone" %>
+  </li>
+</ul>
 <% end -%>
