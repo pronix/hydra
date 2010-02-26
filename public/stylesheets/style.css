@@ -20,10 +20,10 @@ a:active, a:focus, img              {outline: 0;}
 .header { overflow: hidden; position: relative;  }
 .tabs { height: 32px; border-bottom: 1px solid #c2d6ef; padding-top: 49px; }
 .tabs li { display: block; float: left; margin-right: 2px; }
-.tabs li a { display: block; position: relative; float: left; background: url(../img/bgTab.png) no-repeat; height: 32px; line-height: 32px; padding: 0px 50px 0px 47px; zoom: 1; font-size: 13px; font-family: Helvetica, Arial, sans-serif; color: #5566d5 !important; text-decoration: none !important;  }
-.tabs li a span { display: block; text-indent: -9999px; position: absolute; height: 32px; width: 5px; background: url(../img/bgTab.png) no-repeat -295px 0px; right: 0px; top: 0px; }
-.tabs a.current { background: url(../img/bgTabActive.png) no-repeat; height: 33px; color: #373738 !important; line-height: 33px; }
-.tabs a.current span { background: url(../img/bgTabActive.png) no-repeat -295px 0px; height: 33px; }
+.tabs li a { display: block; position: relative; float: left; background: url(../images/bgTab.png) no-repeat; height: 32px; line-height: 32px; padding: 0px 50px 0px 47px; zoom: 1; font-size: 13px; font-family: Helvetica, Arial, sans-serif; color: #5566d5 !important; text-decoration: none !important;  }
+.tabs li a span { display: block; text-indent: -9999px; position: absolute; height: 32px; width: 5px; background: url(../images/bgTab.png) no-repeat -295px 0px; right: 0px; top: 0px; }
+.tabs a.current { background: url(../images/bgTabActive.png) no-repeat; height: 33px; color: #373738 !important; line-height: 33px; }
+.tabs a.current span { background: url(../images/bgTabActive.png) no-repeat -295px 0px; height: 33px; }
 /* login area */
 .loginArea { position: absolute; top: 12px; right: 0px; color: #036; }
 .loginArea p a { padding-left: 10px; }
@@ -33,10 +33,10 @@ a:active, a:focus, img              {outline: 0;}
 
 div.jGrowl {width: 100%; }
 div.jGrowl div.jGrowl-notification { overflow: hidden; height: 28px; line-height: 28px; border: 1px solid #ccc; border-left: none; padding-left: 50px; display: none;}
-div.jGrowl div.jGrowl-notification div.close { background: url(../img/closeIcon.png) no-repeat; width: 15px; height: 28px; float: right; margin-right: 8px; cursor: pointer;}
+div.jGrowl div.jGrowl-notification div.close { background: url(../images/closeIcon.png) no-repeat; width: 15px; height: 28px; float: right; margin-right: 8px; cursor: pointer;}
 
-.success div.jGrowl div.jGrowl-notification { background: url(../img/successIcon.png) no-repeat top left; color: #2e9a15 }
-.failure div.jGrowl div.jGrowl-notification { background: url(../img/failureIcon.png) no-repeat top left; color: #ff0000; }
+.success div.jGrowl div.jGrowl-notification { background: url(../images/successIcon.png) no-repeat top left; color: #2e9a15 }
+.failure div.jGrowl div.jGrowl-notification { background: url(../images/failureIcon.png) no-repeat top left; color: #ff0000; }
 
 /* content */
 h1 { font-size: 24px; font-family: Helvetica, Arial, sans-serif; color: #5566dd; font-weight: normal;  }
@@ -50,7 +50,7 @@ h1 { font-size: 24px; font-family: Helvetica, Arial, sans-serif; color: #5566dd;
 /* table */
 table { width: 100%; border: 1px solid #d6d6c6; empty-cells: show ; border-collapse: collapse; margin-top: 5px; color: #6e737e; }
 table td { padding: 0px 8px; text-align: left;  border: solid 1px #d6d6c6; height: 22px; line-height: 22px; }
-.tableTitle { background: url(../img/bgTitle.png) repeat-x; color: #5e3e23; font-size: 13px; }
+.tableTitle { background: url(../images/bgTitle.png) repeat-x; color: #5e3e23; font-size: 13px; }
 .yellowCell { background-color: #f0ece0; }
 /* color status */
 .reading { color: #336666;}
@@ -75,18 +75,18 @@ table td { padding: 0px 8px; text-align: left;  border: solid 1px #d6d6c6; heigh
 .awesome, .awesome:visited {background: #222 ;	display: inline-block; padding: 5px 10px 6px; color: #fff !important;	-moz-border-radius: 5px; -webkit-border-radius: 5px;	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);	text-shadow: 0 -1px 1px rgba(0,0,0,0.25); border-bottom: 1px solid rgba(0,0,0,0.25);	position: relative;	cursor: pointer; font-family: Helvetica, Arial, sans-serif;  font-size: 13px; font-weight: bold; line-height: 1; text-shadow: 0 -1px 1px rgba(0,0,0,0.25);}
 .awesome:hover { background-color: #111; }
 
-.delBut { display: block; background: url(../img/delIcon.png) no-repeat; width: 23px; height: 22px; text-indent: -9999px;}
-.smallDelBut { display: block; background: url(../img/smallDelIcon.png) no-repeat; width: 16px; height: 16px; text-indent: -9999px;}
-.editBut { display: block; background: url(../img/editIcon.png) no-repeat; width: 20px; height: 22px; text-indent: -9999px;}
-.copyBut { display: block; background: url(../img/copyIcon.png) no-repeat; width: 16px; height: 16px; text-indent: -9999px;}
+.delBut { display: block; background: url(../images/delIcon.png) no-repeat; width: 23px; height: 22px; text-indent: -9999px;}
+.smallDelBut { display: block; background: url(../images/smallDelIcon.png) no-repeat; width: 16px; height: 16px; text-indent: -9999px;}
+.editBut { display: block; background: url(../images/editIcon.png) no-repeat; width: 20px; height: 22px; text-indent: -9999px;}
+.copyBut { display: block; background: url(../images/copyIcon.png) no-repeat; width: 16px; height: 16px; text-indent: -9999px;}
 .backBut { font-size: 14px; }
-.addFileBut { padding-left: 30px; background: #222 url(../img/paperclip.png) no-repeat 7px 3px; }
+.addFileBut { padding-left: 30px; background: #222 url(../images/paperclip.png) no-repeat 7px 3px; }
 
 table .editBut, table .delBut { margin-right: 5px; float: left; }
 /* dashboard */
-.dashboard { width: 803px; }
-.dashboard h1 { padding-bottom: 15px; }
-.dashboard table a, .tasks table a, .tools table a { font-size: 13px; }
+.dashboards { width: 803px; }
+.dashboards h1 { padding-bottom: 15px; }
+.dashboards table a, .tasks table a, .tools table a { font-size: 13px; }
 
 /* tasks */
 .tasks { width: 100%; }
@@ -106,12 +106,12 @@ table .editBut, table .delBut { margin-right: 5px; float: left; }
 .jobList input { position: relative; top: 2px; margin-bottom: 5px; margin-left: 0px; }
 @media all and (-webkit-min-device-pixel-ratio:10000), not all and (-webkit-min-device-pixel-ratio:0) {.jobList input { top: 0px;}}
 
-.infoIcon { display: block; background: url(../img/infoIcon.png) no-repeat; width: 30px; height: 31px; text-indent: -9999px; cursor: pointer;}
+.infoIcon { display: block; background: url(../images/infoIcon.png) no-repeat; width: 30px; height: 31px; text-indent: -9999px; cursor: pointer;}
 .jobList .infoIcon { float: right; margin-left: 5px; position: relative; top: -5px; }
 
 .otherOptions { overflow: hidden; padding-bottom: 30px; }
 .otherOptions div.floatLeft { overflow: hidden; padding-right: 20px; }
-.otherOptions .awesome { margin-top: 15px; padding-left: 30px; background: #222 url(../img/paperclip.png) no-repeat 7px 3px; }
+.otherOptions .awesome { margin-top: 15px; padding-left: 30px; background: #222 url(../images/paperclip.png) no-repeat 7px 3px; }
 .otherOptions ul { margin-top: 10px; }
 .otherOptions .marginRight { margin-right: 20px; }
 .listFiles { float: right; padding-left: 20px;}
@@ -155,7 +155,7 @@ table .editBut, table .delBut { margin-right: 5px; float: left; }
 .taskProfile .rightSide .awesome { margin-top: 30px; }
 .taskProfile .leftSide .awesome { margin-right: 100px; }
 
-.imgSettings { overflow: hidden; padding-bottom: 10px; }
+.imggesSettings { overflow: hidden; padding-bottom: 10px; }
 .imgSettings p { padding-bottom: 5px; overflow: hidden; }
 .imgSettings .linkFile { margin-right: 40px; }
 .imgSettings input { float: left; }
@@ -184,16 +184,16 @@ table .editBut, table .delBut { margin-right: 5px; float: left; }
 /*---------------------------- the overlayed element */
 .apple_overlay {display:none; background: #FFFFFF; padding: 30px 40px;}
 .overlay { display: none; }
-.apple_overlay div.close, div.overlay div.close { background-image: url(../img/closeIcon2.png); position:absolute; right:-12px; top:-12px; cursor:pointer; height:27px;width:26px;}
+.apple_overlay div.close, div.overlay div.close { background-image: url(../images/closeIcon2.png); position:absolute; right:-12px; top:-12px; cursor:pointer; height:27px;width:26px;}
 div.overlay div.close { top: -12px; right: -12px; }
 
 /* delete */
 .delOver { width: 250px; }
-.delOver p { background: url(../img/alertIcon.png) no-repeat left top; padding: 0px 0px 20px 40px; color: #000; }
+.delOver p { background: url(../images/alertIcon.png) no-repeat left top; padding: 0px 0px 20px 40px; color: #000; }
 .delOver .buttonBlock { overflow: hidden; width: 100px; margin: 0px auto }
 
-/* view img */
-#image1 { background: url(../img/white.png) no-repeat; }
+/* view images */
+#image1 { background: url(../images/white.png) no-repeat; }
 
 /* add file */
 .addFileOver { width: 250px; }
@@ -225,7 +225,8 @@ div.overlay div.close { top: -12px; right: -12px; }
 
 /* add/edit category */
 .categoryOver h1 { margin-bottom: 10px; }
-.categoryOver input { width: 260px; float: left; margin: 2px 5px 0px 0px; }
+.categoryOver input[type=text] { width: 210px; float: left; margin: 2px 5px 0px 0px; }
+.categoryOver.editCategory input[type=text] { width: 260px; float: left; margin: 2px 5px 0px 0px; }
 .categoryOver { width: 330px; }
 .categoryOver .awesome { float: left; }
 #addCategory input { width: 210px; }
@@ -240,8 +241,9 @@ div.overlay div.close { top: -12px; right: -12px; }
 
 #File1  {position: absolute; }
 .customFile {  width: 219px; margin-left: -120px;cursor: default;height: 28px; z-index: 2;filter: alpha(opacity: 0);opacity: 0;}
-.fakeButton  {position: absolute; z-index: 1;width: 112px;height: 28px; background: url(../img/button.png) no-repeat left top;float: left;}
-.blocker {position: absolute;z-index: 3;width: 150px;height: 28px;background: url(../img/transparent.gif);  margin-left: -155px;}
+.fakeButton  {position: absolute; z-index: 1;width: 112px;height: 28px; background: url(../images/button.png) no-repeat left top;float: left;}
+.blocker {position: absolute;z-index: 3;width: 150px;height: 28px;background: url(../images/transparent.gif);  margin-left: -155px;}
 #FileName  #activeBrowseButton {display: none;}
 
 .login_error{ color:red; }
+

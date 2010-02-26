@@ -15,7 +15,7 @@ function js_link_to_content(url,el) {
 function js_link(url,dialog, _height, _width){
     $(dialog).load(url+'.js', function(data) {
 
-        var options = { resizable: false,    modal: true, zIndex: 3000,
+        var options = { resizable: false,    modal: true, zIndex: 3000, dialogClass: "apply_overlay",
                         close: function(event, ui) { $(dialog).remove(); },
                         width: _width,
                         height: _height };
@@ -32,7 +32,7 @@ function js_link(url,dialog, _height, _width){
   };
 
 
-
+/*
    $(document).click(function(e){
       var el = $(e.target);
       var hw;
@@ -54,6 +54,6 @@ function js_link(url,dialog, _height, _width){
       } else {
          return true; };
    });
-
+*/
 });
 
