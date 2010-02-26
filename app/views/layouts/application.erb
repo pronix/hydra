@@ -5,31 +5,58 @@
   <head>
     <title><%= I18n.t("hydra") %></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <%= stylesheet_link_tag 'style', 'formtastic','formtastic_changes', 'colorpicker', 'jquery-ui', 'tinyTips' %>
-    <%= javascript_include_tag  'jquery', 'jquery-ui', 'colorpicker' %>
-    <%= javascript_include_tag  'application', 'jquery.timers', 'jquery.tinyTips' %>
+    <%= stylesheet_link_tag 'style', 'formtastic','formtastic_changes', 'colorpicker','jtip' %>
+    <%= javascript_include_tag  'jquery', 'jquery.tools.min', 'colorpicker' %>
+    <%= javascript_include_tag  'application', 'jquery.timers', 'jtip', 'jquery.jgrowl' %>
   </head>
 
   <body>
 
-    <ul class="user_panel">
-      <li><%= current_user.name || current_user.email %></li>
-      <li>
-        <%= link_to I18n.t("sign out"), logout_path %>
-      </li>
-    </ul>
-    <div>
-      <%= flash[:notice] %>
-    </div>
-    <%= link_to I18n.t("create_task"), new_task_path, :class => "gray_button" %>
+    <div id="main">
+      <!-- head -->
+      <div class="header">
+        <!-- top menu -->
+        <%= render "shared/main_menu" %>
+        <!-- end top menu -->
 
-    <%= render "shared/main_menu" %>
-    <%= render "shared/sub_menu" %>
+        <!-- login area -->
+        <div class="loginArea">
+          <p><%= current_user.name || current_user.email %>
+            <%= link_to I18n.t("logout"), logout_path %></p>
+          <%= link_to I18n.t("create_task"), new_task_path, :class => "awesome" %>
+        </div>
+        <!-- end login area -->
+      </div>
+      <!-- end head -->
+
+
+
     <div class="content">
+      <%= render "shared/sub_menu" %>
+      <div id="alertMessage">
+        <div id="jGrowl"></div>
+      </div>
       <div class="<%= params[:controller] %>">
         <%= yield :head %>
         <%= yield %>
       </div>
     </div>
+    <div class="footer"></div>
+    </div>
+
+<script type="text/javascript" charset="utf-8">
+  $(function(){
+
+  <% if flash[:notice] -%>
+    $("#alertMessage").addClass("success")
+    $.jGrowl("<%= flash[:notice] %>");
+  <% elsif flash[:error] -%>
+    $("#alertMessage").addClass("failure")
+    $.jGrowl("<%= flash[:error] %>");
+  <% end -%>
+
+  });
+</script>
+
   </body>
 </html>

@@ -1,10 +1,10 @@
-<ul class="sub_menu">
-  <li <%= "class='active'" if params[:controller]["macros"] %>>
-    <%= link_to I18n.t("macros"), macros_path %></li>
-  <li <%= "class='active'" if params[:controller]["user_files"] %>>
-    <%= link_to I18n.t("files"), user_files_path %></li>
-  <li <%= "class='active'" if params[:controller]["profiles"] %>>
-    <%= link_to I18n.t("profiles"), profiles_path %></li>
-  <li <%= "class='active'" if params[:controller]["categories"] %>>
-    <%= link_to I18n.t("categories"), categories_path %></li>
+<ul class="subMenu">
+  <li><%= link_to I18n.t("macros"), macros_path,
+          :class => ('active' if params[:controller]["macros"] ) %></li>
+  <li><%= link_to I18n.t("files"), user_files_path,
+          :class => ('active' if params[:controller]["user_files"]) %></li>
+  <li><%= link_to I18n.t("profiles"), profiles_path,
+          :class => ('active' if params[:controller]["profiles"]) %></li>
+  <li><%= link_to I18n.t("categories"), categories_path,
+           :class => ('active' if params[:controller]["categories"]) %></li>
 </ul>

@@ -1,8 +1,6 @@
-<% semantic_form_for @category, :url => category_path, :html => { :method => :put, :class => 'base_form' }  do |form| %>
-<% form.inputs :class => "base_form"  do -%>
-<%= form.input :name %>
-<% end -%>
-<% form.buttons do -%>
-<%= form.commit_button I18n.t('save'),  :class => "base_buttons" %>
-<% end -%>
+
+<h1><%= I18n.t("edit_category") %></h1>
+<% form_for @category, :url => category_path, :html => { :method => :put, :class => 'base_form' } do |form| %>
+<%= form.text_field :name, :size => 27 %>
+<%= submit_tag I18n.t("Save"), :class => "awesome borderNone" %>
 <% end -%>

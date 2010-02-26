@@ -1,28 +1,78 @@
-<%= head_page %>
-<%= link_to("Add category", new_category_path , :class=>"gray_button category js_link",
-                     :data_size => "200x230") if current_user && current_user.admin? %>
+<div class="tools">
+<div class="overHidden">
+  <h1 class="floatLeft"><%= I18n.t("categories") %></h1>
+  <%= link_to("Add category", new_category_path , :class=>"awesome floatRight js_link",
+                     :rel => "#overlay") if current_user && current_user.admin? %>
+</div>
 
-<table class="brown categories">
-  <tr>
-    <th><%= I18n.t("name") %></th>
-    <th><%= I18n.t("created") %></th>
+<table>
+  <tr class="tableTitle">
+    <td><%= I18n.t("name") %></td>
+    <td><%= I18n.t("created") %></td>
     <% if current_user && current_user.admin? -%>
-    <th><%= I18n.t("actions") %></th>
+    <td><%= I18n.t("actions") %></td>
     <% end -%>
   </tr>
   <% @categories.each do |category| -%>
-  <tr>
+  <tr class="<%= cycle('yellowCell','') %>">
     <td><%= category.name %></td>
     <td><%= category.created_at.strftime("%d.%m.%Y") %></td>
 
     <% if current_user && current_user.admin? -%>
     <td>
-      <%= link_to I18n.t("edit"), edit_category_path(category), :class => "js_link" %>
-      <%= link_to "", category_path(category),
-          :method => :delete, :confirm => I18n.t("delete_category"), :class => "delete", :title => I18n.t("Delete") %>
+      <%= link_to I18n.t("edit"), edit_category_path(category), :class => "editBut js_link",
+                                                                :title => I18n.t("edit"), :rel => "#overlay" %>
+      <%= link_to I18n.t("delete"), "", :title => I18n.t("Delete_category"), :rel => "#delete", :class=>"delBut" %>
+      <div style="display:none">
+        <p>Are you sure you want to delete?<br /><%= category.name %></p>
+        <div class="buttonBlock">
+          <%= link_to I18n.t("yes"), category_path(category),  :method => :delete, :class => "awesome floatLeft" %>
+          <a href="#" class="awesome floatRight">No</a>
+        </div>
+      </div>
     </td>
     <% end -%>
-
   </tr>
   <% end -%>
 </table>
+</div>
+
+
+<div class="apple_overlay" id="overlay">
+  <div class="categoryOver"></div>
+</div>
+
+<div class="apple_overlay" id="delete">
+  <div class="delOver"></div>
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+
+  $(function(){
+
+ 	$(".delBut[rel]").overlay({effect: 'apple', expose: '#000',
+     onBeforeLoad: function() {
+      var wrap = this.getContent().find(".delOver");
+        wrap.html(this.getTrigger().next("div").clone().html());
+      var _close = this.getClosers();
+        wrap.find("a:last").bind("click",function(){ $(_close).trigger("click"); });
+    }
+  });
+
+  $(".js_link[rel]").overlay({
+   expose: '#000',
+   effect: 'apple',
+   onBeforeLoad: function() {
+       var wrap = this.getContent().find(".categoryOver");
+      if  (this.getTrigger().hasClass("editBut")){
+         wrap.addClass("editCategory");
+       } else {
+         wrap.removeClass("editCategory");
+        };
+       wrap.load((this.getTrigger().attr("href")+".js"));
+      }
+  });
+
+  });
+</script>

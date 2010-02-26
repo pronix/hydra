@@ -22,6 +22,9 @@ class CategoriesController < ApplicationController
   def create
     create! do |success, failure|
       success.html { redirect_to categories_path }
+      failure.html {
+        flash[:error] = @category.errors.full_messages.join(', ')
+        redirect_to categories_path }
     end
   end
 

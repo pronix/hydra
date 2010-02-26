@@ -1,30 +1,26 @@
-  <ul class="main_menu">
-      <li <%= "class='main_menu_a'" if params[:controller][/dashboards/]%>>
-        <% link_to dashboards_path do %>
-        <span class="conten_menu_left">
-          <span class="conten_menu_right"><%= I18n.t("Dashboard") %></span>
-        </span>
+  <ul class="tabs">
+      <li>
+        <% link_to dashboards_path, :class => ('current' if params[:controller][/dashboards/]) do %>
+        <%= I18n.t("Dashboard") %>
+        <span><%= I18n.t("Dashboard") %></span>
         <% end -%>
       </li>
-      <li <%= "class='main_menu_a'" if params[:controller][/tasks/]%>>
-        <% link_to tasks_path do %>
-        <span class="conten_menu_left">
-          <span class="conten_menu_right"><%= I18n.t("Tasks") %></span>
-        </span>
+      <li>
+        <% link_to tasks_path, :class => ('current' if params[:controller][/tasks/]) do %>
+          <%= I18n.t("Tasks") %>
+          <span><%= I18n.t("Tasks") %></span>
         <% end -%>
       </li>
-      <li <%= "class='main_menu_a'" if params[:controller][/macros|files|profiles|categories/]%>>
-        <% link_to macros_path do %>
-        <span class="conten_menu_left">
-          <span class="conten_menu_right"><%= I18n.t("Tools") %></span>
-        </span>
+      <li>
+        <% link_to macros_path, :class => ('current' if params[:controller][/macros|files|profiles|categories/]) do %>
+          <%= I18n.t("Tools") %>
+          <span><%= I18n.t("Tools") %></span>
         <% end -%>
       </li>
-      <li <%= "class='main_menu_a'" if params[:controller][/settings|users|proxy/]%>>
-        <% link_to settings_path do %>
-        <span class="conten_menu_left">
-          <span class="conten_menu_right"><%= I18n.t("Settings") %></span>
-        </span>
+      <li>
+        <% link_to settings_path, :class => ('current' if params[:controller][/settings|users|proxy/]) do %>
+          <%= I18n.t("Settings") %>
+          <span><%= I18n.t("Settings") %></span>
         <% end -%>
         </li>
     </ul>
