@@ -11,11 +11,64 @@
 <li>
   <%= form.label :attachment, I18n.t("file_link"), :class => "borderNoneBtm" %>
   <em class="rightCell"></em>
-  <% if @user_file.new_record? -%>
-    <%= form.file_field :attachment, :size => 1   %>
+  <div class="wrap_files">
+    <% if @user_file.new_record? -%>
+    <%= form.file_field :attachment, :size => 9   %>
+    <span id="_btAddFile" class="awesome addFileBut" style="display:none">Add files</span>
     <% else -%>
     <%= @user_file.attachment.original_filename %>
     <% end -%>
+  </div>
 </li>
 
+<% if @user_file.new_record? -%>
+<script type="text/javascript" charset="utf-8">
+  $(function(){
 
+  $("#user_file_attachment").change(function(){
+   if (!($("#user_file_attachment").val() == ''))
+     {
+       $("#_btAddFile>span").remove();
+       $("#_btAddFile").append($("<span class='att_file'><hr /> ("+$(this).val()+") <a href=''>del</a></span>"));
+
+       $("#_btAddFile").css({"width": ($("#user_file_description").width()-30)+ "px"});
+       $("#_btAddFile>span>a").bind("click", function(){
+          $(this).parents("span:first").remove();
+          $("#_btAddFile").css({"width": ($("#user_file_attachment").width()-30)+'px' })
+          $("#user_file_attachment").val("");
+          return false;
+        })
+     };
+  });
+
+  $("#user_file_attachment").addClass("hd")
+  .css({"width": $("#_btAddFile").innerWidth()+"px", "height": $("#_btAddFile").innerHeight()+"px"});
+  $("#_btAddFile").addClass("fk_bt").css({"margin-top": "0px",
+                                          "margin-right":"0px",
+                                          "left": $("#user_file_attachment").position().left+"px",
+                                           "top": $("#user_file_attachment").position().top+"px"}).show();
+  });
+</script>
+
+<style type="text/css" media="screen">
+  .att_file{
+  font-size: 70%;
+  }
+  div.wrap_files {
+	position: relative;
+  height: 50px;
+  }
+  .fk_bt {
+	position: absolute;
+	z-index: 100001;
+  }
+  input.hd {
+	position: relative;
+	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
+	opacity: 0;
+	z-index: 100002;
+  }
+</style>
+<% end %>
