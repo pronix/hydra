@@ -108,7 +108,7 @@ module Job
 
           unless File.exist? @tmp_logo # создаем только один раз
 
-            if @macro.add_logo?
+            if @macro.add_logo? && @macro.logo
               @logo = @macro.logo.attachment.path
               @size_screen = parse(`identify -format '%wx%h' '#{out_file}'`)
             end

@@ -37,7 +37,7 @@
         <div id="jGrowl"></div>
       </div>
 
-      <div class="<%= parent_menu || 'dashboards' %>">
+      <div class="<%= yield(:custom_class) || parent_menu || 'dashboards' %>">
         <%= yield :head %>
         <%= yield %>
       </div>

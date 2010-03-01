@@ -11,7 +11,7 @@
   <tr class="<%= cycle('yellowCell','') %>">
     <td><%= h task.category.name  %></td>
     <td><%= link_to h(task.name), task_path(task)  %></td>
-    <td class="state_task_<%= task.state %>"><%= I18n.t task.state.to_s %>
+    <td class="<%= task.state %>"><%= I18n.t task.state.to_s %>
       <% if task.downloading? -%>
         <span class='downloading_monitor'>
           [ <%= number_to_percentage(task.percentage.to_i, :precision => 0) -%> | <%= task.speed -%>kb/sec ]
@@ -20,10 +20,36 @@
     </td>
     <% if params[:controller]["tasks"] -%>
     <td>
-      <%= link_to I18n.t("delete"),  task_path(task), :method => :delete,
-      :confirm => I18n.t("delete_task"), :title => I18n.t("delete"), :class=>"delBut" %>
+      <%= link_to I18n.t("delete"), "", :title => I18n.t("delete_task"), :rel => "#delete", :class=>"delBut" %>
+      <div style="display:none">
+        <p>Are you sure you want to delete?<br /><%=h task.name %></p>
+        <div class="buttonBlock">
+          <%= link_to I18n.t("yes"),  task_path(task), :method => :delete, :class => "awesome floatLeft" %>
+          <a href="#" class="awesome floatRight">No</a>
+        </div>
+      </div>
     </td>
     <% end -%>
   </tr>
   <% end -%>
 </table>
+
+<% content_for :overlay do -%>
+<div class="apple_overlay"  id="delete">
+  <div class="delOver">
+  </div>
+</div>
+<% end -%>
+<script type="text/javascript" charset="utf-8">
+  $(function(){
+  $(".delBut[rel]").overlay({effect: 'apple', expose: '#000',
+     onBeforeLoad: function() {
+        var wrap = this.getContent().find(".delOver");
+        wrap.html(this.getTrigger().next("div").clone().html());
+        var _close = this.getClosers();
+        wrap.find("a:last").bind("click",function(){ $(_close).trigger("click"); });
+    }
+  });
+
+  });
+</script>

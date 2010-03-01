@@ -53,9 +53,9 @@ table td { padding: 0px 8px; text-align: left;  border: solid 1px #d6d6c6; heigh
 .tableTitle { background: url(../images/bgTitle.png) repeat-x; color: #5e3e23; font-size: 13px; }
 .yellowCell { background-color: #f0ece0; }
 /* color status */
-.reading { color: #336666;}
-.reading span { color: #666666;}
-.reading span span { color: #6666cc;}
+.reading, .downloading { color: #336666;}
+.reading span, .downloading span { color: #666666;}
+.reading span span, .downloading span span { color: #6666cc;}
 .finished, .completed { color: #2e9a15; }
 .stopped { color: #f61616; }
 .stopped span { color: #6e737e; }
@@ -167,7 +167,7 @@ table .editBut, table .delBut { margin-right: 5px; float: left; }
 .taskProfile .rightSide .awesome { margin-top: 30px; }
 .taskProfile .leftSide .awesome { margin-right: 100px; }
 
-.imggesSettings { overflow: hidden; padding-bottom: 10px; }
+.imgSettings { overflow: hidden; padding-bottom: 10px; }
 .imgSettings p { padding-bottom: 5px; overflow: hidden; }
 .imgSettings .linkFile { margin-right: 40px; }
 .imgSettings input { float: left; }

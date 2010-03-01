@@ -1,35 +1,72 @@
-<%= head_page [I18n.t("task") ].join(": ") %>
-
-<% if @task.finished? -%>
-<div class="re_panel">
-  <%= link_to I18n.t("complete_task"), complete_task_path(@task), :class => "gray_button" %>
-  <%= link_to I18n.t("screen_list"), regenerate_task_path(@task), :class => "gray_button"  %>
-  <%= link_to I18n.t("uploading"), reuploading_task_path(@task), :class => "gray_button"  %>
-
-</div>
+<% content_for :custom_class do -%>
+taskProfile
 <% end -%>
+<div class="leftSide">
+  <h1><%= @task.name %></h1>
+  <p><%=h @task.description %></p><br />
+  <h2><%= I18n.t("covers") %></h2>
+  <% unless @task.covers.blank? -%>
+  <div class="imgSettings">
+    <div class="floatLeft">
+      <% @task.covers.each do |cover| -%>
+      <p>
+        <%= link_to cover.attachment.original_filename,  image_path(cover.attachment.url) %>
+        <span>Uploaded to <strong><%= @task.upload_images_profile.try(:host) %></strong></span>
+      </p>
+      <p>BBCode with Thumbnail<br /><input name="" size="35" /><a href="#" class="copyBut" title="Copy">Copy</a></p>
+      <p>Remove link<br /><input name="" size="35" /><a href="#" class="copyBut" title="Copy">Copy</a></p>
+      <% end -%>
+    </div>
+    <a href="#" class="awesome floatRight">Re-upload image</a>
+  </div>
+  <% end -%>
+  <h2><%= I18n.t("screen_list") %></h2>
+  <% unless @task.list_screens.blank? -%>
+  <div class="imgSettings">
+    <div class="floatLeft">
+      <% @task.list_screens.each do |screen| -%>
+      <p>
+        <%= link_to screen.attachment.original_filename,  image_path(screen.attachment.url),
+            :class => "linkFile listImg" %>
+        <span>Uploaded to <strong><%= @task.upload_images_profile.try(:host) %></strong></span>
+      </p>
+      <p>
+        BBCode with Thumbnail<br /><input name="" size="35" /><a href="#" class="copyBut" title="Copy">Copy</a>
+      </p>
+      <p>
+        Remove link<br /><input name="" size="35" /><a href="#" class="copyBut" title="Copy">Copy</a>
+      </p>
+      <% end -%>
+    </div>
 
-<div class="task_info">
-    <div>
-      <span><%= I18n.t("created_at") %></span><br />
-      <%= @task.created_at.to_s(:long) %>
+    <div class="floatRight">
+      <a href="#" class="awesome floatRight">Generate image</a><br class="clear" />
+      <a href="#" class="awesome floatRight">Re-upload image</a>
     </div>
-    <div>
-      <span><%= I18n.t("name") %></span><br />
-      <%= h @task.name %>
-    </div>
-  <div>
-    <span><%= I18n.t("description") %></span><br />
-    <%= h @task.description %>
   </div>
-  <div>
-    <span><%= I18n.t("links") %></span><br />
-    <%=  @task.extract_link.map{|x| "<div>#{x}</div>"} %>
-  </div>
-  <div>
-    <%= render :partial => 'screen_list', :object => @task.list_screens unless @task.list_screens.blank? %>
-  </div>
-  <div>
-    <%= render :partial => 'logs', :object => @task.job_loggings unless @task.job_loggings.blank? %>
+  <% end -%>
+  <h2>Files</h2>
+  <div class="imgSettings">
+    <textarea name="" rows="5" cols="50" class="floatLeft">
+      <%=h @task.links  %>
+    </textarea>
+    <a href="#" class="copyBut" title="Copy">Copy</a>
   </div>
 </div>
+<div class="rightSide" style="width:310px;">
+  <div class="taskLog">
+    <p><span><%= I18n.t("created") %>:</span><%= @task.created_at.to_s(:long) %></p>
+    <p><span>Finished:</span>
+      <%= !@task.job_loggings.last.stop_time.blank? ?  @task.job_loggings.last.stop_time.to_s(:long) : @task.job_loggings.last.startup.to_s(:long) %></p>
+    <p><em>Task log</em></p>
+    <p><span><%= I18n.t("status") %>: <%= @task.current_state %></span></p>
+    <p><%= I18n.t("start") %>: <%= @task.job_loggings.last.startup.to_s(:long) %></p>
+    <p><%= I18n.t("stop") %>: <%= @task.job_loggings.last.stop_time.to_s(:long) unless @task.job_loggings.last.stop_time.blank? %></p>
+  </div>
+
+  <%= link_to I18n.t("complete_task"), complete_task_path(@task), :class => "awesome" if @task.finished?  %>
+  <span class="statusTask">Status:<span class="<%= @task.current_state %>"><%= @task.current_state %></span></span>
+
+</div>
+</div>
+
