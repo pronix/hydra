@@ -1,7 +1,15 @@
-<%= head_page "edit_macro" %>
-<% semantic_form_for :macro, @macro, :url => macro_path, :html => { :method => :put, :class => 'base_form' }  do |form| %>
-<%= render :partial => 'form', :object => form %>
-<% form.buttons do -%>
-<%= form.commit_button I18n.t('save'),  :class => "base_buttons" %>
-<% end -%>
+<div class="overHidden">
+  <h1 class="floatLeft"><%= I18n.t("macro") %>: <span class="finished">[<%= @macro.name %>]</span></h1>
+  <a href="javascript: history.back();" class="floatRight backBut">Back &raquo;</a>
+</div>
+
+<% form_for :macro, @macro, :url => macro_path, :html => { :method => :put, :class => 'base_form' }  do |form| %>
+<%= error_messages_for "macro" %>
+<ul class="tableForm">
+  <%= render :partial => 'form', :object => form %>
+  <li class="borderNone">
+    <%= submit_tag I18n.t("Save"), :class => "awesome borderNone" %>
+  </li>
+</ul>
+
 <% end -%>

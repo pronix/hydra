@@ -6,7 +6,6 @@
 	background: url(../images/colorpicker/colorpicker_background.png);
 	font-family: Arial, Helvetica, sans-serif;
 	display: none;
-  z-index: 9999;
 }
 .colorpicker_color {
 	width: 150px;
@@ -159,4 +158,77 @@
 }
 .colorpicker_slider {
 	background-position: bottom;
+}
+
+
+
+
+#colorSelector2,#colorSelector3,#colorSelector4 {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 25px;
+	height: 25px;
+	background: url(../images/colorpicker/select2.png);
+    cursor: pointer;
+}
+#colorSelector2 div,#colorSelector3 div,#colorSelector4 div {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 25px;
+	height: 25px;
+	background: url(../images/colorpicker/select2.png) center;
+}
+#colorpickerHolder2,#colorpickerHolder3,#colorpickerHolder4 {
+	top: 25px;
+	left: 0;
+	width: 356px;
+	height: 0;
+	overflow: hidden;
+	position: absolute;
+    z-index: 999;
+}
+#colorpickerHolder2 .colorpicker,#colorpickerHolder3 .colorpicker,#colorpickerHolder4 .colorpicker {
+	background-image: url(../images/colorpicker/custom_background.png);
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+#colorpickerHolder2 .colorpicker_hue div,#colorpickerHolder3 .colorpicker_hue div,#colorpickerHolder4 .colorpicker_hue div {
+	background-image: url(../images/colorpicker/custom_indic.gif);
+}
+#colorpickerHolder2 .colorpicker_hex,#colorpickerHolder3 .colorpicker_hex,#colorpickerHolder4 .colorpicker_hex {
+	background-image: url(../images/colorpicker/custom_hex.png);
+}
+#colorpickerHolder2 .colorpicker_rgb_r,#colorpickerHolder3 .colorpicker_rgb_r,#colorpickerHolder4 .colorpicker_rgb_r {
+	background-image: url(../images/colorpicker/custom_rgb_r.png);
+}
+#colorpickerHolder2 .colorpicker_rgb_g,#colorpickerHolder3 .colorpicker_rgb_g,#colorpickerHolder4 .colorpicker_rgb_g {
+	background-image: url(../images/colorpicker/custom_rgb_g.png);
+}
+#colorpickerHolder2 .colorpicker_rgb_b,#colorpickerHolder3 .colorpicker_rgb_b,#colorpickerHolder4 .colorpicker_rgb_b {
+	background-image: url(../images/colorpicker/custom_rgb_b.png);
+}
+#colorpickerHolder2 .colorpicker_hsb_s,#colorpickerHolder3 .colorpicker_hsb_s,#colorpickerHolder4 .colorpicker_hsb_s {
+	background-image: url(../images/colorpicker/custom_hsb_s.png);
+	display: none;
+}
+#colorpickerHolder2 .colorpicker_hsb_h,#colorpickerHolder3 .colorpicker_hsb_h,#colorpickerHolder4 .colorpicker_hsb_h {
+	background-image: url(../images/colorpicker/custom_hsb_h.png);
+	display: none;
+}
+#colorpickerHolder2 .colorpicker_hsb_b,#colorpickerHolder3 .colorpicker_hsb_b,#colorpickerHolder4 .colorpicker_hsb_b {
+	background-image: url(../images/colorpicker/custom_hsb_b.png);
+	display: none;
+}
+#colorpickerHolder2 .colorpicker_submit,#colorpickerHolder3 .colorpicker_submit,#colorpickerHolder4 .colorpicker_submit {
+	background-image: url(../images/colorpicker/custom_submit.png);
+}
+#colorpickerHolder2 .colorpicker input,#colorpickerHolder3 .colorpicker input,#colorpickerHolder4 .colorpicker input {
+	color: #778398;
+}
+#customWidget,#customWidget2,#customWidget3 {
+	position: relative;
+	height: 25px;
 }

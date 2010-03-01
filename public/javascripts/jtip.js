@@ -10,8 +10,9 @@ $(document).ready(JT_init);
 
 function JT_init(){
 	       $("a.jTip")
-		   .hover(function(){JT_show(this.href,this.id,this.name)},function(){$('#JT').remove()})
-           .click(function(){return false});	   
+		   .hover(function(){
+            JT_show($(this).attr("href"),this.id,this.name)},function(){$('#JT').remove()})
+           .click(function(){return false});
 }
 
 function JT_show(url,linkId,title){
@@ -20,7 +21,7 @@ function JT_show(url,linkId,title){
 	var w = self.innerWidth || (de&&de.clientWidth) || document.body.clientWidth;
 	var hasArea = w - getAbsoluteLeft(linkId);
 	var clickElementy = getAbsoluteTop(linkId) - 3; //set y position
-	
+
 	var queryString = url.replace(/^[^\?]+\??/,'');
 	var params = parseQuery( queryString );
 	if(params['width'] === undefined){params['width'] = 250};
@@ -28,7 +29,7 @@ function JT_show(url,linkId,title){
 	$('#' + linkId).bind('click',function(){window.location = params['link']});
 	$('#' + linkId).css('cursor','pointer');
 	}
-	
+
 	if(hasArea>((params['width']*1)+75)){
 		$("body").append("<div id='JT' style='width:"+params['width']*1+"px'><div id='JT_arrow_left'></div><div id='JT_close_left'>"+title+"</div><div id='JT_copy'><div class='JT_loader'><div></div></div>");//right side
 		var arrowOffset = getElementWidth(linkId) + 11;
@@ -37,10 +38,13 @@ function JT_show(url,linkId,title){
 		$("body").append("<div id='JT' style='width:"+params['width']*1+"px'><div id='JT_arrow_right' style='left:"+((params['width']*1)+1)+"px'></div><div id='JT_close_right'>"+title+"</div><div id='JT_copy'><div class='JT_loader'><div></div></div>");//left side
 		var clickElementx = getAbsoluteLeft(linkId) - ((params['width']*1) + 15); //set x position
 	}
-	
+
 	$('#JT').css({left: clickElementx+"px", top: clickElementy+"px"});
 	$('#JT').show();
-	$('#JT_copy').load(url);
+
+  if (url == "#") {
+  $('#JT_copy').html($("#"+linkId+"_text").html());
+  } else { $('#JT_copy').load(url); }
 
 }
 

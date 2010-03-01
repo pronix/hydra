@@ -1,71 +1,188 @@
+<li>
+  <%= form.label :name, Macros.human_attribute_name("name") %>
+  <em class="rightCell"></em>
+  <%= form.text_field :name %>
+  <%= error_message_on @macro, :name %>
+</li>
+<li>
+  <%= form.label :number_of_frames, Macros.human_attribute_name("number_of_frames"), :class=> "yellowCell" %><em class="rightCell"></em>
+  <%= form.text_field :number_of_frames, :size => 3 %></li>
 
-<% form.inputs do  -%>
-<%= form.input :name %>
-<%= form.inputs :number_of_frames, :columns, :thumb_width, :thumb_height, :thumb_quality %>
-<%= form.input :thumb_frame, :as => :boolean %>
-<%= form.input :frame_size %>
-<%= form.input :frame_color, :input_html => {:class => "color_field" } %>
-<%= form.input :thumb_shadow, :as => :boolean %>
-<%= form.input :thumb_padding %>
-<%= form.input :font, :as => :select,  :collection => Common::Font::options_for_select, :include_blank => false  %>
-<%= form.input :font_size %>
-<%= form.input :font_color,  :input_html => {:class => "color_field" } %>
-<%= form.input :template_background,  :input_html => {:class => "color_field" } %>
-<%= form.input :header_text,
-    :input_html => {:rows => 8 , :class => "headers",
-    :title => "File name [file_name]<br /> Size [width]x[height] <br /> Duration [duration_time] <br />
-               File size [file_size] <br /> Video codec [video_codec] <br /> Audio codec [audio_codec]"
- } %>
-<%= form.input :add_timestamp, :as => :boolean %>
-<%= form.input :position_timestamp, :as => :select, :collection => Common::PositionTimestamp::options_for_select, :include_blank => false %>
-<%= form.input :add_logo, :as => :boolean %>
-<%= form.input :logo, :as => :select, :collection => @logos.map{|x| [x.title, x.id]}   %>
-<%= form.input :file_format, :as => :select, :collection => Common::FileFormat::options_for_select, :include_blank => false  %>
-<% end -%>
+<li><%= form.label :columns, Macros.human_attribute_name("columns") %>
+  <em class="rightCell"></em>
+  <%= form.text_field :columns, :size => 3 %></li>
+<li>
+  <%= form.label :thumb_width, Macros.human_attribute_name("thumb_width"), :class => "yellowCell" %>
+  <em class="rightCell"></em>
+  <%= form.text_field :thumb_width, :size => 3 %></li>
+<li>
+  <%= form.label :thumb_height, Macros.human_attribute_name("thumb_height") %>
+  <em class="rightCell"></em>
+  <%= form.text_field :thumb_height, :size =>  3 %></li>
+<li>
+  <%= form.label :thumb_quality, Macros.human_attribute_name("thumb_quality"), :class => "yellowCell" %>
+  <em class="rightCell"></em>
+  <%= form.text_field :thumb_quality, :size =>  3 %>
+  <%= error_message_on @macro, :thumb_quality %>
+</li>
+<li>
+  <%= form.label :thumb_frame, Macros.human_attribute_name("thumb_frame") %>
+  <em class="rightCell"></em>
+   <%= form.check_box :thumb_frame %>
+</li>
+<li>
+  <%= form.label :frame_size, Macros.human_attribute_name("frame_size"), :class => "yellowCell" %>
+  <em class="rightCell"></em>
+  <%= form.text_field :frame_size, :size =>  3 %></li>
+
+<li class="overVisible">
+  <%= form.label :frame_color, Macros.human_attribute_name("frame_color") %>
+  <em class="rightCell"></em>
+  <div id="customWidget" class="floatLeft">
+    <%= form.text_field :frame_color, :size => 3, :style => "display:none;" %>
+    <div id="colorSelector2" class="color_place" data-color_field="macro_frame_color">
+      <div style="background-color: white"></div></div>
+  </div>
+  <br class="clear" />
+</li>
+
+
+
+<li>
+  <%= form.label :thumb_shadow, Macros.human_attribute_name("thumb_shadow"), :class => "yellowCell" %>
+  <em class="rightCell"></em>
+  <%= form.radio_button :thumb_shadow, "true" %><%= I18n.t("Yes") %>&nbsp;&nbsp;
+  <%= form.radio_button :thumb_shadow, "false" %><%= I18n.t("No") %>
+</li>
+<li>
+  <%= form.label :thumb_padding, Macros.human_attribute_name("thumb_padding") %>
+  <em class="rightCell"></em>
+  <%= form.text_field :thumb_padding, :size => 3 %>
+</li>
+<li>
+  <%= form.label :font, Macros.human_attribute_name("font"), :class => "yellowCell" %>
+  <em class="rightCell"></em>
+  <%= form.select :font, Common::Font::options_for_select %>
+</li>
+<li>
+  <%= form.label :font_size, Macros.human_attribute_name("font_size") %>
+  <em class="rightCell"></em>
+  <%= form.text_field :font_size, :size => 3 %>
+</li>
+
+<li class="overVisible">
+  <%= form.label :font_color, Macros.human_attribute_name("font_color"), :class => "yellowCell" %>
+  <em class="rightCell"></em>
+  <div id="customWidget" class="floatLeft">
+    <%= form.text_field :font_color, :size => 3, :style => "display:none;" %>
+    <div id="colorSelector3" class="color_place" data-color_field="macro_font_color">
+      <div style="background-color: white"></div></div>
+  </div>
+  <br class="clear" />
+</li>
+
+<li class="overVisible">
+  <%= form.label :template_background, Macros.human_attribute_name("template_background") %>
+  <em class="rightCell"></em>
+  <div id="customWidget" class="floatLeft">
+    <%= form.text_field :template_background , :size => 3, :style => "display:none;" %>
+    <div id="colorSelector4" class="color_place" data-color_field="macro_template_background">
+      <div style="background-color:white"></div></div>
+  </div>
+  <br class="clear" />
+</li>
+
+<li>
+  <%= form.label :header_text, Macros.human_attribute_name("header_text"), :class => "yellowCell" %>
+  <em class="rightCell"></em>
+  <%= form.text_area :header_text, :cols => 40, :rows => 5, :class => "floatLeft" %>
+  <a class="infoIcon jTip" id="one" name="Header text variables" href="#" >
+    Help
+  </a>
+  <div id="one_text" style="display:none">
+    File name [file_name]<br />
+    Size [width]x[height] <br />
+    Duration [duration_time] <br />
+    File size [file_size] <br />
+    Video codec [video_codec] <br />
+    Audio codec [audio_codec]
+  </div>
+</li>
+<li>
+  <%= form.label :add_timestamp , Macros.human_attribute_name("add_timestamp") %>
+  <em class="rightCell"></em>
+  <%= form.radio_button :add_timestamp, "true" %><%= I18n.t("Yes") %>&nbsp;&nbsp;
+  <%= form.radio_button :add_timestamp, "false" %><%= I18n.t("No") %>
+</li>
+<li>
+<%= form.label :position_timestamp , Macros.human_attribute_name("position_timestamp"), :class => "yellowCell" %>
+<em class="rightCell"></em>
+
+  <%= radio_button_tag "macro[position_timestamp]", Common::PositionTimestamp::RIGHT, @macro.position_timestamp %>
+  <%= I18n.t(Common::PositionTimestamp::RIGHT) %>&nbsp;&nbsp;
+  <%= radio_button_tag "macro[position_timestamp]", Common::PositionTimestamp::LEFT, @macro.position_timestamp %>
+  <%= I18n.t(Common::PositionTimestamp::LEFT) %>
+  <%= error_message_on @macro, :position_timestamp %>
+
+</li>
+
+<li>
+  <%= form.label :add_logo , Macros.human_attribute_name("add_logo") %>
+  <em class="rightCell"></em>
+  <%= form.check_box :add_logo %>
+  <%= form.select :logo_id, @logos.map{|x| [x.title, x.id]}, :include_blank => true  %>
+  <%= error_message_on @macro, :logo_id %>
+</li>
+<li>
+
+<%= form.label :file_format , Macros.human_attribute_name("file_format"), :class => "yellowCell" %>
+<em class="rightCell"></em>
+<%= radio_button_tag "macro[file_format]", Common::FileFormat::JPG,  @macro.file_format %>
+<%= Common::FileFormat::JPG %>
+<%= radio_button_tag "macro[file_format]", Common::FileFormat::PNG,  @macro.file_format %>
+<%= Common::FileFormat::PNG %>
+<%= error_message_on @macro, :file_format %>
+</li>
 
 <script type="text/javascript" charset="utf-8">
   $(function(){
-    $.each($("input.color_field"),function(i,item){
-      $(item).css({'background-color': '#'+$(item).val()});
-     });
 
-    $("input.color_field").ColorPicker({
-	          onSubmit: function(hsb, hex, rgb, el) {
-		                   $(el).val(hex);
-                       $(el).css({'background-color': '#'+hex});
-              	       $(el).ColorPickerHide();
-                  	 },
-       	onBeforeShow: function () {
-		                   $(this).ColorPickerSetColor(this.value);
-	                   }
+    if (!$("#macro_add_logo").attr("checked")){ $("#macro_logo_id").attr("disabled", "disabled"); }
+
+
+    $("#macro_add_logo").change(function(){
+      if ($(this).attr("checked")){
+          $("#macro_logo_id").attr("disabled", "");
+      } else {
+          $("#macro_logo_id").attr("disabled", "disabled").val("");
+      };
+    });
+
+    <% unless @macro.new_record? %>
+    $.each($(".color_place"),function(i,item){
+      field = $("#"+$(item).attr("data-color_field"));
+      $(item).find("div:first").css({'background-color': $(field).val()});
+     });
+   <% end  %>
+    $(".color_place").ColorPicker({
+	    onShow: function (colpkr) {
+		           $(colpkr).fadeIn(500);
+		           return false;
+	            },
+	    onHide: function (colpkr) {
+		           $(colpkr).fadeOut(500);
+		           return false;
+	            },
+  	onChange: function (hsb, hex, rgb) {
+              el = $(this).data('colorpicker').el
+              field = $("#"+$(el).attr("data-color_field"));
+              $(field).val('#' + hex);
+          		$("#"+$(el).attr("id")+" div").css('backgroundColor', '#' + hex);
+	            }
         })
        .bind('keyup', function(){
           	$(this).ColorPickerSetColor(this.value);
         });
-
-     var list_toggle_element = [
-          {      "toggle_el": "#macro_thumb_frame",
-            "change_element": "#macro_frame_size_input, #macro_frame_color_input" },
-          {      "toggle_el": "#macro_add_timestamp",
-            "change_element": "#macro_position_timestamp_input" },
-          {      "toggle_el": "#macro_add_logo",
-            "change_element": "#macro_logo_input" }]
-
-     $.each(list_toggle_element, function(i, item){
-
-       if (!$(item["toggle_el"]).attr("checked")) {
-            $(item["change_element"]).hide(); };
-
-        $(item["toggle_el"]).click(function(){
-           if ($(this).attr("checked")) {
-               $(item["change_element"]).show();
-           } else {
-               $(item["change_element"]).hide().find("input,select").val(''); };
-        })
-
-
-      });
-  $('textarea.headers').tinyTips('title');
 
   });
 </script>

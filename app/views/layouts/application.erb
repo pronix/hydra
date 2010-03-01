@@ -5,7 +5,7 @@
   <head>
     <title><%= I18n.t("hydra") %></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <%= stylesheet_link_tag 'style', 'formtastic','formtastic_changes', 'colorpicker','jtip' %>
+    <%= stylesheet_link_tag 'style', 'colorpicker','jtip' %>
     <%= javascript_include_tag  'jquery', 'jquery.tools.min', 'colorpicker' %>
     <%= javascript_include_tag  'application', 'jquery.timers', 'jtip', 'jquery.jgrowl' %>
   </head>
@@ -54,9 +54,11 @@
   <% if flash[:notice] -%>
     $("#alertMessage").addClass("success")
     $.jGrowl("<%= flash[:notice] %>");
+    $(".jGrowl-notification").height($(".message").height())
   <% elsif flash[:error] -%>
     $("#alertMessage").addClass("failure")
     $.jGrowl("<%= flash[:error] %>");
+
   <% end -%>
 
   });

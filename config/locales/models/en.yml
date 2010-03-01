@@ -2,6 +2,7 @@ en:
   activerecord:
     models:
       task: Tasks
+      macros: Macro
     attributes:
       task:
         name: Task name
@@ -12,5 +13,14 @@ en:
         macro_renaming: Macro of link appearance
         screen_list: Create screen list
         that_rename: Select rename objects
+      macros:
+        name: Macro name
+        thumb_padding: Space between thumbs
+        font: Template font
+        font_size: Template font size
+        font_color: Template font color
+        template_background: Background color
+        position_timestamp: Timestamp position
+        file_format: Output file format
 
 

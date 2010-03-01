@@ -15,6 +15,9 @@ class MacrosController < ApplicationController
   def create
     create! do |success, failure|
       success.html { redirect_to macros_path }
+      failure.html {
+        flash[:error] = "Error"
+        render :action => "new" }
     end
   end
 
