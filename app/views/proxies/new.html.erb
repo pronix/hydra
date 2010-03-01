@@ -1,9 +1,5 @@
-<%= head_page "new_proxies"%>
-<% semantic_form_for @proxy, :html => { :method => :post, :class => 'base_form' }  do |form| %>
-<% form.inputs :class => "base_form"  do -%>
-<%= form.input :proxies, :as => :text, :input_html => { :rows => 12 , :cols => 70} %>
-<% end -%>
-<% form.buttons do -%>
-<%= form.commit_button I18n.t('Add'),  :class => "base_buttons" %>
-<% end -%>
+<%= content_tag :h1, I18n.t("add_proxy") %>
+<% form_for @proxy, :url => proxies_path, :html => { :method => :post }  do |form| %>
+<%= form.text_area :proxies, :rows => 5, :cols => 20 %>
+<%= submit_tag I18n.t("submit"), :class => "awesome borderNone" %>
 <% end -%>

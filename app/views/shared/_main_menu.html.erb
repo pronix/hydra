@@ -18,7 +18,7 @@
         <% end -%>
       </li>
       <li>
-        <% link_to settings_path, :class => ('current' if params[:controller][/settings|users|proxy/]) do %>
+        <% link_to settings_path, :class => ('current' if params[:controller][/settings|users|proxies/]) do %>
           <%= I18n.t("Settings") %>
           <span><%= I18n.t("Settings") %></span>
         <% end -%>

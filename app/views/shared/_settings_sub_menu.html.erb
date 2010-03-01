@@ -1,9 +1,12 @@
 <ul class="subMenu">
-  <li <%= "class='active'" if params[:controller]["settings"] %>>
-    <%= link_to I18n.t("my_settings"), settings_path %></li>
-  <li <%= "class='active'" if params[:controller]["users"] %>>
-    <%= link_to I18n.t("users"), users_path if current_user.admin? %></li>
-  <li <%= "class='active'" if params[:controller]["proxies"] %>>
-    <%= link_to I18n.t("proxy"), proxies_path %></li>
+  <li>
+    <%= link_to I18n.t("my_settings"), settings_path, :class => ('current' if params[:controller]["settings"]) %>
+  </li>
+  <li>
+    <%= link_to(I18n.t("users"), users_path, :class => ('current' if params[:controller]["users"])) if current_user.admin? %>
+  </li>
+  <li>
+    <%= link_to I18n.t("proxy"), proxies_path, :class => ('current' if params[:controller]["proxies"] ) %>
+  </li>
 </ul>
 

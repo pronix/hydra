@@ -3,6 +3,13 @@ class ProxiesController < ApplicationController
   defaults :resource_class => Proxy, :collection_name => 'proxies', :instance_name => 'proxy'
   respond_to :html, :js
 
+  def new
+    new! do |format|
+      format.html { render :action => :new }
+      format.js   { render :action => :new, :layout => false }
+    end
+  end
+
   def create
     Proxy.add_proxies(current_user, params[:proxy][:proxies])
     redirect_to proxies_path

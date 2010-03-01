@@ -1,21 +1,74 @@
-<%= head_page %>
-<%= link_to("Add proxy", new_proxy_path , :class=>"gray_button category") %>
+ <div class="overHidden">
+   <%= head_page_left I18n.t "proxy" %>
+   <%= link_to(I18n.t("Add proxy"), new_proxy_path , :class=>"awesome floatRight js_link", :rel => "#proxy") %>
+ </div>
+
+
 <table class="brown proxies">
-  <tr>
-    <th><%= I18n.t("address") %></th>
-    <th><%= I18n.t("country") %></th>
-    <th><%= I18n.t("status") %></th>
-    <th><%= I18n.t("actions") %></th>
+  <tr class="tableTitle">
+    <td><%= I18n.t("address") %></td>
+    <td><%= I18n.t("country") %></td>
+    <td><%= I18n.t("status") %></td>
+    <td><%= I18n.t("actions") %></td>
   </tr>
   <% @proxies.each do |proxy| -%>
   <tr>
     <td><%= proxy.address %></td>
-    <td><%= image_tag "flags/#{proxy.country_code}.png" %><%= proxy.country %></td>
-    <td class="<%= proxy.online? ? 'green' : 'red' %>"><%= I18n.t proxy.current_state.to_s %></td>
     <td>
-      <%= link_to "", proxy_path(proxy), :method => :delete, :confirm => I18n.t("delete_proxy"), :class => "delete" %>
-      <%= link_to I18n.t("edit"), edit_proxy_path(proxy), :class => "js_link" %>
+      <span class="flagCountry"><%= image_tag "flags/#{proxy.country_code}.png" %></span>
+      <%= proxy.country %>
+    </td>
+    <td>
+      <span class="<%= proxy.online? ? 'finished' : 'stopped' %>">
+      <%= I18n.t proxy.current_state.to_s %>
+      </span>
+    </td>
+    <td>
+      <%= link_to I18n.t("delete"), "", :title => I18n.t("delete_file"), :rel => "#delete", :class=>"delBut" %>
+      <div style="display:none">
+        <p>Are you sure you want to delete?<br /><%= proxy.address %></p>
+        <div class="buttonBlock">
+          <%= link_to I18n.t("yes"), proxy_path(proxy), :method => :delete, :class => "awesome floatLeft" %>
+          <a href="#" class="awesome floatRight">No</a>
+        </div>
+      </div>
     </td>
   </tr>
   <% end -%>
 </table>
+
+<div class="apple_overlay" id="proxy">
+  <div class="proxyOver">
+  </div>
+</div>
+<div class="apple_overlay"  id="delete">
+  <div class="delOver">
+  </div>
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+
+  $(function(){
+
+  $(".delBut[rel]").overlay({effect: 'apple', expose: '#000',
+     onBeforeLoad: function() {
+      var wrap = this.getContent().find(".delOver");
+        wrap.html(this.getTrigger().next("div").clone().html());
+      var _close = this.getClosers();
+        wrap.find("a:last").bind("click",function(){ $(_close).trigger("click"); });
+    }
+  });
+
+
+  $(".js_link[rel]").overlay({
+   expose: '#000',
+   effect: 'apple',
+   onBeforeLoad: function() {
+    var wrap = this.getContent().find(".proxyOver");
+    wrap.load((this.getTrigger().attr("href")+".js"));
+      }
+  });
+
+  });
+</script>
