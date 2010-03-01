@@ -1,21 +1,74 @@
-<%= head_page %>
-<%= link_to I18n.t("add_user"), new_user_path, :class => "gray_button users" %>
+<div class="overHidden">
+  <h1 class="floatLeft"><%= I18n.t("users") %></h1>
+  <%= link_to I18n.t("add_user"), new_user_path, :class => "awesome floatRight js_link", :rel => "#addUser" %>
+</div>
+
 <table class="brown">
-  <tr>
-    <th><%= I18n.t("login") %></th>
-    <th><%= I18n.t("added_date") %></th>
-    <th><%= I18n.t("tasks") %></th>
-    <th><%= I18n.t("actions") %></th>
+  <tr class="tableTitle">
+    <td><%= I18n.t("login") %></td>
+    <td><%= I18n.t("added_date") %></td>
+    <td><%= I18n.t("tasks") %></td>
+    <td><%= I18n.t("actions") %></td>
   </tr>
   <% @users.each do |user| -%>
-  <tr>
+  <tr class="<%= cycle('yellowCell','') %>">
     <td><%= user.email %></td>
     <td><%= user.created_at.strftime("%d.%m.%Y %H:%M") %></td>
-    <td><%= user.active_tasks.to_i %>/<%= user.completed_tasks.to_i %></td>
+    <td><span class="finished"><%= user.active_tasks.to_i %>/<%= user.completed_tasks.to_i %></span></td>
     <td>
-      <%= link_to I18n.t("edit"), edit_user_path(user), :class => "js_link"  -%>
-      <%= link_to I18n.t("delete"), user_path(user), :method => :delete, :confirm => I18n.t("Delete user") -%>
+      <%= link_to I18n.t("edit"), edit_user_path(user), :class => "editBut js_link", :rel => "#editUser"  -%>
+      <%= link_to I18n.t("delete"), "", :title => I18n.t("delete_user"), :rel => "#delete", :class=>"delBut" %>
+      <div style="display:none">
+        <p>Are you sure you want to delete?<br /><%= user.name || user.email %></p>
+        <div class="buttonBlock">
+          <%= link_to I18n.t("yes"),  user_path(user), :method => :delete, :class => "awesome floatLeft" %>
+          <a href="#" class="awesome floatRight">No</a>
+        </div>
+      </div>
     </td>
   </tr>
   <% end -%>
 </table>
+
+<% content_for :overlay do -%>
+<div class="apple_overlay" id="addUser">
+  <div class="addUserOver">
+</div></div>
+<div class="apple_overlay" id="editUser">
+  <div class="addUserOver">
+</div></div>
+<div class="apple_overlay"  id="delete">
+  <div class="delOver">
+</div></div>
+<% end -%>
+
+<script type="text/javascript" charset="utf-8">
+
+  $(function(){
+
+  $(".delBut[rel]").overlay({effect: 'apple', expose: '#000',
+     onBeforeLoad: function() {
+      var wrap = this.getContent().find(".delOver");
+        wrap.html(this.getTrigger().next("div").clone().html());
+      var _close = this.getClosers();
+        wrap.find("a:last").bind("click",function(){ $(_close).trigger("click"); });
+    }
+  });
+
+
+  $(".js_link[rel]").overlay({
+   expose: '#000',
+   effect: 'apple',
+   onBeforeLoad: function() {
+       var wrap = this.getContent().find(".addUserOver");
+      if  (this.getTrigger().hasClass("editBut")){
+         wrap.addClass("editUser");
+       } else {
+         wrap.removeClass("editUser");
+        };
+       wrap.load((this.getTrigger().attr("href")+".js"));
+      }
+  });
+
+  });
+</script>

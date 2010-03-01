@@ -7,9 +7,6 @@ class User < ActiveRecord::Base
 
   default_scope :order => "created_at DESC"
 
-  # validations
-  validates_presence_of :notification_email
-
   # associations
   # задачи, если пользователя удаляют то в задача user_id == nil
   has_and_belongs_to_many :roles

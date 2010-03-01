@@ -1,8 +1,25 @@
-<% form.inputs :class => "base_form"  do -%>
-<%= form.input :name %>
-<%= form.input :email %>
-<%= form.input :notification_email %>
-<%= form.input :password %>
-<%= form.input :password_confirmation %>
-<%= form.input :roles, :as => :check_boxes %>
-<% end -%>
+<li><label><%= I18n.t("nickname") %></label><em class="rightCell"></em>
+  <%= form.text_field :name, :size => 20 %>
+</li>
+<li><label class="yellowCell">E-mail</label><em class="rightCell"></em>
+  <%= form.text_field :email, :size => 19 %>
+</li>
+<li><label><%= I18n.t("password") %></label><em class="rightCell"></em>
+  <%= form.password_field :password, :size => 19 %>
+</li>
+<li><label class="yellowCell"><%= I18n.t("repeat_password") %></label><em class="rightCell"></em>
+  <%= form.password_field :password_confirmation, :size => 19 %>
+</li>
+<li>
+  <label class="borderNone"><%= I18n.t("account_type") %></label>
+  <em class="rightCell"></em>
+  <% if resource.new_record? -%>
+    <%= select_tag  "user[role_ids][]",
+      options_for_select(Role.all.map{|x| [x.name, x.id]} ),
+      { :include_blank => I18n.t("Choose account type")} %>
+  <% else -%>
+  <%= select_tag  "user[role_ids][]",
+      options_for_select(Role.all.map{|x| [x.name, x.id]}, resource.roles.first.id ),
+      { :include_blank => I18n.t("Choose account type")} %>
+  <% end -%>
+</li>

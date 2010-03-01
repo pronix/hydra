@@ -1,7 +1,9 @@
-<%= head_page "new_user" %>
-<% semantic_form_for @user, :html => { :method => :post, :class => 'base_form' }  do |form| %>
-<%= render :partial => 'form', :object => form %>
-<% form.buttons do -%>
-<%= form.commit_button I18n.t('Create'),  :class => "base_buttons" %>
-<% end -%>
+<%= content_tag :h1, I18n.t("add_user") %>
+<% form_for @user,:url => users_path,  :html => { :method => :post }  do |form| %>
+<ul class="tableForm toolsProfiles">
+  <%= render :partial => 'form', :object => form %>
+  <li class="borderNone">
+    <%= submit_tag I18n.t("Save"), :class => "awesome borderNone" %>
+  </li>
+</ul>
 <% end -%>

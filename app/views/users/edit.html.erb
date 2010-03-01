@@ -1,7 +1,12 @@
-<%= head_page "edit_user" %>
-<% semantic_form_for @user, :url => user_path, :html => { :method => :put, :class => 'base_form' }  do |form| %>
-<%= render :partial => 'form', :object => form %>
-<% form.buttons do -%>
-<%= form.commit_button I18n.t('save'),  :class => "base_buttons" %>
-<% end -%>
+<h1>
+  <%=  I18n.t("edit_user") %>: <span class="finished">[<%= resource.email %>]</span>
+</h1>
+
+<% form_for @user, :url => user_path, :html => { :method => :put}  do |form| %>
+<ul class="tableForm toolsProfiles">
+  <%= render :partial => 'form', :object => form %>
+  <li class="borderNone">
+    <%= submit_tag I18n.t("Save"), :class => "awesome borderNone" %>
+  </li>
+</ul>
 <% end -%>
