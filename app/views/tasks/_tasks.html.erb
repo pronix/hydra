@@ -1,14 +1,14 @@
 <table class="brown <%= params[:controller] -%>">
-  <tr>
-		<th><%= I18n.t("category") %></th>
-		<th><%= I18n.t("name") %></th>
-		<th><%= I18n.t("status") %></th>
+  <tr class="tableTitle">
+		<td><%= I18n.t("category") %></td>
+		<td><%= I18n.t("name") %></td>
+		<td><%= I18n.t("status") %></td>
     <% if params[:controller]["tasks"] -%>
-      <th><%= I18n.t("actions") %></th>
+      <td><%= I18n.t("actions") %></td>
     <% end -%>
   </tr>
   <% tasks.each do |task| -%>
-  <tr>
+  <tr class="<%= cycle('yellowCell','') %>">
     <td><%= h task.category.name  %></td>
     <td><%= link_to h(task.name), task_path(task)  %></td>
     <td class="state_task_<%= task.state %>"><%= I18n.t task.state.to_s %>
@@ -21,7 +21,7 @@
     <% if params[:controller]["tasks"] -%>
     <td>
       <%= link_to I18n.t("delete"),  task_path(task), :method => :delete,
-      :confirm => I18n.t("delete_task"), :title => I18n.t("delete")  %>
+      :confirm => I18n.t("delete_task"), :title => I18n.t("delete"), :class=>"delBut" %>
     </td>
     <% end -%>
   </tr>

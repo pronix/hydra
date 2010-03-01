@@ -1,8 +1,12 @@
-<%= head_page "create_task" %>
-<% semantic_form_for :task, @task,:url => tasks_path,  :html => { :method => :post, :class => 'base_form', :multipart => true }  do |form| %>
+<div class="createTask">
+<%= head_page I18n.t("create_task") %>
+<% form_for @task, :url => tasks_path, :method => "post", :html => { :method => :post, :class => 'base_form', :multipart => true } do |form| %>
+<%# semantic_form_for :task, @task,:url => tasks_path,  :html => { :method => :post, :class => 'base_form', :multipart => true }  do |form| %>
 <%= render :partial => 'form', :object => form %>
-<% form.buttons do -%>
-<%= form.commit_button I18n.t('Create'),  :class => "base_buttons" %>
-<% end -%>
-<% end -%>
 
+<p class="alignCenter">
+  <%= submit_tag I18n.t("Submit"), :class => "awesome borderNone" %>
+</p>
+
+<% end -%>
+</div>

@@ -1,3 +1,8 @@
+
+
+
+<% false && begin %>
+
 <% form.inputs do  -%>
 <%= form.input :name %>
 <%= form.input :category, :include_blank => false %>
@@ -43,5 +48,310 @@
   <% end -%>
 
 <% end -%>
-<%#= form.inputs  -%>
+<% end  -%>
 
+
+
+<ul class="inputForm">
+  <li>
+    <%= label_tag :name, I18n.t("task_name") %>
+    <%= form.text_field :name, :size => "30", :id => "enterName" %>
+    <div class="floatRight">
+      <%= I18n.t("select_category") %>
+      <%= form.select :category_id, Category.all.map{|x| [x.name, x.id]} %>
+    </div>
+  </li>
+
+  <li>
+    <%= form.label :description, I18n.t("description") %>
+    <%= form.text_area :description, :rows => 4, :cols => 40  %>
+  </li>
+  <li>
+    <%= form.label :links, I18n.t("add_links") %>
+    <%= form.text_area :links, :rows => 4, :cols => 57, :class => "floatLeft"  %>
+
+    <div class="passOptions">
+      <%= form.check_box :use_password %><%= I18n.t("password_option") %><br/>
+      <%= form.password_field :password, :disabled => true, :class => "passwdField", :size => 20 %>
+    </div>
+  </li>
+</ul>
+
+
+<h2><%= I18n.t("jobs_list") %></h2>
+   <div class="jobList">
+     <div class="floatLeft">
+       <%= form.check_box :extracting_files %><%= I18n.t("Extracting files") %>
+     </div>
+
+     <div class="floatLeft">
+       <p><%= form.check_box :rename %><%= I18n.t("Rename") %></p>
+       <p class="option">
+         <%  Common::ThatRename.options_for_select.each do |t| -%>
+         <%= form.radio_button :that_rename,  t.last %> <%= I18n.t(t.first) %>
+         <% end -%>
+       </p>
+       <p class="option">
+         <%= form.label :rename_file_name, I18n.t("name") %><br />
+         <%= form.text_field :rename_file_name, :size => 33 %>
+       </p>
+       <p class="option"><%= I18n.t("text") %><br />
+         <%= form.text_field :rename_text, :size => 33 %></p>
+       <p class="option">
+         <%= I18n.t("macro_of_file_name") %><br />
+         <%= form.text_field :macro_renaming, :size => 33 %>
+         <a class="infoIcon jTip" id="one" name="Macro variables" href="#" >Help</a>
+         <div style="display:none" id="one_text">
+           File name [file_name] <br />
+           File extension [ext]
+           Some text [text]
+           Arhive part [part_number]
+         </div>
+       </p>
+     </div>
+
+     <div class="floatLeft">
+       <p class="screen">
+         <%= form.check_box :screen_list %><%= I18n.t("Create_screen") %><br />
+         <%= form.select :screen_list_macro_id, current_user.macros.map{|x| [x.name, x.id]}, :include_blank => true %>
+       </p>
+
+       <p class="upload">
+         <%= form.check_box :upload_images %><%= I18n.t("upload_images") %><br />
+         <%= form.select :upload_images_profile_id,
+             current_user.profiles.without_mediavalise.map{|x| [x.name, x.id]}, :include_blank => true  %>
+       </p>
+
+
+       <p class="archive">
+         <%= form.check_box :create_archive %><%= I18n.t("create_arhive") %><br />
+
+         <p class="archiveField">
+         Part size (per Mb)<br />
+         <%= form.text_field :password_arhive, :size => 22 %><br />
+         Protect by password<br />
+         <%= form.text_field :part_size, :size => 22 %>
+         </p>
+       </p>
+
+     </div>
+
+     <div class="floatRight">
+       <p class="upload2">
+         <%= form.check_box :mediavalise %><%= I18n.t("upload_to_mediavalise") %><br />
+         <%= form.select :mediavalise_profile_id,
+             current_user.profiles.mediavalise.map{|x| [x.name, x.id]}, :include_blank => true  %>
+       </p>
+     </div>
+   </div>
+
+
+   <!-- ------------------------------------ -->
+
+<!-- other options -->
+<div class="otherOptions">
+  <div class="floatLeft">
+    <h2><%= I18n.t("covers") %></h2><br class="clear" />
+		<div id="but_img_upload" class="floatLeft">
+			<input id="File1" type="file"/>
+		</div>
+
+		<script type="text/javascript">
+      window.onload = WindowOnLoad;
+      var fileInput = document.getElementById('File1');
+      var fileName = document.createElement('div');
+      fileName.style.display = 'none';
+      var activeButton = document.createElement('div');
+      var bb = document.createElement('div');
+      var bl = document.createElement('div');
+      function WindowOnLoad()
+      {
+      var wrap = document.getElementById('but_img_upload');
+      fileName.setAttribute('id','FileName');
+      activeButton.setAttribute('id','activeBrowseButton');
+      fileInput.value = '';
+      fileInput.onchange = HandleChanges;
+      fileInput.onmouseover = MakeActive;
+      fileInput.onmouseout = UnMakeActive;
+      fileInput.className = 'customFile';
+      bl.className = 'blocker';
+      bb.className = 'fakeButton';
+      activeButton.className = 'fakeButton';
+      wrap.appendChild(bb);
+      wrap.appendChild(bl);
+
+      wrap.appendChild(activeButton);
+
+      wrap.appendChild(fileName);
+
+
+      };
+      function HandleChanges()
+      { fileName.style.display = 'block'; };
+      function MakeActive() {
+           activeButton.style.display = 'block';  };
+      function UnMakeActive() { activeButton.style.display = 'none';  };
+    </script>
+
+
+    <ul class="listFiles" id="coversFiles">
+    </ul>
+  </div>
+
+  <div class="floatLeft">
+    <h2><%= I18n.t("Attachments") %></h2><br class="clear" />
+    <ul class="floatLeft marginRight">
+      <li><%= form.check_box :add_screens_to_arhive %><%= I18n.t("add_screen_list_to_archive") %></li>
+      <li><%= form.check_box :add_covers_to_arhive %><%= I18n.t("add_covers_to_archive") %></li>
+    </ul>
+
+    <a href="#" class="awesome floatLeft" rel="#addFile">Add files</a>
+    <ul class="listFiles" id="attachmentFiles">
+    </ul>
+
+  </div>
+
+  <div class="floatLeft">
+    <h2><%= I18n.t("use_proxy") %></h2><br class="clear" />
+    <ul class="floatLeft marginRight">
+      <li>
+        <%= radio_button_tag "task[proxy]", 1,  @task.proxy %>
+        <%= I18n.t("yes") %>
+      </li>
+      <li>
+        <%= radio_button_tag "task[proxy]", 1,  @task.proxy %><%= I18n.t("no") %>
+      </li>
+    </ul>
+  </div>
+
+</div>
+                <!-- end other options -->
+   <!-- ------------------------------------ -->
+
+
+
+   <!-- overlay addfile -->
+   <div class="apple_overlay"  id="addFile">
+     <div class="addFileOver">
+       <h1><%= I18n.t("add_files") %></h1>
+       <ul>
+         <% current_user.user_files.each do |ff| -%>
+         <li>
+           <%= check_box_tag "_task[attachment_file_ids][]", ff.id, false,
+               :id => "_task_attachment_file_ids_#{ff.id}", :data_title_file => ff.title %>
+           <label class="<%= cycle('yellowCell','') %>"><%= ff.title %></label>
+         </li>
+         <% end -%>
+         <li><a href="#" class="awesome">Save</a></li>
+       </ul>
+     </div>
+   </div>
+   <!-- end overlay addfile -->
+
+
+
+
+
+   <script type="text/javascript" charset="utf-8">
+  $(function(){
+
+    $("#File1").change(function(){
+     console.log("change file1");
+     var t = $(this).clone();
+     $(t).attr({"name":"task[covers][][attachment]", "id":""}).css({"display":"none"});
+
+     $("#coversFiles").append(
+       $("<li class='borderNone'></li>")
+          .append("<span class='listImg'>"+$(this).val()+"</span>")
+          .append("<a href='#' class='smallDelBut delCoverFile' rel='#delete' title='Delete' >delete</a>")
+          .append($(t))
+      );
+     $(this).val("");
+    });
+
+    $(".delCoverFile").live("click", function(){
+       var item = $(this).parents("li:first");
+       $(item).remove();
+       return false;
+      });
+
+    $(".delAttachmentFile").live("click", function(){
+       var item = $(this).parents("li:first");
+       var i = $(item).find("input:first");
+       $("#_task_attachment_file_ids_"+$(i).val()).attr("checked","");
+       $(item).remove();
+       return false;
+      });
+
+  	$(".awesome[rel]").overlay({effect: 'apple', expose: '#000',
+        onClose: function(){
+          var list_files = $("#attachmentFiles")
+          $(list_files).find("li").remove();
+          $.each($("#addFile").find("input:checked"),function(i,item){
+
+          var t = $(item).clone();
+          $(t).attr({"name":"task[attachment_file_ids][]", "id":""}).css({"display":"none"});
+          var title_file = $(t).attr("data_title_file");
+          $(list_files).append(
+          $("<li class='bordernone'></li>")
+                   .append("<span>"+title_file+"</span>")
+                   .append("<a class='smallDelBut delAttachmentFile' href='#' rel='#delete' title='delete'>delete</a>")
+                   .append($(t))
+            );
+           });
+         },
+        onBeforeLoad: function(){
+          var wrap = this.getContent();
+          var _close = this.getClosers();
+          wrap.find('a:last').bind("click",function(){
+                  $(_close).trigger("click");
+                  return false;
+            });
+         }});
+
+    $("#enterName").focus(function(){
+     if ($(this).val() == "<%= I18n.t('enter_name')%>") {
+          $(this).val(" ");
+        };
+    });
+
+    /* список объектов которые активируються при включение флажков   */
+    var list_toggle_element = [
+     {"tg_el": "#task_rename",               "ct_el": ".option"},
+     {"tg_el": "#task_use_password",         "ct_el": "#task_password"},
+     {"tg_el": "#task_screen_list",          "ct_el": "#task_screen_list_macro_id"},
+     {"tg_el": "#task_upload_images",        "ct_el": "#task_upload_images_profile_id"},
+     {"tg_el": "#task_create_archive",       "ct_el": ".archiveField"},
+     {"tg_el": "#task_mediavalise",          "ct_el": "#task_mediavalise_profile_id"}
+     ];
+
+    $.each(list_toggle_element, function(i, item){
+
+      $(item["ct_el"]).css({"color":"#666666"});
+      $(item["ct_el"]).filter("input").attr("disabled", "disabled").val("")
+           .andSelf().filter("select").attr("disabled", "disabled").val("")
+           .andSelf().find("input").attr("disabled", "disabled").val("");
+
+
+     $(item["tg_el"]).bind("change",function(){
+       if ($(item["tg_el"]).attr("checked")) {
+        $(item["tg_el"]).parents(":first").css({"color":"#000000"});
+        $(item["ct_el"]).css({"color":"#000000"});
+
+        $(item["ct_el"]).filter("input").attr("disabled", "")
+                        .andSelf().filter("select").attr("disabled", "")
+                        .andSelf().find("input").attr("disabled", "");
+
+       } else {
+        $(item["tg_el"]).parents(":first").css({"color":"#666666"});
+        $(item["ct_el"]).css({"color":"#666666"});
+        $(item["ct_el"]).filter("input").attr("disabled","disabled").attr("checked","").val("")
+                        .andSelf().filter("select").attr("disabled", "disabled").val("")
+                        .andSelf().find("input").attr("disabled", "disabled").attr("checked","").val("");
+       };
+     })
+
+    });
+
+  });
+</script>

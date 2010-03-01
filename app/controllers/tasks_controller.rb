@@ -64,7 +64,7 @@ class TasksController < ApplicationController
                    when /completed/
                      " workflow_state in ( :completed_state ) "
                    end
-    @arguments.merge!({ :completed_state => %w(completed error )})
+    @arguments.merge!({ :completed_state => %w(completed)})
     @conditions << " category_id = :category " if session[:task_category]
     @arguments.merge!({ :category => session[:task_category]})  if session[:task_category]
     @conditions = @conditions.join(" AND ")

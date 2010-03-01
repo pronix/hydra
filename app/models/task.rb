@@ -36,7 +36,7 @@ class Task < ActiveRecord::Base
   # files
 
   has_many :covers , :as => :assetable, :dependent => :destroy
-  has_many :attachment_files , :as => :assetable, :dependent => :destroy
+  has_many :attachment_files , :as => :assetable, :dependent => :destroy, :class_name => "UserFile"
   has_many :list_screens, :dependent => :destroy
 
   belongs_to :screen_list_macro,     :class_name => "Macros"
@@ -76,7 +76,7 @@ class Task < ActiveRecord::Base
 
 
   # name scope
-  named_scope :active, :conditions => [" workflow_state not in(?) ", %w(completed error)]
+  named_scope :active, :conditions => [" workflow_state not in(?) ", %w(completed)]
   named_scope :active_without_self, lambda { |t| {
       :conditions => [" tasks.workflow_state not in(?) and tasks.id not in (?) ", %w(completed error), t.read_attribute(:id) ]
     }}
@@ -162,12 +162,6 @@ class Task < ActiveRecord::Base
       covers.build(cover)
     end
   end
-  # Добавление прикрепленных файлов к задаче
-  def attachment_files=(attr)
-    attr.each do |attachment_file|
-      attachment_files.build(attachment_file)
-    end
-  end
 
   # Логирования выполнение работы
   def start_job(comment="")
@@ -209,9 +203,11 @@ class Task < ActiveRecord::Base
         halt!("Нет ответа от сервера закачек") unless aria_ping?
         end_job
       end
-      event :error_start_downloading, :transitions_to => :error do |*message|
+      event :erroneous, :transitions_to => :error do |*message|
         end_job(message.first)
       end
+
+
     end
 
 
@@ -279,7 +275,7 @@ class Task < ActiveRecord::Base
     state :error do
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
-        Notification.deliver_stopped_task(self)
+        Notification.deliver_stopped_task(self) if user.notification_email?
       }
     end
 
@@ -428,7 +424,7 @@ class Task < ActiveRecord::Base
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
         FileUtils.rm_rf(downloding_path)
-        Notification.deliver_completed_task(self)
+        Notification.deliver_completed_task(self) if user.notification_email?
       }
     end
 
@@ -480,4 +476,6 @@ class Task < ActiveRecord::Base
 
   end
 end
+
+
 

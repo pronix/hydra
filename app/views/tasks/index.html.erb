@@ -1,9 +1,11 @@
-<%= head_page session[:task_status]["active"] ? "active_tasks" : "completed_tasks" %>
+<div class="overHidden">
+<h1 class="floatLeft"><%= I18n.t(session[:task_status]["active"] ? "active_tasks" : "completed_tasks") %></h1>
 
-<form class="categories" action="#" method="post">
+<form class="categories floatRight" action="#" method="post">
 <%= select_tag :category,options_for_select([[I18n.t("all_categories"),nil]]+Category.all.map{|x| [x.name, x.id]},
     session[:task_category].to_i), :class => "categories" %>
 </form>
+</div>
 <div id="load_content">
   <%= render :partial => 'tasks', :object => @tasks %>
 </div>
