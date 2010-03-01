@@ -104,37 +104,41 @@ module Job
           output=`#{montage_command}`
 
           # Добавляем шапку для логотипа
-          @tmp_logo = File.join(@path, ["tmp_logo", @macro.file_format].join('.') )
 
-          unless File.exist? @tmp_logo # создаем только один раз
 
-            if @macro.add_logo? && @macro.logo
-              @logo = @macro.logo.attachment.path
-              @size_screen = parse(`identify -format '%wx%h' '#{out_file}'`)
+            @tmp_logo = File.join(@path, ["tmp_logo", @macro.file_format].join('.') )
+
+            unless File.exist? @tmp_logo # создаем только один раз
+
+              if @macro.add_logo? && !@macro.logo.blank?
+                @logo = @macro.logo.attachment.path
+                @size_screen = parse(`identify -format '%wx%h' '#{out_file}'`)
+              end
+
+              # Создаем шаблон логотипа
+              command = [" convert ",
+                      " -size '#{@size_screen.first}x200' xc:#{!@background.blank? ? @background.split(' ').last : "none"} ",
+                      " -gravity 'East' "]
+              command << " -draw \" image over 10,0 0,0 '#{@logo}' \" '#{@tmp_logo}'  " if @macro.add_logo? &&
+                !@macro.logo.blank?
+              command = command.join(' ')
+              log "create temp logo"
+              log command
+              `#{command}`
             end
 
-            # Создаем шаблон логотипа
-            command = [" convert ",
-                       " -size '#{@size_screen.first}x200' xc:#{!@background.blank? ? @background.split(' ').last : "none"} ",
-                       " -gravity 'East' "]
-            command << " -draw \" image over 10,0 0,0 '#{@logo}' \" '#{@tmp_logo}'  " if @macro.add_logo?
-            command = command.join(' ')
-            log "create temp logo"
+            # Присоединяем шаблон логотипа к основному скрн листу
+            command = [ "convert",
+                        "'(' '#{@tmp_logo}' +append ')'",
+                        "'(' '#{out_file}' +append ')'",
+                        " -gravity 'NorthEast' #{@background} -append '#{out_file}'"
+                      ].join(' ')
+
+            log "add logo"
             log command
-            `#{command}`
-          end
+            output = `#{command}`
 
-          # Присоединяем шаблон логотипа к основному скрн листу
-          command = [ "convert",
-                      "'(' '#{@tmp_logo}' +append ')'",
-                      "'(' '#{out_file}' +append ')'",
-                      " -gravity 'NorthEast' #{@background} -append '#{out_file}'"
-                    ].join(' ')
-
-          log "add logo"
-          log command
-          output = `#{command}`
-
+          # end add logo
 
           # Добавляем заголовок с техническими данными
           @header_text = @macro.header_text.chomp.
@@ -156,8 +160,8 @@ module Job
       end
 
       # Удаляем временные файлы
-      FileUtils.rm_rf(@path_tmp)
-      FileUtils.rm_rf(@tmp_logo)
+      FileUtils.rm_rf(@path_tmp) unless @path_tmp.blank?
+      FileUtils.rm_rf(@tmp_logo) unless @tmp_logo.blank?
 
       # Если получилось несколько скрин листов то объеденяем их в один
       _files = Dir.glob(@path + "**/**")
@@ -176,7 +180,7 @@ module Job
         save
       end
 
-      job_completion!("Count files: #{Dir.glob(@path+ "**/**").size}")
+       job_completion!("Count files: #{Dir.glob(@path+ "**/**").size}")
 
     rescue => ex
       log ex.message, :error
