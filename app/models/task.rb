@@ -469,6 +469,7 @@ class Task < ActiveRecord::Base
         FileUtils.rm_rf(packed_path)
         FileUtils.rm_rf(unpacked_path)
         FileUtils.rm_rf(screen_list_path)
+        run_next_task
       }
     end
 
