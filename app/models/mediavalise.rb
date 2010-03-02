@@ -37,7 +37,7 @@ class Mediavalise
           'Content-Type' => "multipart/form-data; boundary=#{boundary}" } }
       doc = Nokogiri.parse(response)
       result = response.body.to_s.scan(/http:\/\/[a-zA-z0-9|.|\/]*\b/)
-      result!.reject!{|x| x["delete"]}
+      result.reject!{|x| x["delete"]}
       return result
 
     rescue => ex
