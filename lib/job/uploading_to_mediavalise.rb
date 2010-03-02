@@ -6,15 +6,13 @@ module Job
           log "start job:uploading mediavalise "
           _host, _login, _password = mediavalise_profile.host, mediavalise_profile.login, mediavalise_profile.password
           _files = Dir.glob(uploading_path + "**/**")
-          result  = []
           _files.each { |x|
-            result << Mediavalise.uploading({ :file_path => x,
-                                              :file_name => File.basename(x),
-                                              :login => _login,
-                                              :password => _password})
+            Mediavalise.uploading({ :file_path => x,
+                                    :file_name => File.basename(x),
+                                    :login => _login,
+                                    :password => _password, :task => self })
           }
-          mediavalise_links = result.join(', ')
-          save
+
           log "stop job:uploading mediavalise "
         rescue => ex
           log " MEDIAVALISE : #{ex.message}", :debug
