@@ -13,7 +13,7 @@ taskProfile
         <%= link_to x.cover.attachment.original_filename,  image_path(x.cover.attachment.url) %>
         <span>Uploaded to <strong><%= @task.upload_images_profile.try(:host) %></strong></span>
       </p>
-       <% x.links.each do |link| -%>
+       <% x.links && x.links.each do |link| -%>
         <p><%=h link.first %><br />
            <%= text_field_tag "", link.last, :size => 35  %>
            <a href="#" class="copyBut" title="Copy">Copy</a>
@@ -37,7 +37,7 @@ taskProfile
             :class => "linkFile listImg" %>
         <span>Uploaded to <strong><%= @task.upload_images_profile.try(:host) %></strong></span>
       </p>
-        <% list_screen.links.each do |link| -%>
+        <% list_screen.links && list_screen.links.each do |link| -%>
           <p><%=h link.first %><br />
              <%= text_field_tag "", link.last, :size => 35  %>
              <a href="#" class="copyBut" title="Copy">Copy</a>
