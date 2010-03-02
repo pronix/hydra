@@ -56,12 +56,10 @@ namespace :deploy do
   task :restart_daemons do
     run "cd #{current_path} && \
          RAILS_ENV=production #{ruby_path}/ruby script/proxy_checker.rb stop && \
-         RAILS_ENV=production #{ruby_path}/ruby script/monitor_downloading.rb stop && \
-         RAILS_ENV=production #{ruby_path}/ruby script/delayed_job stop && \
+         RAILS_ENV=production #{ruby_path}/ruby script/monitor_downloading.rb stop \
          cd #{current_path} && \
          RAILS_ENV=production #{ruby_path}/ruby script/proxy_checker.rb start && \
-         RAILS_ENV=production #{ruby_path}/ruby script/monitor_downloading.rb start && \
-         RAILS_ENV=production #{ruby_path}/ruby script/delayed_job start "
+         RAILS_ENV=production #{ruby_path}/ruby script/monitor_downloading.rb start "
   end
   desc "start daemons"
   task :start_daemons do
@@ -74,8 +72,29 @@ namespace :deploy do
   end
 
 end
+
+namespace :bluepill do
+  desc "Stop processes that bluepill is monitoring and quit bluepill"
+  task :quit, :roles => [:app] do
+    begin
+    run "bluepill stop"
+    run "bluepill quit"
+    rescue =>e
+      puts e
+    end
+  end
+  desc "Load bluepill configuration and start it"
+  task :start, :roles => [:app] do
+    run "bluepill load #{release_path}/config/production.pill"
+  end
+  desc "Prints bluepills monitored processes statuses"
+  task :status, :roles => [:app] do
+    run "bluepill status"
+  end
+end
 # after  "deploy"update_code
-after "deploy:update",  "deploy:symlinks", "deploy:chown", "deploy:start_aria", "deploy:restart_daemons"
+
+after "deploy:update",  "deploy:symlinks", "deploy:chown", "deploy:start_aria", "deploy:restart_daemons", "bluepill:quit", "bluepill:start"
 
 
 

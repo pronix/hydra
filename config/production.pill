@@ -1,0 +1,18 @@
+RAILS_ROOT='/var/wwww/hydra/current'
+Bluepill.application("my_app", :log_file => "#{RAILS_ROOT}/log/bluepill.log") do |app|
+  app.process("delayed_job") do |process|
+    process.working_dir = RAILS_ROOT
+
+    process.start_grace_time    = 10.seconds
+    process.stop_grace_time     = 10.seconds
+    process.restart_grace_time  = 10.seconds
+
+    process.start_command = "ruby script/delayed_job -e production start"
+    process.stop_command  = "ruby script/delayed_job -e production stop"
+
+    process.pid_file = "#{RAILS_ROOT}/tmp/pids/delayed_job.pid"
+    process.stdout = process.stderr = "#{RAILS_ROOT}/log/bluepill.log"
+    process.uid = "apache"
+    process.gid = "apache"
+  end
+end

@@ -58,12 +58,14 @@ taskProfile
   </div>
   <% end -%>
   <h2><%= I18n.t("files") %></h2>
+  <% unless @task.mediavalise_links.blank? -%>
   <div class="imgSettings">
     <textarea name="" rows="5" cols="50" class="floatLeft">
       <%=h @task.mediavalise_links  %>
     </textarea>
     <a href="#" class="copyBut" title="Copy">Copy</a>
   </div>
+  <% end -%>
 </div>
 <div class="rightSide" style="width:310px;">
   <div class="taskLog">
