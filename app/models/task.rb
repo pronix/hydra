@@ -19,7 +19,11 @@ class Task < ActiveRecord::Base
 
   # associations
   has_many :job_loggings, :dependent => :delete_all do
-
+    def error
+      all(:conditions => ["job not in (?) ", "error"]).last.comment
+    rescue
+      ""
+    end
     def start_job(comment = "")
       (find_by_job(proxy_owner.reload.current_state.to_s) ||
        create(:job => proxy_owner.reload.current_state.to_s)).

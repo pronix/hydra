@@ -12,9 +12,14 @@
     <td><%= h task.category.name  %></td>
     <td><%= link_to h(task.name), task_path(task)  %></td>
     <td class="<%= task.state %>"><%= I18n.t task.state.to_s %>
+
       <% if task.downloading? -%>
         <span class='downloading_monitor'>
           [ <%= number_to_percentage(task.percentage.to_i, :precision => 0) -%> | <%= task.speed -%>kb/sec ]
+        </span>
+        <% elsif task.error? -%>
+        <span>
+          [ <%= task.job_loggings.error %> ]
         </span>
       <% end -%>
     </td>

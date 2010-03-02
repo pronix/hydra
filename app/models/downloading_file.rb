@@ -38,9 +38,9 @@ class DownloadingFile < ActiveRecord::Base
       !@active.blank? && DownloadingFile.transaction do
         @active.each {|x|
           @dwn_file = find_by_gid(x[:gid])
-          @dwn_file.update_attributes({ :speed => x[:speed],
-                                        :total_length => x[:total_length],
-                                        :completed_length => x[:completed_length]  })
+          @dwn_file && @dwn_file.update_attributes({ :speed => x[:speed],
+                                                     :total_length => x[:total_length],
+                                                     :completed_length => x[:completed_length]  })
         }
       end
 

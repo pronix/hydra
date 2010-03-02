@@ -57,8 +57,8 @@ table td { padding: 0px 8px; text-align: left;  border: solid 1px #d6d6c6; heigh
 .reading span, .downloading span { color: #666666;}
 .reading span span, .downloading span span { color: #6666cc;}
 .finished, .completed { color: #2e9a15; }
-.stopped { color: #f61616; }
-.stopped span { color: #6e737e; }
+.stopped, .error { color: #f61616; }
+.stopped span, .error span { color: #6e737e; }
 .quened { color: #999; }
 .extracting { color: #336666; }
 /* input form tables */
