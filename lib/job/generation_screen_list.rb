@@ -9,7 +9,28 @@ module Job
     # получим из задачи в каком формате нужны скрин листы
     # и сделаем скрин листы
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    # обычная генерация
     def process_of_generation_screen_list
+      _generation_screen_list
+      job_completion!("Count files: #{Dir.glob(screen_list_path+ "**/**").size}")
+    rescue => ex
+      log ex.message, :error
+      erroneous!("#{ex.message}")
+    end
+
+    # повторная генерация запусщенная в ручную
+    def re_process_of_generation_screen_list
+      _generation_screen_list
+      finish_regenerate!("Count files: #{Dir.glob(screen_list_path+ "**/**").size}")
+    rescue => ex
+      log ex.message, :error
+      erroneous!("#{ex.message}")
+    end
+
+    private
+
+    def _generation_screen_list
       @macro = screen_list_macro
       @number_of_frames = @macro.number_of_frames
       list_screens.destroy_all # удаляем скринлисты сгенерированные в прошлый раз
@@ -54,9 +75,10 @@ module Job
           # Собираем сделанные скриншоты в один скрин лист
 
           @font_settings = []
+          @font_color = @macro.font_color.to_s["#"] ? @macro.font_color : "##{@macro.font_color}"
           @font_settings << " -font '#{@macro.font}'" unless @macro.font.blank?
           @font_settings << " -pointsize '#{@macro.font_size}'" unless @macro.font_size.blank?
-          @font_settings << " -fill '##{@macro.font_color}'" unless @macro.font_color.blank?
+          @font_settings << " -fill '#{@font_color}'" unless @macro.font_color.blank?
           @font_settings = @font_settings.join(' ')
 
           # Если в макросе указано что нужно добавить шкалу времени то добавляем ее
@@ -103,24 +125,25 @@ module Job
           log montage_command
           output=`#{montage_command}`
 
+
+
           # Добавляем шапку для логотипа
-
-
             @tmp_logo = File.join(@path, ["tmp_logo", @macro.file_format].join('.') )
 
             unless File.exist? @tmp_logo # создаем только один раз
 
               if @macro.add_logo? && !@macro.logo.blank?
                 @logo = @macro.logo.attachment.path
-                @size_screen = parse(`identify -format '%wx%h' '#{out_file}'`)
               end
 
+              @size_screen = parse(`identify -format '%wx%h' '#{out_file}'`)
               # Создаем шаблон логотипа
               command = [" convert ",
                       " -size '#{@size_screen.first}x200' xc:#{!@background.blank? ? @background.split(' ').last : "none"} ",
                       " -gravity 'East' "]
-              command << " -draw \" image over 10,0 0,0 '#{@logo}' \" '#{@tmp_logo}'  " if @macro.add_logo? &&
-                !@macro.logo.blank?
+              command << " -draw \" image over 10,0 0,0 '#{@logo}' \" " if @macro.add_logo? && !@macro.logo.blank?
+              command << " '#{@tmp_logo}'  "
+
               command = command.join(' ')
               log "create temp logo"
               log command
@@ -179,15 +202,11 @@ module Job
         list_screens.build :screen => Screen.create!(:attachment => File.open(ff))
         save
       end
-
-       job_completion!("Count files: #{Dir.glob(@path+ "**/**").size}")
-
-    rescue => ex
-      log ex.message, :error
-      erroneous!("#{ex.message}")
     end
 
-    private
+
+
+
     def escape_file_name(s)
       s.to_s.gsub(/\\|\n|\r/, '').gsub(/\s+/, " ")
     end

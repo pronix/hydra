@@ -9,8 +9,8 @@ module Job
       FileUtils.mkdir_p(packed_path)
 
       # Добавляем обложки в архив
-      add_covers_to_arhive? && covers.each { |x|
-        `cp '#{x.attachment.path}' '#{File.join(@_tmp_packed_path,x.attachment.original_filename )}'`
+      add_covers_to_arhive? && task_covers.each { |x|
+        `cp '#{x.cover.attachment.path}' '#{File.join(@_tmp_packed_path,x.cover.attachment.original_filename )}'`
       }
 
       # Добавляем файлы в архив
