@@ -7,6 +7,9 @@ class Task < ActiveRecord::Base
   include Job::Rename
   include Job::Packing
   include Job::Uploading
+  include Job::UploadingToMediavalise
+  include Job::UploadingCovers
+  include Job::UploadingScreenList
 
   ROOT_PATH_DOWNLOAD = File.join(RAILS_ROOT, "data", "task_files")
 
@@ -35,9 +38,10 @@ class Task < ActiveRecord::Base
   belongs_to :user
   # files
 
-  has_many :covers , :as => :assetable, :dependent => :destroy
+  # has_many :covers , :as => :assetable, :dependent => :destroy
   has_many :attachment_files , :as => :assetable, :dependent => :destroy, :class_name => "UserFile"
   has_many :list_screens, :dependent => :destroy
+  has_many :task_covers , :dependent => :destroy
 
   belongs_to :screen_list_macro,     :class_name => "Macros"
   belongs_to :upload_images_profile, :class_name => "Profile"
@@ -157,9 +161,9 @@ class Task < ActiveRecord::Base
   end
 
   # Добавление  обложек к задаче
-  def covers=(attr)
+  def task_covers=(attr)
     attr.each do |cover|
-      covers.build(cover)
+      task_covers.build( :cover => Cover.create!(:attachment => cover ))
     end
   end
 
@@ -330,9 +334,18 @@ class Task < ActiveRecord::Base
       event :erroneous, :transitions_to => :error do |*message|
         end_job(message.first)
       end
+      event :finish_regenerate, :transitions_to => :finished do |*message|
+        end_job(message.first)
+      end
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
-        send_later :process_of_generation_screen_list
+        case triggering_event.to_s
+        when /regenerate/
+          send_later :re_process_of_generation_screen_list
+        else
+          send_later :process_of_generation_screen_list
+        end
+
       }
     end
 
@@ -392,9 +405,21 @@ class Task < ActiveRecord::Base
         end_job(message.first)
       end
 
+      event :finish_reuploading, :transitions_to => :finished do |*message|
+        end_job(message.first)
+      end
+
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
-        send_later :process_uploading
+
+        case triggering_event.to_s
+        when /reuploading\b/
+          send_later :re_uploading_screen_list
+        when /reuploading_covers\b/
+          send_later :re_uploading_cover
+        else
+          send_later :process_uploading
+        end
       }
 
     end
@@ -418,7 +443,10 @@ class Task < ActiveRecord::Base
       end
 
       event :reuploading, :transitions_to => :uploading do |*message|
-        end_job(I18n.t("restart_uploading"))
+        end_job(I18n.t("restart_uploading_screen_list"))
+      end
+      event :reuploading_covers, :transitions_to => :uploading do |*message|
+        end_job(I18n.t("restart_uploading_covers"))
       end
 
       on_entry { |prior_state, triggering_event, *event_args|

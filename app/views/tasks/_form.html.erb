@@ -257,7 +257,7 @@
 
     $("#File1").change(function(){
      var t = $(this).clone();
-     $(t).attr({"name":"task[covers][][attachment]", "id":""}).css({"display":"none"});
+     $(t).attr({"name":"task[task_covers][]", "id":""}).css({"display":"none"});
 
      $("#coversFiles").append(
        $("<li class='borderNone'></li>")

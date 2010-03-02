@@ -40,7 +40,14 @@ class TasksController < ApplicationController
   def reuploading
     @task = current_user.tasks.find params[:id]
     @task && @task.finished? && @task.reuploading!
-    flash[:notice] = I18n.t('restart_generate_screen_list')
+    flash[:notice] = I18n.t('restart_uploding_screen_list')
+    redirect_to task_path(@task)
+  end
+  # Повторная загрузка обложек
+  def reuploading_covers
+    @task = current_user.tasks.find params[:id]
+    @task && @task.finished? && @task.reuploading_covers!
+    flash[:notice] = I18n.t('restart_uploading_covers')
     redirect_to task_path(@task)
   end
 

@@ -11,7 +11,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :tasks, :member => {
     :complete => :get,
     :regenerate => :get,
-    :reuploading => :get
+    :reuploading => :get,
+    :reuploading_covers => :get
   }
 
   # Tools

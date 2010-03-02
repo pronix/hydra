@@ -5,57 +5,67 @@ taskProfile
   <h1><%= @task.name %></h1>
   <p><%=h @task.description %></p><br />
   <h2><%= I18n.t("covers") %></h2>
-  <% unless @task.covers.blank? -%>
+  <% unless @task.task_covers.blank? -%>
   <div class="imgSettings">
     <div class="floatLeft">
-      <% @task.covers.each do |cover| -%>
+      <% @task.task_covers.each do |x| -%>
       <p>
-        <%= link_to cover.attachment.original_filename,  image_path(cover.attachment.url) %>
+        <%= link_to x.cover.attachment.original_filename,  image_path(x.cover.attachment.url) %>
         <span>Uploaded to <strong><%= @task.upload_images_profile.try(:host) %></strong></span>
       </p>
-      <p>BBCode with Thumbnail<br /><input name="" size="35" /><a href="#" class="copyBut" title="Copy">Copy</a></p>
-      <p>Remove link<br /><input name="" size="35" /><a href="#" class="copyBut" title="Copy">Copy</a></p>
+       <% x.links.each do |link| -%>
+        <p><%=h link.first %><br />
+           <%= text_field_tag "", link.last, :size => 35  %>
+           <a href="#" class="copyBut" title="Copy">Copy</a>
+        </p>
+       <% end -%>
       <% end -%>
     </div>
-    <a href="#" class="awesome floatRight">Re-upload image</a>
+    <% if @task.finished? -%>
+    <%= link_to "Re-upload image", reuploading_covers_task_path, :class => "awesome floatRight"  %>
+
+    <% end -%>
   </div>
   <% end -%>
   <h2><%= I18n.t("screen_list") %></h2>
   <% unless @task.list_screens.blank? -%>
   <div class="imgSettings">
     <div class="floatLeft">
-      <% @task.list_screens.each do |screen| -%>
+      <% @task.list_screens.each do |list_screen| -%>
       <p>
-        <%= link_to screen.attachment.original_filename,  image_path(screen.attachment.url),
+        <%= link_to list_screen.screen.attachment.original_filename,  image_path(list_screen.screen.attachment.url),
             :class => "linkFile listImg" %>
         <span>Uploaded to <strong><%= @task.upload_images_profile.try(:host) %></strong></span>
       </p>
-      <p>
-        BBCode with Thumbnail<br /><input name="" size="35" /><a href="#" class="copyBut" title="Copy">Copy</a>
-      </p>
-      <p>
-        Remove link<br /><input name="" size="35" /><a href="#" class="copyBut" title="Copy">Copy</a>
-      </p>
+        <% list_screen.links.each do |link| -%>
+          <p><%=h link.first %><br />
+             <%= text_field_tag "", link.last, :size => 35  %>
+             <a href="#" class="copyBut" title="Copy">Copy</a>
+          </p>
+        <% end -%>
       <% end -%>
     </div>
 
     <div class="floatRight">
-      <a href="#" class="awesome floatRight">Generate image</a><br class="clear" />
-      <a href="#" class="awesome floatRight">Re-upload image</a>
+      <% if @task.finished? -%>
+      <%= link_to "Generate image", regenerate_task_path, :class => "awesome floatRight" %>
+      <br class="clear" />
+      <%= link_to "Re-upload image", reuploading_task_path, :class => "awesome floatRight" %>
+      <% end -%>
     </div>
   </div>
   <% end -%>
-  <h2>Files</h2>
+  <h2><%= I18n.t("files") %></h2>
   <div class="imgSettings">
     <textarea name="" rows="5" cols="50" class="floatLeft">
-      <%=h @task.links  %>
+      <%=h @task.mediavalise_links  %>
     </textarea>
     <a href="#" class="copyBut" title="Copy">Copy</a>
   </div>
 </div>
 <div class="rightSide" style="width:310px;">
   <div class="taskLog">
-    <p><span><%= I18n.t("created") %>:</span><%= @task.created_at.to_s(:long) %></p>
+    <p><span><%= I18n.t("created") %>:</span><%= @task.job_loggings.first.startup.to_s(:long) %></p>
     <p><span>Finished:</span>
       <%= !@task.job_loggings.last.stop_time.blank? ?  @task.job_loggings.last.stop_time.to_s(:long) : @task.job_loggings.last.startup.to_s(:long) %></p>
     <p><em>Task log</em></p>
