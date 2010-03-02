@@ -21,10 +21,11 @@ taskProfile
        <% end -%>
       <% end -%>
     </div>
-    <% if @task.finished? -%>
-    <%= link_to "Re-upload image", reuploading_covers_task_path, :class => "awesome floatRight"  %>
 
+    <% if @task.finished? && @task.upload_images? -%>
+    <%= link_to "Re-upload image", reuploading_covers_task_path, :class => "awesome floatRight"  %>
     <% end -%>
+
   </div>
   <% end -%>
   <h2><%= I18n.t("screen_list") %></h2>
@@ -48,11 +49,12 @@ taskProfile
 
     <div class="floatRight">
       <% if @task.finished? -%>
-      <%= link_to "Generate image", regenerate_task_path, :class => "awesome floatRight" %>
+      <%= link_to "Generate image", regenerate_task_path, :class => "awesome floatRight" if @task.screen_list? %>
       <br class="clear" />
-      <%= link_to "Re-upload image", reuploading_task_path, :class => "awesome floatRight" %>
+      <%= link_to "Re-upload image", reuploading_task_path, :class => "awesome floatRight"  if @task.upload_images? %>
       <% end -%>
     </div>
+
   </div>
   <% end -%>
   <h2><%= I18n.t("files") %></h2>
