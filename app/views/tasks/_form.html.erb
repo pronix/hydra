@@ -1,57 +1,3 @@
-
-
-
-<% false && begin %>
-
-<% form.inputs do  -%>
-<%= form.input :name %>
-<%= form.input :category, :include_blank => false %>
-<%= form.input :description, :input_html => {:rows => 7 } %>
-<%= form.input :links, :input_html => {:rows => 7 } %>
-<%= form.input :use_password %>
-<%= form.input :password %>
-<%= form.input :proxy %>
-<% end -%>
-<% form.inputs :name => I18n.t("covers") do  -%>
-<%= form.input :covers, :as => :file, :input_html => {:name => "task[covers][][attachment]"} %>
-<%= form.input :add_covers_to_arhive %>
-<% end -%>
-<% form.inputs :name => I18n.t("arhive_attachments") do  -%>
-  <%= form.input :attachment_files, :as => :file, :input_html => {:name => "task[attachment_files][][attachment]"} %>
-<% end -%>
-<% form.inputs :name => I18n.t("jobs_list") do  -%>
-<%= form.input :extracting_files %>
-
-
-  <% form.inputs :name => I18n.t("rename file") do  -%>
-    <%= form.input :rename, :as => :boolean %>
-    <%= form.input :that_rename, :as => :radio, :collection => Common::ThatRename.options_for_select, :label => nil  %>
-    <%= form.input :rename_file_name %>
-    <%= form.input :rename_text %>
-    <%= form.input :macro_renaming %>
-  <% end %>
-
-  <% form.inputs  do  -%>
-    <%= form.input :screen_list, :as => :boolean %>
-    <%= form.input :add_screens_to_arhive %>
-    <%= form.input :screen_list_macro_id , :collection => current_user.macros%>
-
-    <%= form.input :upload_images, :as => :boolean %>
-    <%= form.input :upload_images_profile_id , :collection => current_user.profiles.without_mediavalise %>
-    <%= form.input :mediavalise, :as => :boolean %>
-    <%= form.input :mediavalise_profile_id , :collection => current_user.profiles.mediavalise %>
-
-
-    <%= form.input :create_archive, :as => :boolean %>
-    <%= form.input :password_arhive %>
-    <%= form.input :part_size %>
-  <% end -%>
-
-<% end -%>
-<% end  -%>
-
-
-
 <ul class="inputForm">
   <li>
     <%= label_tag :name, I18n.t("task_name") %>
@@ -308,11 +254,9 @@
             });
          }});
 
-    $("#enterName").focus(function(){
-     if ($(this).val() == "<%= I18n.t('enter_name')%>") {
-          $(this).val(" ");
-        };
-    });
+  var data ="<%= current_user.tasks.map(&:name).join(' ') %>".split(" ");
+  $("#enterName").autocomplete(data);
+
 
     /* список объектов которые активируються при включение флажков   */
     var list_toggle_element = [
