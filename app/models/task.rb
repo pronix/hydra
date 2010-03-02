@@ -10,9 +10,7 @@ class Task < ActiveRecord::Base
   include Job::UploadingToMediavalise
   include Job::UploadingCovers
   include Job::UploadingScreenList
-
   ROOT_PATH_DOWNLOAD = File.join(RAILS_ROOT, "data", "task_files")
-
   default_scope :order => "created_at DESC"
 
 
@@ -202,6 +200,7 @@ class Task < ActiveRecord::Base
 
   workflow do
 
+
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     # Новая задач (в очереди )
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -219,21 +218,22 @@ class Task < ActiveRecord::Base
     end
 
 
+
     state :job_finish do
 
 
       on_entry do |prior_state, triggering_event, *event_args|
         write_attribute(:previous_state, I18n.t("completed_#{prior_state.to_s}"))
-
+        save!
         case prior_state.to_sym
         when :downloading # завершилось скачивание
           case
-          when extracting_files?                                then start_extracting!
-          when screen_list?                                     then start_generation!
-          when rename? && that_rename[Common::ThatRename::FILE] then start_renaming!
-          when create_archive?                                  then start_packing!
+          when extracting_files?                                then send_later :start_extracting!
+          when screen_list?                                     then send_later :start_generation!
+          when rename? && that_rename[Common::ThatRename::FILE] then send_later :start_renaming!
+          when create_archive?                                  then send_later :start_packing!
           else
-            start_uploading!
+            send_later :start_uploading!
           end
 
         when :extracting # завершилось распаковка
@@ -293,16 +293,19 @@ class Task < ActiveRecord::Base
     state :downloading do
 
       on_entry { |prior_state, triggering_event, *event_args|
+        log "start download"
         start_job
-        to_aria
+        send_later :to_aria
+
       }
 
       # При выходе копируем скачанные файлы в папку для закачки
       on_exit do |new_state, triggering_event, *event_args|
         copy_file_to_uploading(downloding_path)
+        log "stop download"
       end
 
-      event :job_completion, :transitions_to => :job_finish do |*message|
+      event :completion_downloading, :transitions_to => :job_finish do |*message|
         downloading_files.destroy_all
         end_job(message.first)
       end
@@ -318,11 +321,13 @@ class Task < ActiveRecord::Base
     state :extracting do
       event :job_completion, :transitions_to => :job_finish do |*message|
         end_job(message.first)
+        log "stop unpacked"
       end
       event :erroneous, :transitions_to => :error do |*message|
         end_job(message.first)
       end
       on_entry { |prior_state, triggering_event, *event_args|
+        log "start unpacked"
         start_job
         process_of_unpacking
       }
@@ -334,6 +339,7 @@ class Task < ActiveRecord::Base
     state :generation do
       event :job_completion, :transitions_to => :job_finish do |*message|
         end_job(message.first)
+        log "stop generation"
       end
       event :erroneous, :transitions_to => :error do |*message|
         end_job(message.first)
@@ -349,7 +355,6 @@ class Task < ActiveRecord::Base
         else
           send_later :process_of_generation_screen_list
         end
-
       }
     end
 
@@ -359,13 +364,16 @@ class Task < ActiveRecord::Base
     state :renaming do
       event :job_completion, :transitions_to => :job_finish do |*message|
         end_job(message.first)
+        log "stop renaming"
       end
       event :erroneous, :transitions_to => :error do |*message|
         end_job(message.first)
       end
       on_entry { |prior_state, triggering_event, *event_args|
+        log "start renaming"
         start_job
         process_renaming
+
       }
 
       # При выходе копируем переименовыванные файлы файлы в папку для закачки
@@ -381,6 +389,7 @@ class Task < ActiveRecord::Base
     state :packing do
       event :job_completion, :transitions_to => :job_finish do |*message|
         end_job(message.first)
+        log "stop packing"
       end
 
       event :erroneous, :transitions_to => :error do |*message|
@@ -388,6 +397,7 @@ class Task < ActiveRecord::Base
       end
 
       on_entry { |prior_state, triggering_event, *event_args|
+        log "start packing"
         start_job
         process_packing
       }
@@ -403,6 +413,7 @@ class Task < ActiveRecord::Base
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     state :uploading do
       event :job_completion, :transitions_to => :job_finish do |*message|
+        log "stop uploading"
         end_job(message.first)
       end
       event :erroneous, :transitions_to => :error do |*message|
@@ -415,6 +426,7 @@ class Task < ActiveRecord::Base
 
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
+        log "start uploading"
 
         case triggering_event.to_s
         when /reuploading\b/
@@ -422,7 +434,7 @@ class Task < ActiveRecord::Base
         when /reuploading_covers\b/
           send_later :re_uploading_cover
         else
-          send_later :process_uploading
+          process_uploading
         end
       }
 
@@ -473,6 +485,9 @@ class Task < ActiveRecord::Base
       }
     end
 
+    on_transition do |from, to, triggering_event, *event_args|
+      log "job: from #{from} to #{to} "
+    end
 
   end
 
@@ -504,9 +519,12 @@ class Task < ActiveRecord::Base
   end
 
   def log message, level = :info
-    Rails.logger.send level,
-    "[ Task##{read_attribute(:id)}] [#{Time.now.to_s}] #{message}"
+    job_log ||= Task.open_log
+    job_log.send level, "[ Task##{read_attribute(:id)}] [#{Time.now.to_s}] #{message}"
+  end
 
+  def self.open_log
+    ActiveSupport::BufferedLogger.new(File.join(RAILS_ROOT, 'log', 'jobs.log'))
   end
 end
 
