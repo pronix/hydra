@@ -36,11 +36,9 @@ class Mediavalise
           'Content-Length' => form.length.to_s,
           'Content-Type' => "multipart/form-data; boundary=#{boundary}" } }
       doc = Nokogiri.parse(response)
-
-      # result = []
-      # doc.css("fieldset").last.css("form").css("div").each_slice(2) {|m|
-      # result << [m.first.text.strip, m.last.css("input").attr("value").to_s.strip ] }
-      return response
+      result = response.body.to_s.scan(/http:\/\/[a-zA-z0-9|.|\/]*\b/)
+      result!.reject!{|x| x["delete"]}
+      return result
 
     rescue => ex
       raise "Uploading file to MediaValise: #{ex.message}"
@@ -50,11 +48,4 @@ class Mediavalise
 
   end
 end
-# <div id="file_links">
-# <div>
-# <h2 id="h2_file_name">203_routing_in_rails_3.mov</h2>
-# <label>Download:</label>
-# <input value="http://hadoop.adenin.ru/file/5a5unccvzfujzgrz/203_routing_in_rails_3.mov" id="download_link" type="text">
-# <label>Delete</label>
-# <input value="http://hadoop.adenin.ru/file/delete/28/mqtbxhav2tus7yuxxmjb4qt37jx6pepv" id="destroy_link" type="text">
-# </div>
+
