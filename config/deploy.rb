@@ -41,8 +41,10 @@ namespace :deploy do
       run "mkdir -p #{shared_path}/data/#{share}" unless File.exist?("#{shared_path}/data/#{share}")
       run "ln -nfs #{shared_path}/data/#{share} #{release_path}/data/#{share} "
     end
+    run "ln -nfs  /var/www/hydra/shared/production.sqlite3 #{release_path}/db/production.sqlite3"
     run "touch #{shared_path}/database.yml"
     run "ln -nfs #{shared_path}/database.yml #{current_path}/config/database.yml "
+
   end
   desc "start aria server"
   task :start_aria do
@@ -73,37 +75,9 @@ namespace :deploy do
 
 end
 # after  "deploy"update_code
-after "deploy:update", "deploy:chown", "deploy:symlinks", "deploy:start_aria", "deploy:restart_daemons"
+after "deploy:update",  "deploy:symlinks", "deploy:chown", "deploy:start_aria", "deploy:restart_daemons"
 
 
-# namespace :sqlite3 do
-#   desc "Generate a database configuration file"
-#   task :build_configuration, :roles => :db do
-#     db_options = {
-#       "adapter" =>  "postgresql",
-#       "encoding" => "unicode",
-#       "database" => "hydra",
-#       "pool" => 5,
-#       "username" => "hydra",
-#       "password" => "hydra",
-#     }
-#     config_options = {"production" => db_options}.to_yaml
-#     put config_options, "#{shared_path}/database_config.yml"
-#   end
-
-#   desc "Links the configuration file"
-#   task :link_configuration_file, :roles => :db do
-#     run "ln -nsf #{shared_path}/database_config.yml #{current_path}/config/database.yml"
-#   end
-
-#   desc "Make a shared database folder"
-#   task :make_shared_folder, :roles => :db do
-#     run "mkdir -p #{shared_database_path}"
-#   end
-# end
-
-# after "deploy" , "sqlite3:build_configuration", "sqlite3:link_configuration_file", "deploy:symlinks"
-# after  "deploy",   "deploy:link_current_to_appache_folder", "deploy:symlinks"
 
 
 

@@ -104,7 +104,7 @@ module Common
   end
 
   module Host
-    MEDIAVALISE        = RAILS_ENV["production"] ? "mediavalise.com" : "hadoop.adenin.ru"
+    MEDIAVALISE        = "hadoop.adenin.ru" #RAILS_ENV["production"] ? "mediavalise.com" : "hadoop.adenin.ru"
     IMAGEVENUE         = "imagevenue.com"
     IMAGEBAM           = "imagebam.com"
     # PIXHOST            = "pixhost.org"
