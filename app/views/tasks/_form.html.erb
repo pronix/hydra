@@ -1,3 +1,4 @@
+<%= error_messages_for "task" %>
 <ul class="inputForm">
   <li>
     <%= label_tag :name, I18n.t("task_name") %>
@@ -34,7 +35,7 @@
        <p><%= form.check_box :rename %><%= I18n.t("Rename") %></p>
        <p class="option">
          <%  Common::ThatRename.options_for_select.each do |t| -%>
-         <%= form.radio_button :that_rename,  t.last %> <%= I18n.t(t.first) %>
+         <%= radio_button "task", "that_rename",  t.last.to_s %> <%= I18n.t(t.first) %>
          <% end -%>
        </p>
        <p class="option">
@@ -92,7 +93,6 @@
    </div>
 
 
-   <!-- ------------------------------------ -->
 
 <!-- other options -->
 <div class="otherOptions">
@@ -271,9 +271,9 @@
     $.each(list_toggle_element, function(i, item){
 
       $(item["ct_el"]).css({"color":"#666666"});
-      $(item["ct_el"]).filter("input").attr("disabled", "disabled").val("")
-           .andSelf().filter("select").attr("disabled", "disabled").val("")
-           .andSelf().find("input").attr("disabled", "disabled").val("");
+      $(item["ct_el"]).filter("input").attr("disabled", "disabled")
+           .andSelf().filter("select").attr("disabled", "disabled")
+           .andSelf().find("input").attr("disabled", "disabled");
 
 
      $(item["tg_el"]).bind("change",function(){
@@ -290,7 +290,8 @@
         $(item["ct_el"]).css({"color":"#666666"});
         $(item["ct_el"]).filter("input").attr("disabled","disabled").attr("checked","").val("")
                         .andSelf().filter("select").attr("disabled", "disabled").val("")
-                        .andSelf().find("input").attr("disabled", "disabled").attr("checked","").val("");
+                        .andSelf().find("input[type=radio]").attr("disabled", "disabled").attr("checked","")
+                        .andSelf().find("input[type!=radio]").attr("disabled", "disabled").attr("checked","").val("");
        };
      })
 
