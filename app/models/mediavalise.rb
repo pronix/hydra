@@ -9,8 +9,8 @@ class Mediavalise
         { "user_session[login]" => user, "user_session[password]" => password}}
     end
     def uploading(args=nil)
-      file_path, file_name, user, password =
-        args[:file_path], args[:file_name], args[:login], args[:password]
+      file_path, file_name, user, password, task =
+        args[:file_path], args[:file_name], args[:login], args[:password], args[:task]
 
       boundary = ActiveSupport::SecureRandom.hex.upcase
       form = Tempfile.new(boundary)
@@ -35,15 +35,18 @@ class Mediavalise
         :headers => {
           'Content-Length' => form.length.to_s,
           'Content-Type' => "multipart/form-data; boundary=#{boundary}" } }
-      doc = Nokogiri.parse(response)
-      result = response.body.to_s.scan(/http:\/\/[a-zA-z0-9|.|\/]*\b/)
-      result.reject!{|x| x["delete"]}
-      return result
+
+      _result = response.body.to_s.scan(/http:\/\/[a-zA-z0-9|.|\/]*\b/)
+      _result.reject!{|x| x["delete"] }
+      form.close
+      task.log "links mediavalise : #{_result.join(', ')}"
+      task.mediavalise_links = [task.mediavalise_links.to_s.strip, _result].flatten.join(', ')
+      task.save!
+      return _result
 
     rescue => ex
-      raise "Uploading file to MediaValise: #{ex.message}"
-    ensure
       form.close
+      raise "Error: uploading file to MediaValise: #{ex.message}"
     end
 
   end
