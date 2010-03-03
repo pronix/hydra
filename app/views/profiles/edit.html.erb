@@ -3,7 +3,7 @@
   <a href="javascript: history.back();" class="floatRight backBut">Back &raquo;</a>
 </div>
 <% form_for :profile, @profile, :url => profile_path, :html => { :method => :put }  do |form| %>
-<ul class="tableForm toolsProfiles">
+<ul class="tableForm toolsProfiles profileForm">
   <%= render :partial => 'form', :object => form %>
   <li class="borderNone">
     <%= submit_tag I18n.t("Save"), :class => "awesome " %>
