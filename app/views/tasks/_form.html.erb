@@ -271,11 +271,13 @@
 
     $.each(list_toggle_element, function(i, item){
 
-      $(item["ct_el"]).css({"color":"#666666"});
-      $(item["ct_el"]).filter("input").attr("disabled", "disabled")
-           .andSelf().filter("select").attr("disabled", "disabled")
-           .andSelf().find("input").attr("disabled", "disabled");
 
+      if (!$(item["tg_el"]).attr("checked")) {
+        $(item["ct_el"]).css({"color":"#666666"});
+        $(item["ct_el"]).filter("input").attr("disabled", "disabled")
+              .andSelf().filter("select").attr("disabled", "disabled")
+              .andSelf().find("input").attr("disabled", "disabled");
+       };
 
      $(item["tg_el"]).bind("change",function(){
        if ($(item["tg_el"]).attr("checked")) {
