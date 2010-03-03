@@ -92,9 +92,9 @@ module Common
   end
 
   module ThatRename
-    ARCHIVE, FILE = %w(arhive file)
+    ARCHIVE, FILE = %w(archive file)
     def self.options_for_select
-      [ [I18n.t("rename_arhive"), ARCHIVE],
+      [ [I18n.t("rename_archive"), ARCHIVE],
         [I18n.t("rename_extracted_file"), FILE ] ]
     end
 

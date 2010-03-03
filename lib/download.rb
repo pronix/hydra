@@ -11,12 +11,12 @@ class Download
 Скачивание файла экспорта.
 =end
   def call(env)
-    if env["PATH_INFO"][/^\/images\/assets/]
+    if env["PATH_INFO"][/\/assets/]
       begin
         request = Rack::Request.new(env)
         user = UserSession.find.try(:user)
         raise "not user" if user.blank?
-        @link =  /\/images\/assets\/(.+)$/.match(env["PATH_INFO"]).to_a.last
+        @link =  /\/assets\/(.+)$/.match(env["PATH_INFO"]).to_a.last
         @headers = {
           'X-Accel-Redirect' => "/internal_download/#{@link}",
           'Content-Type' => Rack::Mime.mime_type(File.extname((@link.split('?').first rescue @link ))),

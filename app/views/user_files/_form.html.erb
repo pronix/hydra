@@ -16,7 +16,7 @@
     <%= form.file_field :attachment, :size => 9   %>
     <span id="_btAddFile" class="awesome addFileBut" style="display:none">Add files</span>
     <% else -%>
-    <%= @user_file.attachment.original_filename %>
+    <%= link_to @user_file.attachment.original_filename, @user_file.attachment.url  %>
     <% end -%>
   </div>
 </li>
