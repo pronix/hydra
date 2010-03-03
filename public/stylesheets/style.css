@@ -231,6 +231,10 @@ div.overlay div.close { top: -12px; right: -12px; }
 .addUserOver input[type="checkbox"] { width: auto;}
 .addUserOver select { width: 160px;}
 
+/* profile */
+.profileForm input[type=password] { width: 171px;}
+.profileForm .rightCell { left:148px; }
+
 /* upload file */
 #uploadFile .addFileBut { float: left !important; margin-top: 0px; }
 #uploadFile input[type=text] { width: 170px;}

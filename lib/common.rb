@@ -112,7 +112,7 @@ module Common
 
     def self.options_for_select
       [
-       [MEDIAVALISE, MEDIAVALISE],
+       ["MediaValise.com", MEDIAVALISE],
        [IMAGEVENUE, IMAGEVENUE ],
        [IMAGEBAM,   IMAGEBAM ],
        # [PIXHOST,    PIXHOST ],
