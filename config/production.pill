@@ -1,4 +1,4 @@
-RAILS_ROOT='/var/wwww/hydra/current'
+RAILS_ROOT='/var/www/hydra/current'
 Bluepill.application("my_app", :log_file => "#{RAILS_ROOT}/log/bluepill.log") do |app|
   app.process("delayed_job") do |process|
     process.working_dir = RAILS_ROOT
