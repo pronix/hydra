@@ -4,7 +4,6 @@
 </div>
 
 <% form_for :macro, @macro, :url => macro_path, :html => { :method => :put, :class => 'base_form' }  do |form| %>
-<%= error_messages_for "macro" %>
 <ul class="tableForm">
   <%= render :partial => 'form', :object => form %>
   <li class="borderNone">

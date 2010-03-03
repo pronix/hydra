@@ -1,7 +1,6 @@
 <h1><%= I18n.t("add_profile") %></h1>
 <% form_for :profile, @profile,:url => profiles_path,
                      :html => { :method => :post }  do |form| %>
-
 <ul class="tableForm toolsProfiles profileForm">
   <%= render :partial => 'form', :object => form %>
   <li class="borderNone">

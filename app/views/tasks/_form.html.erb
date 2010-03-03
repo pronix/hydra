@@ -1,4 +1,5 @@
-<%= error_messages_for "task" %>
+<%= error_messages_for 'task', :class => 'failure block_error', :header_message => nil, :message => nil %>
+
 <ul class="inputForm">
   <li>
     <%= label_tag :name, I18n.t("task_name") %>
@@ -296,6 +297,6 @@
      })
 
     });
-
   });
 </script>
+

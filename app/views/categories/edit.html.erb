@@ -1,6 +1,6 @@
-
 <h1><%= I18n.t("edit_category") %></h1>
 <% form_for @category, :url => category_path, :html => { :method => :put, :class => 'base_form' } do |form| %>
+<%= error_messages_for 'category', :class => 'failure block_error', :header_message => nil, :message => nil %>
 <%= form.text_field :name, :size => 27 %>
 <%= submit_tag I18n.t("Save"), :class => "awesome borderNone" %>
 <% end -%>

@@ -1,7 +1,6 @@
 <div class="createTask">
 <%= head_page I18n.t("create_task") %>
 <% form_for @task, :url => tasks_path, :method => "post", :html => { :method => :post, :class => 'base_form', :multipart => true } do |form| %>
-<%# semantic_form_for :task, @task,:url => tasks_path,  :html => { :method => :post, :class => 'base_form', :multipart => true }  do |form| %>
 <%= render :partial => 'form', :object => form %>
 
 <p class="alignCenter">
@@ -10,3 +9,4 @@
 
 <% end -%>
 </div>
+

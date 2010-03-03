@@ -38,6 +38,7 @@ div.jGrowl div.jGrowl-notification div.close { background: url(../images/closeIc
 .success div.jGrowl div.jGrowl-notification { background: url(../images/successIcon.png) no-repeat top left; color: #2e9a15 }
 .failure div.jGrowl div.jGrowl-notification { background: url(../images/failureIcon.png) no-repeat top left; color: #ff0000; }
 
+
 /* content */
 h1 { font-size: 24px; font-family: Helvetica, Arial, sans-serif; color: #5566dd; font-weight: normal;  }
 .subTitle, h2 { font-size: 18px; font-weight: normal; color: #5e3e23; }
@@ -267,3 +268,4 @@ div.overlay div.close { top: -12px; right: -12px; }
 
 .login_error{ color:red; }
 
+.block_error { display: none; }

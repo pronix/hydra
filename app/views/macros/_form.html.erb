@@ -1,8 +1,8 @@
+<%= error_messages_for 'macro', :class => 'failure block_error', :header_message => nil, :message => nil %>
 <li>
   <%= form.label :name, Macros.human_attribute_name("name") %>
   <em class="rightCell"></em>
   <%= form.text_field :name %>
-  <%= error_message_on @macro, :name %>
 </li>
 <li>
   <%= form.label :number_of_frames, Macros.human_attribute_name("number_of_frames"), :class=> "yellowCell" %><em class="rightCell"></em>
@@ -23,7 +23,6 @@
   <%= form.label :thumb_quality, Macros.human_attribute_name("thumb_quality"), :class => "yellowCell" %>
   <em class="rightCell"></em>
   <%= form.text_field :thumb_quality, :size =>  3 %>
-  <%= error_message_on @macro, :thumb_quality %>
 </li>
 <li>
   <%= form.label :thumb_frame, Macros.human_attribute_name("thumb_frame") %>
@@ -122,7 +121,6 @@
   <%= I18n.t(Common::PositionTimestamp::RIGHT) %>&nbsp;&nbsp;
   <%= radio_button_tag "macro[position_timestamp]", Common::PositionTimestamp::LEFT, @macro.position_timestamp %>
   <%= I18n.t(Common::PositionTimestamp::LEFT) %>
-  <%= error_message_on @macro, :position_timestamp %>
 
 </li>
 
@@ -131,7 +129,6 @@
   <em class="rightCell"></em>
   <%= form.check_box :add_logo %>
   <%= form.select :logo_id, @logos.map{|x| [x.title, x.id]}, :include_blank => true  %>
-  <%= error_message_on @macro, :logo_id %>
 </li>
 <li>
 
@@ -141,7 +138,6 @@
 <%= Common::FileFormat::JPG %>
 <%= radio_button_tag "macro[file_format]", Common::FileFormat::PNG,  @macro.file_format %>
 <%= Common::FileFormat::PNG %>
-<%= error_message_on @macro, :file_format %>
 </li>
 
 <script type="text/javascript" charset="utf-8">

@@ -66,6 +66,16 @@
     return false;
     });
 
+
+
+   if ($(".block_error:first").find("li").length != 0) {
+      $("#alertMessage").addClass("failure");
+      $.each($(".block_error:first").find("li"), function(i, item){
+         $.jGrowl($(item).text());
+        });
+
+    };
+
   });
 </script>
 

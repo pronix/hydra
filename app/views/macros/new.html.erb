@@ -2,7 +2,6 @@
   <h1 class="floatLeft"><%= I18n.t("create_macro") %></span></h1>
 </div>
 <% form_for :macro, @macro,:url => macros_path, :html => { :method => :post }  do |form| %>
-
 <ul class="tableForm">
   <%= render :partial => 'form', :object => form %>
   <li class="borderNone">

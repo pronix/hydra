@@ -1,5 +1,6 @@
 <%= content_tag :h1, I18n.t("add_proxy") %>
 <% form_for @proxy, :url => proxies_path, :html => { :method => :post }  do |form| %>
+<%= error_messages_for 'proxy', :class => 'failure block_error', :header_message => nil, :message => nil %>
 <%= form.text_area :proxies, :rows => 5, :cols => 20 %>
 <%= submit_tag I18n.t("submit"), :class => "awesome borderNone" %>
 <% end -%>
