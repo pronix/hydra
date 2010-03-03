@@ -77,19 +77,19 @@ namespace :bluepill do
   desc "Stop processes that bluepill is monitoring and quit bluepill"
   task :quit, :roles => [:app] do
     begin
-    run "bluepill stop"
-    run "bluepill quit"
+    run "/opt/ruby-enterprise-1.8.7-2010.01/bin/bluepill stop"
+    run "/opt/ruby-enterprise-1.8.7-2010.01/bin/bluepill quit"
     rescue =>e
       puts e
     end
   end
   desc "Load bluepill configuration and start it"
   task :start, :roles => [:app] do
-    run "/opt/ruby-enterprise-1.8.7-2010.01/bin/bluepill load #{current_path}/config/production.pill"
+    run "RAILS_ENV=production /opt/ruby-enterprise-1.8.7-2010.01/bin/bluepill load #{current_path}/config/production.pill"
   end
   desc "Prints bluepills monitored processes statuses"
   task :status, :roles => [:app] do
-    run "/opt/ruby-enterprise-1.8.7-2010.01/bin/bluepill status"
+    run "RAILS_ENV=production /opt/ruby-enterprise-1.8.7-2010.01/bin/bluepill status"
   end
 end
 # after  "deploy"update_code
