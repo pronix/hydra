@@ -1,6 +1,6 @@
 <%= content_tag :h1, I18n.t("Upload file") %>
 <% form_for :user_file, @user_file, :url => user_files_path, :html => { :method => :post, :multipart => true }  do |form| %>
-<ul class="tableForm toolsProfiles">
+<ul class="tableForm toolsProfiles fileForm">
   <%= render :partial => 'form', :object => form %>
   <li class="borderNone">
     <%= submit_tag I18n.t("Save"), :class => "awesome " %>

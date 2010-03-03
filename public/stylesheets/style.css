@@ -235,6 +235,9 @@ div.overlay div.close { top: -12px; right: -12px; }
 .profileForm input[type=password] { width: 171px;}
 .profileForm .rightCell { left:148px; }
 
+/* file */
+.fileForm .rightCell { left:148px; }
+
 /* upload file */
 #uploadFile .addFileBut { float: left !important; margin-top: 0px; }
 #uploadFile input[type=text] { width: 170px;}
