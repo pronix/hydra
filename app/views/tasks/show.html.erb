@@ -10,7 +10,7 @@ taskProfile
     <div class="floatLeft">
       <% @task.task_covers.each do |x| -%>
       <p>
-        <%= link_to x.cover.attachment.original_filename,  image_path(x.cover.attachment.url) %>
+        <%= link_to x.cover.attachment.original_filename,  image_path(x.cover.attachment.url), :rel => "#image1" %>
         <span>Uploaded to <strong><%= @task.upload_images_profile.try(:host) %></strong></span>
       </p>
        <% x.links && x.links.each do |link| -%>
@@ -35,6 +35,7 @@ taskProfile
       <% @task.list_screens.each do |list_screen| -%>
       <p>
         <%= link_to list_screen.screen.attachment.original_filename,  image_path(list_screen.screen.attachment.url),
+            :rel => "#image1",
             :class => "linkFile listImg" %>
         <span>Uploaded to <strong><%= @task.upload_images_profile.try(:host) %></strong></span>
       </p>
@@ -73,14 +74,32 @@ taskProfile
     <p><span>Finished:</span>
       <%= !@task.job_loggings.last.stop_time.blank? ?  @task.job_loggings.last.stop_time.to_s(:long) : @task.job_loggings.last.startup.to_s(:long) %></p>
     <p><em>Task log</em></p>
-    <p><span><%= I18n.t("status") %>: <%= @task.current_state %></span></p>
+    <p><span><%= I18n.t("status") %>: <%= @task.state %></span></p>
     <p><%= I18n.t("start") %>: <%= @task.job_loggings.last.startup.to_s(:long) %></p>
     <p><%= I18n.t("stop") %>: <%= @task.job_loggings.last.stop_time.to_s(:long) unless @task.job_loggings.last.stop_time.blank? %></p>
   </div>
 
   <%= link_to I18n.t("complete_task"), complete_task_path(@task), :class => "awesome" if @task.finished?  %>
-  <span class="statusTask">Status:<span class="<%= @task.current_state %>"><%= @task.current_state %></span></span>
+  <span class="statusTask">Status:<span class="<%= @task.current_state %>"><%= @task.state %></span></span>
 
 </div>
 </div>
 
+<% content_for :overlay do %>
+<!-- view image -->
+<div class="overlay" id="image1">
+  <img />
+</div>
+<!-- end view image -->
+<% end -%>
+<script type="text/javascript" charset="utf-8">
+  $(function(){
+  	$(".listImg[rel]").overlay({effect: 'apple', expose: '#000',
+                          onBeforeLoad: function() {
+                          var img = this.getContent().find("img:first");
+                          $(img).css({"width": ($(window).width()-100)+"px"})
+                                .attr("src", this.getTrigger().attr("href") );
+                        }
+  })
+  });
+</script>
