@@ -5,7 +5,7 @@ development:
   path: "/rpc"
   user: "hydra"
   password: "hydra"
-
+  ipv6: false
 production:
   command: "aria2c --enable-xml-rpc"
   server: "localhost"
@@ -13,4 +13,4 @@ production:
   path: "/rpc"
   user: "hydra"
   password: "hydra"
-
+  ipv6: false

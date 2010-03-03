@@ -6,8 +6,11 @@ namespace :hydra do
     desc "Started with aria2 XML-RPC API"
     task :start => :environment do
       options = YAML.load(File.read(File.join(RAILS_ROOT,'config','aria', 'aria.yml')))[RAILS_ENV]
-      command =[options["command"], "--daemon","-q",
-                "--xml-rpc-listen-port=#{options["port"]}", "--xml-rpc-user=#{options["user"]}",
+      command =[options["command"],
+                "--disable-ipv6=#{!options["ipv6"]}" ,
+                "--daemon","-q",
+                "--xml-rpc-listen-port=#{options["port"]}",
+                "--xml-rpc-user=#{options["user"]}",
                 "--xml-rpc-passwd=#{options["password"]}"
                 ].join(" ")
 
