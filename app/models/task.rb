@@ -223,7 +223,7 @@ class Task < ActiveRecord::Base
 
 
       on_entry do |prior_state, triggering_event, *event_args|
-        write_attribute(:previous_state, I18n.t("completed_#{prior_state.to_s}"))
+        write_attribute(:previous_state, prior_state.to_s)
         save!
         case prior_state.to_sym
         when :downloading # завершилось скачивание
@@ -499,9 +499,9 @@ class Task < ActiveRecord::Base
 
   def state
     if job_finish? && !previous_state.blank?
-      read_attribute("previous_state")
+      I18n.t("state.#{read_attribute("previous_state")}")
     else
-      current_state.to_s
+      I18n.t("state.#{current_state.to_s}")
     end
   end
 

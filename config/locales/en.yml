@@ -3,3 +3,15 @@
 
 en:
   dashboard: Dashboard
+  state:
+    completed: "Completed"
+    extracting: "Extracting files"
+    job_finish: ""
+    queued: "Queued"
+    finished: "Finished"
+    generation: "Generate screen list"
+    renaming: "Renaming files"
+    packing: "Packing files"
+    downloading: "Downloading"
+    uploading: "Uploading"
+    error: "Stopped"

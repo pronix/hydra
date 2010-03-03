@@ -40,7 +40,7 @@ class Mediavalise
       _result.reject!{|x| x["delete"] }
       form.close
       task.log "links mediavalise : #{_result.join(', ')}"
-      task.mediavalise_links = [task.mediavalise_links.to_s.strip, _result].flatten.join(', ')
+      task.mediavalise_links = [task.mediavalise_links.to_s.strip, _result].compact.flatten.join(', ')
       task.save!
       return _result
 
