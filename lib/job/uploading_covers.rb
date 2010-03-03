@@ -10,7 +10,7 @@ module Job
               :login =>        upload_images_profile.login,
               :password =>     upload_images_profile.password,
               :content_type => upload_images_profile.content_type_id,
-              :file_path=>     task_cover.cover.attachment.path,
+              :file_path =>    task_cover.cover.attachment.path,
               :file_name =>    task_cover.cover.attachment.original_filename
           }
 
@@ -33,9 +33,9 @@ module Job
           end
 
         rescue ImageHostingServiceAvailableError
-          raise "сервис недоступен"
+          raise " #{upload_images_profile.host} сервис недоступен"
         rescue ImageHostingLinksError
-          raise "невозможно получить ссылки на файлы (файлы, картинки)"
+          raise " #{upload_images_profile.host} невозможно получить ссылки на файлы (файлы, картинки)"
         rescue => ex
           raise " #{upload_images_profile.host} : #{ex.message}"
         end
