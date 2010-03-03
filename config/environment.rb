@@ -21,7 +21,7 @@ Rails::Initializer.run do |config|
   config.gem "httparty", :source => 'http://gemcutter.org'
   config.gem 'ffmpeg-ruby', :source => 'http://gemcutter.org'
   config.gem "nokogiri", :version => '>=1.4.1'
-
+  config.gem "bluepill", :version => '>=0.0.33'
   config.time_zone = 'UTC'
 
   # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
