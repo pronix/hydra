@@ -7,7 +7,7 @@ class ImageHosting::Imagebam < ImageHosting
       post "/login", { :body => { :nick => user, :pw => password, :dologin => true}}
     end
 
-    def send_image(args)
+    def send_image(args=nil)
       file_path, file_name, user, password, content_type  =
         args[:file_path], args[:file_name], args[:login], args[:password], args[:content_type]
 
@@ -44,12 +44,7 @@ class ImageHosting::Imagebam < ImageHosting
 
 
       form << "--" << boundary << "\r\n"
-      form << "Content-Disposition: form-data; "
-      form << "name=\"file[]\"; "
-      form << "filename=\"#{file_name}\"; "
-      form << "Content-Type: \"#{Rack::Mime.mime_type(File.extname(file_path))}\""
-      form << "\r\n\r\n"
-      form << File.read(file_path)
+      file_to_post_param(form, "file[]", file_path, file_name)
       form << "\r\n--" << boundary << "--\r\n"
       form.seek(0)
 

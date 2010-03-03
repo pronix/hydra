@@ -40,12 +40,7 @@ class ImageHosting::Imagevenue < ImageHosting
       form << (content_type == Common::ContentType::FAMILY ? "safe" : "notsafe")
       form << "\r\n"
       form << "--" << boundary << "\r\n"
-      form << "Content-Disposition: form-data; "
-      form << "name=\"userfile[]\"; "
-      form << "filename=\"#{file_name}\"; "
-      form << "Content-Type: \"#{Rack::Mime.mime_type(File.extname(file_path))}\""
-      form << "\r\n\r\n"
-      form << File.read(file_path)
+      file_to_post_param(form, "userfile[]", file_path, file_name)
       form << "\r\n--" << boundary << "--\r\n"
       form.seek(0)
 
