@@ -85,11 +85,11 @@ namespace :bluepill do
   end
   desc "Load bluepill configuration and start it"
   task :start, :roles => [:app] do
-    run "bluepill load #{release_path}/config/production.pill"
+    run "/opt/ruby-enterprise-1.8.7-2010.01/bin/bluepill load #{current_path}/config/production.pill"
   end
   desc "Prints bluepills monitored processes statuses"
   task :status, :roles => [:app] do
-    run "bluepill status"
+    run "/opt/ruby-enterprise-1.8.7-2010.01/bin/bluepill status"
   end
 end
 # after  "deploy"update_code
