@@ -107,23 +107,24 @@ module Common
     MEDIAVALISE        = "hadoop.adenin.ru" #RAILS_ENV["production"] ? "mediavalise.com" : "hadoop.adenin.ru"
     IMAGEVENUE         = "imagevenue.com"
     IMAGEBAM           = "imagebam.com"
-    # PIXHOST            = "pixhost.org"
-    # STOOORAGE          = "stooorage.com"
+    PIXHOST            = "pixhost.org"
+    STOOORAGE          = "stooorage.com"
 
+    def self.must_have_login_password
+      [ MEDIAVALISE, IMAGEVENUE, IMAGEBAM ]
+    end
     def self.options_for_select
       [
        ["MediaValise.com", MEDIAVALISE],
        [IMAGEVENUE, IMAGEVENUE ],
        [IMAGEBAM,   IMAGEBAM ],
-       # [PIXHOST,    PIXHOST ],
-       # [STOOORAGE,  STOOORAGE ],
+       [PIXHOST,    PIXHOST ],
+       [STOOORAGE,  STOOORAGE ],
 
       ]
     end
     def self.valid_options
-      [
-       MEDIAVALISE, IMAGEVENUE, IMAGEBAM #, PIXHOST, STOOORAGE
-      ]
+      [ MEDIAVALISE, IMAGEVENUE, IMAGEBAM , PIXHOST, STOOORAGE ]
     end
   end
 

@@ -13,23 +13,33 @@ module Job
               :file_path=>     sc.screen.attachment.path,
               :file_name =>    sc.screen.attachment.original_filename
           }
+
+            log "start job:uploading #{upload_images_profile.host} "
+            log "#{upload_images_profile.host} upload file #{sc.screen.attachment.original_filename}"
+
             case upload_images_profile.host
             when Common::Host::IMAGEVENUE
-              log "start job:uploading IMAGEVENUE "
-              log "IMAGEVENUE upload file #{sc.screen.attachment.original_filename}"
               sc.links = ImageHosting::Imagevenue.send_image(_options)
-              sc.save
-              log "stop job:uploading IMAGEVENUE "
             when Common::Host::IMAGEBAM
-              log "start job:uploading IMAGEBAM "
-              log "IMAGEBAM upload file #{sc.screen.attachment.original_filename}"
               sc.links = ImageHosting::Imagebam.send_image(_options)
-              sc.save
-              log "stop job:uploading IMAGEBAM "
+            when Common::Host::STOOORAGE
+              sc.links = ImageHosting::Stooorage.send_image(_options)
+            when Common::Host::PIXHOST
+              sc.links = ImageHosting::Pixhost.send_image(_options)
             end
+
+            sc.save
+            log "stop job:uploading #{upload_images_profile.host} "
+
           end
+
+        rescue ImageHostingServiceAvailableError
+          raise "сервис недоступен"
+        rescue ImageHostingLinksError
+          raise "невозможно получить ссылки на файлы (файлы, картинки)"
+
         rescue => ex
-          raise " #{upload_images_profile.host} : #{ex.message}"
+          raise " #{upload_images_profile.host} :  #{ex.message}"
         end
       end
     end

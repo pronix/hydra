@@ -56,23 +56,30 @@ class ImageHosting::Imagebam < ImageHosting
       response_login = self.login(user, password)
       raise "[ IMAGEBAM ] Invalid login or password" unless response_login.body[/You are now logged in as/i]
       self.default_cookies.add_cookies(response_login.headers["set-cookie"][0])
+      begin
+        response = post "/nav/save",{ :body => form.read,
+          :headers => {
+            'Content-Length' => form.length.to_s,
+            'Content-Type' => "multipart/form-data; boundary=#{boundary}" } }
+      rescue => ex
+        raise ImageHostingServiceAvailableError
+      end
 
-      response = post "/nav/save",{ :body => form.read,
-        :headers => {
-          'Content-Length' => form.length.to_s,
-          'Content-Type' => "multipart/form-data; boundary=#{boundary}" } }
-      doc = Nokogiri.parse(response)
+      begin
+        doc = Nokogiri.parse(response)
+        result = []
+        doc.css("fieldset").last.css("form").css("div").each_slice(2) {|m|
+          result << [m.first.text.strip, m.last.css("input").attr("value").to_s.strip ] }
+      rescue
+        raise ImageHostingLinksError
+      end
 
-      result = []
-      doc.css("fieldset").last.css("form").css("div").each_slice(2) {|m|
-        result << [m.first.text.strip, m.last.css("input").attr("value").to_s.strip ] }
-
+      form.close
       return result
 
     rescue => ex
-      raise "Uploading image to Imagebam: #{ex.message}"
-    ensure
       form.close
+      raise ex
     end
   end
 end

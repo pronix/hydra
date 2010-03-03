@@ -13,21 +13,29 @@ module Job
               :file_path=>     task_cover.cover.attachment.path,
               :file_name =>    task_cover.cover.attachment.original_filename
           }
+
+            log "start job:uploading #{upload_images_profile.host} "
+            log "#{upload_images_profile.host} upload file #{task_cover.cover.attachment.original_filename}"
+
             case upload_images_profile.host
             when Common::Host::IMAGEVENUE
-              log "start job:uploading IMAGEVENUE "
-              log "IMAGEVENUE upload file #{task_cover.cover.attachment.original_filename}"
               task_cover.links = ImageHosting::Imagevenue.send_image(_options)
-              task_cover.save
-              log "stop job:uploading IMAGEVENUE "
             when Common::Host::IMAGEBAM
-              log "start job:uploading IMAGEBAM "
-              log "IMAGEBAM upload file #{task_cover.cover.attachment.original_filename}"
               task_cover.links = ImageHosting::Imagebam.send_image(_options)
-              task_cover.save
-              log "stop job:uploading IMAGEBAM "
+            when Common::Host::STOOORAGE
+              task_cover.links = ImageHosting::Stooorage.send_image(_options)
+            when Common::Host::PIXHOST
+              task_cover.links = ImageHosting::Pixhost.send_image(_options)
+            end
+            task_cover.save
+
+            log "stop job:uploading IMAGEVENUE "
           end
-          end
+
+        rescue ImageHostingServiceAvailableError
+          raise "сервис недоступен"
+        rescue ImageHostingLinksError
+          raise "невозможно получить ссылки на файлы (файлы, картинки)"
         rescue => ex
           raise " #{upload_images_profile.host} : #{ex.message}"
         end
