@@ -10,7 +10,9 @@ class Task < ActiveRecord::Base
   include Job::UploadingToMediavalise
   include Job::UploadingCovers
   include Job::UploadingScreenList
+
   ROOT_PATH_DOWNLOAD = File.join(RAILS_ROOT, "data", "task_files")
+  MAX_ACTIVE_TASK = 5
   default_scope :order => "created_at DESC"
 
 
@@ -112,7 +114,7 @@ class Task < ActiveRecord::Base
   def run_next_task
     begin
       @_task = user.tasks.queued.first
-      @_task && @_task.start_downloading!
+      @_task && (user.tasks.active.size < MAX_ACTIVE_TASK ) && @_task.start_downloading!
     rescue Workflow::TransitionHalted => ex
       erroneous!(ex.message)
     end
@@ -121,7 +123,8 @@ class Task < ActiveRecord::Base
   # если активнх задач нету отправляем задачу на скачивания
   def new_task
     start_job
-    start_downloading! if user.tasks.active_without_self(self).blank?
+    # active_tasks = user.tasks.active_without_self(self)
+    start_downloading! if user.tasks.active_without_self(self).size < MAX_ACTIVE_TASK
   rescue Workflow::TransitionHalted => ex
     erroneous!(ex.message)
   end
