@@ -5,7 +5,9 @@ class ImageHosting::Pixhost < ImageHosting
   #  Maximum image size is 5 MB.
   class << self
     def get_cookeis
-      get "/?lang=en"
+      response_get = get('/?lang=en')
+      self.default_cookies.add_cookies(response_get.headers["set-cookie"][0]) if  response_get.headers["set-cookie"] &&
+        response_get.headers["set-cookie"][0]
     end
 
     def send_image(args=nil)
@@ -41,7 +43,7 @@ class ImageHosting::Pixhost < ImageHosting
         form << "\r\n--" << boundary << "--\r\n"
 
         form.seek(0)
-        self.default_cookies.add_cookies(get_cookeis.headers["set-cookie"][0])
+        get_cookeis
         response = HTTParty.post "http://www.pixhost.org:8080/classic-upload/",{
           :body => form.read,
           :headers => {

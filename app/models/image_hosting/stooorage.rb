@@ -3,8 +3,11 @@ class ImageHosting::Stooorage < ImageHosting
 
   class << self
     def get_cookeis
-       get "/"
+      response_get = get('/')
+      self.default_cookies.add_cookies(response_get.headers["set-cookie"][0]) if  response_get.headers["set-cookie"] &&
+        response_get.headers["set-cookie"][0]
     end
+
     # Picture is larger than 2 MBWrong file format, allowed are gif,png,jpgArray
     def send_image(args)
 
@@ -25,8 +28,7 @@ class ImageHosting::Stooorage < ImageHosting
         file_to_post_param(form, "img", file_path, file_name)
         form << "\r\n--" << boundary << "--\r\n"
         form.seek(0)
-
-        self.default_cookies.add_cookies(get_cookeis.headers["set-cookie"][0])
+        get_cookeis
         response = HTTParty.post "http://www.stooorage.com/", {
           :body => form.read,
           :headers => {
@@ -60,5 +62,4 @@ class ImageHosting::Stooorage < ImageHosting
   end
 end
 
-        # file_path, file_name, content_type  = "/home/maxim/www/hydra/data/screen/attachments/43/original.png",
-        # "193_tableless_model.png"
+

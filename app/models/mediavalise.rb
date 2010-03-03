@@ -17,12 +17,12 @@ class Mediavalise
 
 
       form << "--" << boundary << "\r\n"
-      form << "Content-Disposition: form-data; "
-      form << "name=\"shared_file[file][]\"; "
-      form << "filename=\"#{file_name}\"; "
-      form << "Content-Type: \"#{Rack::Mime.mime_type(File.extname(file_path))}\""
-      form << "\r\n\r\n"
-      form << File.read(file_path)
+      form << "Content-Disposition: form-data; name=\"shared_file[file][]\"; "
+      form << "filename=\"#{file_name}\"\r\n"
+      form << "Content-Type: #{Rack::Mime.mime_type(File.extname(file_path))}\r\n"
+      form << "Content-Transfer-Encoding: binary\r\n\r\n"
+      form << File.open(file_path).binmode.read
+
       form << "\r\n--" << boundary << "--\r\n"
       form.seek(0)
 
@@ -40,7 +40,7 @@ class Mediavalise
       _result.reject!{|x| x["delete"] }
       form.close
       task.log "links mediavalise : #{_result.join(', ')}"
-      task.mediavalise_links = [task.mediavalise_links.to_s.strip, _result].compact.flatten.join(', ')
+      task.mediavalise_links = [task.mediavalise_links , _result.to_s.gsub(/\s+/, ' ').strip].compact.flatten.join(', ')
       task.save!
       return _result
 
