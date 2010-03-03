@@ -61,9 +61,7 @@ taskProfile
   <h2><%= I18n.t("files") %></h2>
   <% unless @task.mediavalise_links.blank? -%>
   <div class="imgSettings">
-    <textarea name="" rows="5" cols="50" class="floatLeft">
-      <%=h @task.mediavalise_links  %>
-    </textarea>
+    <%= text_area_tag "", @task.mediavalise_links, :rows => 5, :cols => 50, :class => "floatLeft" %>
     <a href="#" class="copyBut" title="Copy">Copy</a>
   </div>
   <% end -%>

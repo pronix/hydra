@@ -11,7 +11,7 @@
   <tr class="<%= cycle('yellowCell','') %>">
     <td><%= h task.category.name  %></td>
     <td><%= link_to h(task.name), task_path(task)  %></td>
-    <td class="<%= task.state %>"><%= I18n.t task.state.to_s %>
+    <td class="<%= task.current_state %>"><%= task.state  %>
 
       <% if task.downloading? -%>
         <span class='downloading_monitor'>
