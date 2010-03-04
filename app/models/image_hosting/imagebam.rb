@@ -1,6 +1,7 @@
 class ImageHosting::Imagebam < ImageHosting
   base_uri "www.imagebam.com"
-
+# jpg, gif or png
+  # Image is larger then 3mb.
   class << self
 
     def login(user, password)
@@ -10,6 +11,14 @@ class ImageHosting::Imagebam < ImageHosting
     def send_image(args=nil)
       file_path, file_name, user, password, content_type  =
         args[:file_path], args[:file_name], args[:login], args[:password], args[:content_type]
+
+      type_file = `file -b '#{file_path}'`
+      unless type_file[/png|gif|jpg|jpeg/i]
+        raise ImageHostingNotSupportError, "Not support format image"
+      end
+      if File.size(file_path) > 3.megabytes
+        raise ImageHostingNotSupportError, "Big image"
+      end
 
       boundary = ActiveSupport::SecureRandom.hex.upcase
       form = Tempfile.new(boundary)
