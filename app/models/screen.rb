@@ -6,7 +6,7 @@ class Screen < Asset
 
   validates_attachment_presence :attachment
 
-  validates_attachment_size :attachment, :less_than => 5.megabytes
+  validates_attachment_size :attachment, :less_than => 15.megabytes
   validates_attachment_content_type :attachment, :content_type => ['image/jpeg', 'image/png']
   before_post_process :image?
 
