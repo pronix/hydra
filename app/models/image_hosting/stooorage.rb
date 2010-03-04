@@ -39,6 +39,8 @@ class ImageHosting::Stooorage < ImageHosting
 
       rescue
         raise ImageHostingServiceAvailableError
+      ensure
+        form.close
       end
 
       begin
@@ -52,11 +54,9 @@ class ImageHosting::Stooorage < ImageHosting
         raise ImageHostingLinksError
       end
 
-      form.close
       return result
 
     rescue => ex
-      form.close
       raise ex
     end
   end

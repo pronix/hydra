@@ -71,11 +71,9 @@ class ImageHosting::Imagebam < ImageHosting
         raise ImageHostingLinksError
       end
 
-      form.close
       return result
 
     rescue => ex
-      form.close
       raise ex
     end
   end

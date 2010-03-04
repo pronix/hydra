@@ -54,6 +54,8 @@ class ImageHosting::Pixhost < ImageHosting
 
       rescue
         raise ImageHostingServiceAvailableError
+      ensure
+        form.close
       end
 
 
@@ -67,10 +69,9 @@ class ImageHosting::Pixhost < ImageHosting
         raise ImageHostingLinksError
       end
 
-      form.close
+
       return result
     rescue => ex
-      form.close
       raise ex
     end
   end

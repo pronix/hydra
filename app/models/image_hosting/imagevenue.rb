@@ -59,6 +59,8 @@ class ImageHosting::Imagevenue < ImageHosting
             'Content-Type' => "multipart/form-data; boundary=#{boundary}" } }
       rescue
         raise ImageHostingServiceAvailableError
+      ensure
+        form.close
       end
 
       begin
@@ -68,11 +70,9 @@ class ImageHosting::Imagevenue < ImageHosting
         raise ImageHostingLinksError
       end
 
-      form.close
       return result
 
     rescue => ex
-      form.close
       raise ex
     end
 
