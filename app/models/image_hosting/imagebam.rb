@@ -59,18 +59,18 @@ class ImageHosting::Imagebam < ImageHosting
             'Content-Length' => form.length.to_s,
             'Content-Type' => "multipart/form-data; boundary=#{boundary}" } }
 
-        Rails.logger.debug '-'*90
-        Rails.logger.debug response.body.to_s
-        Rails.logger.debug '-'*90
+        Task.log '-'*90
+        Task.log response.body.to_s
+        Task.log '-'*90
       rescue => ex
         raise ImageHostingServiceAvailableError
       end
 
       begin
         doc = Nokogiri.parse(response)
-        Rails.logger.debug '-'*90
-        Rails.logger.debug doc
-        Rails.logger.debug '-'*90
+        Task.log '-'*90
+        Task.log doc.to_s
+        Task.log '-'*90
         result = []
         doc.css("fieldset").last.css("form").css("div").each_slice(2) {|m|
           result << [m.first.text.strip, m.last.css("input").attr("value").to_s.strip ] }

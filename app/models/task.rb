@@ -522,13 +522,19 @@ class Task < ActiveRecord::Base
   end
 
   def log message, level = :info
-    job_log ||= Task.open_log
-    job_log.send level, "[ Task##{read_attribute(:id)}] [#{Time.now.to_s}] #{message}"
+    _message = "[ Task##{read_attribute(:id)}] [#{Time.now.to_s}] #{message}"
+    self.class.log _message, level
   end
 
+
+  def self.log message, level = :info
+    job_log ||= Task.open_log
+    job_log.send level, message
+  end
   def self.open_log
     ActiveSupport::BufferedLogger.new(File.join(RAILS_ROOT, 'log', 'jobs.log'))
   end
+
 end
 
 
