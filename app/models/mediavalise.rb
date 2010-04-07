@@ -1,6 +1,6 @@
 class Mediavalise
   include HTTParty
-  base_uri "hadoop.adenin.ru"
+  base_uri "mediavalise.com"
 
   class << self
 
