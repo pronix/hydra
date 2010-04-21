@@ -53,3 +53,17 @@ ActionMailer::Base.smtp_settings = {
   end
 
 I18n.exception_handler = :just_raise_that_exception
+
+# уведомления о ошибках
+ExceptionNotifier.configure_exception_notifier do |config|
+  config[:app_name]                 = "hydra"
+  config[:sender_address]           = "error@hydra.raidosoft.com"
+  config[:exception_recipients]     = ["pronix.service@gmail.com"]
+  config[:subject_prepend]          = "[HYDRA - #{(defined?(Rails) ? Rails.env : RAILS_ENV).capitalize} ERROR] "
+  config[:subject_append]           = nil
+  config[:sections]                 = %w(request session environment backtrace)
+  config[:notify_error_codes]   = %W( 405 500 503 )
+  config[:notify_other_errors]  = true
+end
+
+
