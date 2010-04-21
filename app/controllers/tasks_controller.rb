@@ -12,10 +12,15 @@ class TasksController < ApplicationController
   end
 
   def create
+    if params[:task][:category_id]
     create! do |success, failure|
       session[:task_status] = "active"
       success.html { redirect_to tasks_path }
       failure.html { render :new }
+    end
+    else
+      flash[:notice] = 'выберите категорию'
+      redirect_to :back
     end
   end
 
