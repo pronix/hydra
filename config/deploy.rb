@@ -20,7 +20,13 @@ role :db,  "adenin.ru" , :primary => true
 set(:shared_database_path) {"#{shared_path}/databases"}
 set(:ruby_path,"/opt/ruby-enterprise-1.8.7-2010.01/bin")
 
+before "deploy:setup","deploy:mkdir_data"
 namespace :deploy do
+  desc "Directories for data"
+  task :mkdir_data, :roles => :app do
+    run "mkdir #{shared_path}/data/{arhive_attahments,covers,user_files,screen}"
+  end
+
   desc "Restarting passenger with restart.txt"
   task :restart, :roles => :app, :except => { :no_release => true } do
     run "touch #{current_path}/tmp/restart.txt"
