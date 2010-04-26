@@ -19,7 +19,7 @@ Rails::Initializer.run do |config|
   config.gem "daemon-spawn", :source => 'http://gemcutter.org'
   config.gem 'delayed_job', :lib => 'delayed_job', :source => 'http://gemcutter.org'
   config.gem "httparty", :source => 'http://gemcutter.org'
-  config.gem 'ffmpeg-ruby', :source => 'http://gemcutter.org'
+  #config.gem 'ffmpeg-ruby', :source => 'http://gemcutter.org'
   config.gem "nokogiri", :version => '>=1.4.1'
   config.gem "bluepill", :version => '>=0.0.33'
   config.time_zone = 'UTC'
