@@ -6,15 +6,15 @@ set :repository,  "git@github.com:pronix/hydra.git"
 set :ssh_options, {:forward_agent => true}
 set :branch, "master"
 
-set :user, "root"
+set :user, "hydra"
 
 set :deploy_via, :remote_cache
-set :deploy_to, "/var/www/#{application}"
+set :deploy_to, "/home/clients/hydra/#{application}"
 set :use_sudo, false
 
-role :app, "adenin.ru"
-role :web, "adenin.ru"
-role :db,  "adenin.ru" , :primary => true
+role :app, "hydra.raidosoft.com"
+role :web, "hydra.raidosoft.com"
+role :db,  "hydra.raidosoft.com" , :primary => true
 
 
 set(:shared_database_path) {"#{shared_path}/databases"}
@@ -24,7 +24,7 @@ before "deploy:setup","deploy:mkdir_data"
 namespace :deploy do
   desc "Directories for data"
   task :mkdir_data, :roles => :app do
-    run "mkdir #{shared_path}/data/{arhive_attahments,covers,user_files,screen}"
+    run "mkdir -p #{shared_path}/data/{arhive_attahments,covers,user_files,screen}"
   end
 
   desc "Restarting passenger with restart.txt"
@@ -101,29 +101,3 @@ end
 # after  "deploy"update_code
 
 after "deploy:update",  "deploy:symlinks", "deploy:chown", "deploy:start_aria", "deploy:restart_daemons", "bluepill:quit", "bluepill:start"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# If you are using Passenger mod_rails uncomment this:
-# if you're still using the script/reapear helper you will need
-# these http://github.com/rails/irs_process_scripts
-
-# namespace :deploy do
-#   task :start do ; end
-#   task :stop do ; end
-#   task :restart, :roles => :app, :except => { :no_release => true } do
-#     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
-#   end
-# end
