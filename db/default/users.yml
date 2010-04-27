@@ -1,6 +1,6 @@
 user_admin:
   email: "hydra@gmail.com"
-  notification_email: "hydra@gmail.com"
+  notification_email: true
   name:  "hydra@gmail.com"
   password_salt: MBdB_21h3IDzr63RDxIb
   crypted_password: 92c8e189627993f5698af73641cc273db0eb4c70bde1a56a30a7612a62bbbeb8163793d1e9447f9ea1c7f6bedf199eff4d713bccdd8fe33638ae42e79db5623c
