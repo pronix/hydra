@@ -13,4 +13,3 @@ production:
   path: "/rpc"
   user: "hydra"
   password: "hydra"
-  ipv6: false

@@ -6,10 +6,10 @@ set :repository,  "git@github.com:pronix/hydra.git"
 set :ssh_options, {:forward_agent => true}
 set :branch, "master"
 
-set :user, "hydra"
+set :user, "root"
 
 set :deploy_via, :remote_cache
-set :deploy_to, "/home/clients/hydra/#{application}"
+set :deploy_to, "/var/www/#{application}"
 set :use_sudo, false
 
 role :app, "hydra.raidosoft.com"
@@ -47,8 +47,8 @@ namespace :deploy do
       run "mkdir -p #{shared_path}/data/#{share}" unless File.exist?("#{shared_path}/data/#{share}")
       run "ln -nfs #{shared_path}/data/#{share} #{release_path}/data/#{share} "
     end
-    run "ln -nfs  /var/www/hydra/shared/production.sqlite3 #{release_path}/db/production.sqlite3"
-    run "touch #{shared_path}/database.yml"
+#    run "ln -nfs  /var/www/hydra/shared/production.sqlite3 #{release_path}/db/production.sqlite3"
+#    run "touch #{shared_path}/database.yml"
     run "ln -nfs #{shared_path}/database.yml #{current_path}/config/database.yml "
 
   end
