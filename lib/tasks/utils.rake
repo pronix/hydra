@@ -7,7 +7,7 @@ namespace :hydra do
     task :start => :environment do
       options = YAML.load(File.read(File.join(RAILS_ROOT,'config','aria', 'aria.yml')))[RAILS_ENV]
       command =[options["command"],
-                "--disable-ipv6=#{!options["ipv6"]}" ,
+#                "--disable-ipv6=#{!options["ipv6"]}" ,
                 "--daemon","-q",
                 "--xml-rpc-listen-port=#{options["port"]}",
                 "--xml-rpc-user=#{options["user"]}",
