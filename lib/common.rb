@@ -31,6 +31,7 @@ module Common
     def self.mime_type
       [
        'application/x-mp4',
+       'application/octet-stream',
        'video/mpeg',
        'video/quicktime',
        'video/x-la-asf',
