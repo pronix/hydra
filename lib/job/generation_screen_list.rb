@@ -51,7 +51,7 @@ module Job
 
 
 
-        if !type_file.blank? && Common::Video.mime_type.include?(type_file.scan(/video\/\w+/).first)
+        if !type_file.blank? && Common::Video.mime_type.include?(type_file.split(':').last.scan(/[a-zA-Z0-9-]+\/[a-zA-Z0-9-]+/).first)
 
           FileUtils.rm_rf(@path_tmp) # удаляем сриншоты с придыдущего видео файла
           FileUtils.mkdir_p(@path_tmp)
