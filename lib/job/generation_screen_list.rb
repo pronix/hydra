@@ -1,4 +1,6 @@
 require 'open3'
+require 'ffmpeg-ruby'
+
 module Job
   module GenerationScreenList
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
