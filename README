@@ -9,6 +9,7 @@
 
     FFMpeg
     ffmpeg-ruby (headers libavformat)
+    gem install ffmpeg-ruby -- --with-opt-include=/opt/ffmpeg/include
 
     Version: ImageMagick 6.5.1-0 2009-08-27 Q16 OpenMP http://www.imagemagick.org
 
