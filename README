@@ -15,6 +15,7 @@
 
 Скрипты:
    - ./script/monitor_downloading.rb start
+   В скрипте указать путь до корня приложения
    - ./script/delayed_job start
 
    - rake hydra:aria2c:start                   # Started with aria2 XML-RPC API

@@ -9,7 +9,8 @@ class DaemonMonitorDownloading < DaemonSpawn::Base
   def start(args)
     loop do
       begin
-        DownloadingFile.process
+        # DownloadingFile.process
+        `/var/www/hydra/current/script/runner -e production 'DownloadingFile.process'`
       rescue
         STDERR.puts  " #{$!.inspect} "
       end
