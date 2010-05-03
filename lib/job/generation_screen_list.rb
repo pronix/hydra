@@ -77,17 +77,23 @@ module Job
           # Собираем сделанные скриншоты в один скрин лист
 
           @font_settings = []
-          @font_color = @macro.font_color.to_s["#"] ? @macro.font_color : "##{@macro.font_color}"
+          @font_color = /#?(.*)$/.match(@macro.font_color.to_s) && "##{$1}"
           @font_settings << " -font '#{@macro.font}'" unless @macro.font.blank?
           @font_settings << " -pointsize '#{@macro.font_size}'" unless @macro.font_size.blank?
           @font_settings << " -fill '#{@font_color}'" unless @macro.font_color.blank?
           @font_settings = @font_settings.join(' ')
 
+          @font_settings_tm = [] # для временной шкалы чтоб для шапки и временной шкалы размер шрифта был разный
+          @font_settings_tm << " -font '#{@macro.font}'" unless @macro.font.blank?
+          @font_settings_tm << " -pointsize '#{@macro.font_size.to_i + 20}'" unless @macro.font_size.blank?
+          @font_settings_tm << " -fill '#{@font_color}'" unless @macro.font_color.blank?
+          @font_settings_tm = @font_settings_tm.join(' ')
+
           # Если в макросе указано что нужно добавить шкалу времени то добавляем ее
           @macro.add_timestamp? &&  out_files.map{|x|
             position = Common::PositionTimestamp::values[@macro.position_timestamp]
             text = second_to_s(x[:timestamp])
-            cmd = %(convert '#{x[:file]}' -gravity #{position} #{@font_settings} -draw "text 5,5 '#{text}'" '#{x[:file]}' )
+            cmd = %(convert '#{x[:file]}' -gravity #{position} #{@font_settings_tm} -draw "text 5,5 '#{text}'" '#{x[:file]}' )
             output = `#{cmd}`
 
           }
@@ -96,7 +102,10 @@ module Job
           @tile = %( -tile '#{@macro.columns}x' )
           # рамка
           @border = ""
-          @border = %( -bordercolor '##{@macro.frame_color}' -frame '#{@macro.frame_size}' ) if @macro.thumb_frame?
+          @frame_color = /#?(.*)$/.match(@macro.frame_color.to_s) && "##{$1}"
+          # @border = %( -bordercolor '#{@frame_color}' -frame '#{@macro.frame_size}' ) if @macro.thumb_frame?
+          @border = %( -frame '#{@macro.frame_size}' -mattecolor '#{@frame_color}' ) if @macro.thumb_frame?
+
           # качество
           @quality = %( -quality '#{@macro.thumb_quality}' )
           # тень
@@ -104,7 +113,8 @@ module Job
           @shadow = %( -shadow ) if @macro.thumb_shadow?
           # Фон
           @background = ""
-          @background = %( -background '##{@macro.template_background}' ) unless @macro.template_background.blank?
+          @template_background = /#?(.*)$/.match(@macro.template_background.to_s) && "##{$1}"
+          @background = %( -background '#{@template_background}' ) unless @template_background.blank?
 
           # размеры картинок
           @thumb_padding = []
