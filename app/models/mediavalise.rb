@@ -1,20 +1,47 @@
 class Mediavalise
   include HTTParty
-  base_uri "mediavalise.com"
+  base_uri "http://www.mediavalise.com"
+# r = HTTParty.post('http://www.mediavalise.com/user_session',:query => { "user_session[login]" => 'serg', "user_session[password]" => 'mvpass'})
 
   class << self
 
     def login(user, password)
-      post "/user_session", { :body =>
-        { "user_session[login]" => user, "user_session[password]" => password}}
+      HTTParty.post('http://www.mediavalise.com/user_session',
+                    :query => { "user_session[login]" => user.to_s,
+                      "user_session[password]" => password.to_s})
     end
+
+    def get_form
+      response_login = self.login(user, password)
+      raise "[MEDIAVALISE ] Invalid login or password" if response_login.body.to_s["error_full"]
+      self.default_cookies.add_cookies(response_login.headers["set-cookie"][0])
+      get('http://www.mediavalise.com/account/upload')
+    end
+
     def uploading(args=nil)
+
       file_path, file_name, user, password, task =
         args[:file_path], args[:file_name], args[:login], args[:password], args[:task]
+
+      response_login = self.login(user, password)
+      raise "[MEDIAVALISE ] Invalid login or password" if response_login.body.to_s["error_full"]
+      self.default_cookies.add_cookies(response_login.headers["set-cookie"][0])
+
 
       boundary = ActiveSupport::SecureRandom.hex.upcase
       form = Tempfile.new(boundary)
 
+
+
+      authenticity_token = get_form
+      authenticity_token = Nokogiri.parse(authenticity_token)
+      authenticity_token = authenticity_token.css("input[name='authenticity_token']").attr('value').to_s rescue ''
+      form << "--" << boundary << "\r\n"
+      form << "Content-Disposition: form-data; "
+      form << "name=\"authenticity_token\"; "
+      form << "\r\n\r\n"
+      form << authenticity_token
+      form << "\r\n"
 
       form << "--" << boundary << "\r\n"
       form << "Content-Disposition: form-data; name=\"shared_file[file][]\"; "
@@ -26,16 +53,13 @@ class Mediavalise
       form << "\r\n--" << boundary << "--\r\n"
       form.seek(0)
 
-
-      response_login = self.login(user, password)
-      raise "[MEDIAVALISE ] Invalid login or password" if response_login.body.to_s["error_full"]
-      self.default_cookies.add_cookies(response_login.headers["set-cookie"][0])
-
-      response = post "/files",{ :body => form.read,
+      response = post("/files",{ :body => form.read,
         :headers => {
           'Content-Length' => form.length.to_s,
-          'Content-Type' => "multipart/form-data; boundary=#{boundary}" } }
+          'Content-Type' => "multipart/form-data; boundary=#{boundary}" } })
 
+      doc = Nokogiri.parse(response)
+      raise "[MEDIAVALISE ] Invalid server" unless response.code.to_i == 200
       _result = response.body.to_s.scan(/http:\/\/[a-zA-z0-9|.|\/]*\b/)
       _result.reject!{|x| x["delete"] }
       form.close
