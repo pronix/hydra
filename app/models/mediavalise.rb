@@ -60,17 +60,20 @@ class Mediavalise
 
       doc = Nokogiri.parse(response)
       raise "[MEDIAVALISE ] Invalid server" unless response.code.to_i == 200
+      # Если в ответе от MEDIAVALISE есть ссылки на файл то все нормально, иначе выводим сообщения
+      # которые передаются от MEDIAVALISE
+      # TODO нужно сделать api MEDIAVALISE для загрузки файлов,
+      # с нормальной выдачей результата выдачей
       if response.body.to_s["http:"]
         _result = response.body.to_s.scan(/http:\/\/[a-zA-z0-9|.|\/]*\b/)
         _result.reject!{|x| x["delete"] }
       else
-        _result = response.body.gsub('"','').gsub("'",'').gsub(",",'').
-          scan(/addFileLinks\((.*)\)\)/)
+        _result = response.body.gsub(/"|,/,'').scan(/addFileLinks\((.*)\)\'/).to_a
         _result = _result.flatten.map{|x| x.strip }.join(' ') unless _result.nil?
-
       end
+
       form.close
-      task.log "links mediavalise : #{_result.join(', ')}"
+      task.log "links mediavalise : #{[_result].join(', ')}"
       task.mediavalise_links = [task.mediavalise_links , _result.to_s.gsub(/\s+/, ' ').strip].compact.flatten.join(', ')
       task.save!
       return _result

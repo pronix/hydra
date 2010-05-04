@@ -1,4 +1,7 @@
 require 'open3'
+class JobExtractingError < StandardError #:nodoc:
+end
+
 module Job
   module Extracting
     # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -44,14 +47,19 @@ module Job
           if !type_file.blank? && Common::Video.mime_type.include?(type_file.split(':').last.scan(/[a-zA-Z0-9-]+\/[a-zA-Z0-9-]+/).first)
             system(%(cp #{task_file} #{@path}/))
           else
-            raise "archive type is not defined or not supported"
+            raise JobExtractingError, "archive type is not defined or not supported"
           end
         end
       end
 
       job_completion!("Count files: #{Dir.glob(@path+ "**/**").size}")
+
+    rescue JobExtractingError => ex
+      raise erroneous!("#{ex.message}")
     rescue => ex
-      erroneous!("#{ex.message}")
+      erroneous!("Unknow error")
+      Task.log ex.message, :error
+      raise
     end
 
   end

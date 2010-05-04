@@ -1,5 +1,7 @@
 require 'open3'
 require 'ffmpeg-ruby'
+class JobGenerationScreenListError < StandardError #:nodoc:
+end
 
 module Job
   module GenerationScreenList
@@ -16,18 +18,25 @@ module Job
     def process_of_generation_screen_list
       _generation_screen_list
       job_completion!("Count files: #{Dir.glob(screen_list_path+ "**/**").size}")
-    rescue => ex
+
+    rescue JobGenerationScreenListError => ex
       log ex.message, :error
       erroneous!("#{ex.message}")
+    rescue ex
+      log ex.message, :error
+      erroneous!("Unknow error")
     end
 
     # повторная генерация запусщенная в ручную
     def re_process_of_generation_screen_list
       _generation_screen_list
       finish_regenerate!("Count files: #{Dir.glob(screen_list_path+ "**/**").size}")
-    rescue => ex
+    rescue JobGenerationScreenListError => ex
       log ex.message, :error
       erroneous!("#{ex.message}")
+    rescue ex
+      log ex.message, :error
+      erroneous!("Unknow error")
     end
 
     private
@@ -138,6 +147,14 @@ module Job
           output=`#{montage_command}`
 
 
+          # Подготовляем технические данные для заголовка
+          @header_text = @macro.header_text.chomp.
+            gsub(/\[file_name\]/,        video_info[:file_name]).
+            gsub(/\[width\]x\[height\]/, video_info[:resolution]).
+            gsub(/\[duration_time\]/,    video_info[:duration]).
+            gsub(/\[file_size\]/,        video_info[:file_size]).
+            gsub(/\[video_codec\]/,      video_info[:video_codec]).
+            gsub(/\[audio_codec\]/,      video_info[:audio_codec])
 
           # Добавляем шапку для логотипа
             @tmp_logo = File.join(@path, ["tmp_logo", @macro.file_format].join('.') )
@@ -150,8 +167,9 @@ module Job
 
               @size_screen = parse(`identify -format '%wx%h' '#{out_file}'`)
               # Создаем шаблон логотипа
+              height_header = @macro.add_logo? ? '200' : "#{@header_text.split("\n").size * @macro.font_size.to_i * 1.34 }" # высота шапки
               command = [" convert ",
-                      " -size '#{@size_screen.first}x200' xc:#{!@background.blank? ? @background.split(' ').last : "none"} ",
+                      " -size '#{@size_screen.first}x#{height_header}' xc:#{!@background.blank? ? @background.split(' ').last : "none"} ",
                       " -gravity 'East' "]
               command << " -draw \" image over 10,0 0,0 '#{@logo}' \" " if @macro.add_logo? && !@macro.logo.blank?
               command << " '#{@tmp_logo}'  "
@@ -176,14 +194,6 @@ module Job
           # end add logo
 
           # Добавляем заголовок с техническими данными
-          @header_text = @macro.header_text.chomp.
-            gsub(/\[file_name\]/,        video_info[:file_name]).
-            gsub(/\[width\]x\[height\]/, video_info[:resolution]).
-            gsub(/\[duration_time\]/,    video_info[:duration]).
-            gsub(/\[file_size\]/,        video_info[:file_size]).
-            gsub(/\[video_codec\]/,      video_info[:video_codec]).
-            gsub(/\[audio_codec\]/,      video_info[:audio_codec])
-
 
           command = ["convert", "'#{out_file}'", "#{@font_settings}",
                      "-gravity 'NorthWest'", " -annotate +15+15 \"#{@header_text}\"",
