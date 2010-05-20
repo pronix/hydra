@@ -88,7 +88,7 @@ class DownloadingFile < ActiveRecord::Base
         # но есть в очереди то запускаем один из них
         task.downloading_files.reload # обновляем данные из базы
         if task.downloading_files.active.blank? && !task.downloading_files.queued.blank?
-          task.downloading_files.queued.start!
+          task.downloading_files.queued.last.start!
         end
 
       }
