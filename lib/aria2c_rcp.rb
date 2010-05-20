@@ -23,6 +23,10 @@ module Aria2cRcp
   def self.tell_active
     client.call("aria2.tellActive")
   end
+  # Очистка от завершенных, удаленных, ошибочных задач
+  def self.purge
+    client.call("aria2.purgeDownloadResult")
+  end
 
   def self.tell
     {
