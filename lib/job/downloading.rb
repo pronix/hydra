@@ -39,7 +39,7 @@ module Job
         erroneous! "Error: #{downloading_files.error.first.comment}"
       end
 
-      Aria2cRcp.purge # очищаем aria2c от уже завершенных задач
+      # Aria2cRcp.purge # очищаем aria2c от уже завершенных задач
     end
 
 
