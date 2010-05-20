@@ -16,6 +16,9 @@
       <% if task.downloading? -%>
         <span class='downloading_monitor'>
           [ <%= number_to_percentage(task.percentage.to_i, :precision => 0) -%> | <%= task.speed -%>kb/sec ]
+          <% if task.downloading_files.count > 1 -%>
+          [<%= task.downloading_files.complete.count %>/<%= task.downloading_files.queued.count %>]
+          <% end -%>
         </span>
         <% elsif task.error? -%>
         <span>
