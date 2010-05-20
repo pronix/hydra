@@ -10,8 +10,9 @@ module Job
       @path = downloding_path
 
       FileUtils.mkdir_p(File.dirname(@path))
-      @options={ "dir" => @path }
+      __options={ "dir" => @path }
 
+      # Поставили все файлы в  очередь
       self.extract_link.each do |uri|
         _options = if proxy? && !@proxies.blank?
                      _i = @proxies.find{ |x| x[:free] }
@@ -19,13 +20,13 @@ module Job
                        _i = @proxies.map{ |x| x[:free] = true} && @proxies.first
                      end
                      _i[:free] = false
-                     @options.merge({ "http-proxy" => _i[:address] })
+                     __options.merge({ "http-proxy" => _i[:address] })
                    else
-                     @options
+                     __options
                    end
-        @gid = Aria2cRcp.add_uri([uri], _options)
-        downloading_files.create(:gid => @gid) if @gid
+        downloading_files.create(:uri => uri, :options => _options )
       end
+      downloading_files.last.start! # стартуем закачку для одного файла
     end
 
     # Проверка загружены ли все файлы по задаче
