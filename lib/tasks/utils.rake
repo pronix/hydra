@@ -11,7 +11,8 @@ namespace :hydra do
                 "--daemon","-q",
                 "--xml-rpc-listen-port=#{options["port"]}",
                 "--xml-rpc-user=#{options["user"]}",
-                "--xml-rpc-passwd=#{options["password"]}"
+                "--xml-rpc-passwd=#{options["password"]}",
+                "--log=#{RAILS_ROOT}/log/aria2c.log --log-level=error"
                 ].join(" ")
 
       puts command
