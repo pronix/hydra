@@ -42,7 +42,7 @@ class DownloadingFile < ActiveRecord::Base
     named_scope state, :conditions => { :workflow_state => state.to_s }
   }
 
-  named_scop :ungid, :conditions => ["gid is not null"]
+  named_scope :ungid, :conditions => ["gid is not null"]
 
   class << self
     def process
