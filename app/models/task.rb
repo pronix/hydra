@@ -143,10 +143,10 @@ class Task < ActiveRecord::Base
 
   # средняя скорость загрузки по все файлам
   def speed
-    @_speed = read_attribute(:speed)
-    return @_speed unless  @_speed.to_i == 0
-    return 0 if downloading_files.blank?
-    (downloading_files.sum(:speed)/ downloading_files.count)/1.kilobyte
+    # @_speed = read_attribute(:speed)
+    # return @_speed unless  @_speed.to_i == 0
+    # return 0 if downloading_files.blank?
+    (downloading_files.active.sum(:speed)/ downloading_files.active.count)/1.kilobyte
   rescue
     0
   end
