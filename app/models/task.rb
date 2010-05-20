@@ -152,10 +152,10 @@ class Task < ActiveRecord::Base
   end
   # процент скачанного объекма файлов
   def percentage
-    @_percentage = read_attribute(:percentage)
-    return @_percentage if @_percentage.to_i == 100
-    return 0 if downloading_files.blank?
-    (downloading_files.sum(:completed_length)*100)/downloading_files.sum(:total_length)
+    # @_percentage = read_attribute(:percentage)
+    # return @_percentage if @_percentage.to_i == 100
+    # return 0 if downloading_files.blank?
+    (downloading_files.active.sum(:completed_length)*100)/downloading_files.active.sum(:total_length)
   rescue
     0
   end
