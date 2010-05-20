@@ -38,6 +38,8 @@ module Job
       elsif downloading_files.any?{|x| x.error? }
         erroneous! "Error: #{downloading_files.error.first.comment}"
       end
+
+      Aria2cRcp.purge # очищаем aria2c от уже завершенных задач
     end
 
 
