@@ -17,9 +17,11 @@ module Job
         result = nil
         case IO.popen(%(file -b #{task_file})).readline
         when /^gzip/i
+          raise JobExtractingError, "not support arhive: gunzip" if `which gunzip` && !$?.success?
           command = %(gunzip -f #{task_file})
           Open3.popen3(command){ |gzip_in, gzip_out, gzip_err| result = gzip_err.gets; raise result unless result.blank? }
         when /^bzip2/i
+          raise JobExtractingError, "not support arhive: bunzip2" if `which bunzip2` && !$?.success?
           command = %(bunzip2 -f #{task_file})
           Open3.popen3(command){ |bzip2_in, bzip2_out, bzip2_err| result = bzip2_err.gets; raise result unless result.blank? }
         end
@@ -27,16 +29,20 @@ module Job
 
       Dir.glob(downloding_path + "**/**").each do |task_file|
         result = nil
+
         case IO.popen(%(file -b #{task_file})).readline
         when /^zip/i
+          raise JobExtractingError, "not support arhive: zip" if `which zip` && !$?.success?
           command =  use_password? ? %(unzip -o -P #{password}  #{task_file} -d #{@path}/ ) :
             %(unzip -o  #{task_file} -d #{@path}/ )
           Open3.popen3(command){ |zip_in, zip_out, zip_err| result = zip_err.gets; raise result unless result.blank?  }
         when /^rar/i
+          raise JobExtractingError, "not support arhive: rar" if `which rar` && !$?.success?
           command = use_password? ? %(rar e -y -p#{password} -inul #{task_file}  #{@path}/) :
             %(rar e -y -inul #{task_file}  #{@path}/)
           Open3.popen3(command){ |rar_in, rar_out, rar_err| result = rar_err.gets; raise result unless result.blank?  }
         when /tar/i
+          raise JobExtractingError, "not support arhive: tar" if `which tar` && !$?.success?
           command = %(tar xf #{task_file} -C #{@path})
           Open3.popen3(command){ |tar_in, tar_out, tar_err| result = tar_err.gets; raise result unless result.blank?  }
         else
@@ -57,7 +63,7 @@ module Job
     rescue JobExtractingError => ex
       raise erroneous!("#{ex.message}")
     rescue => ex
-      erroneous!("Unknow error")
+      erroneous!(" Extracting: Unknow error")
       Task.log ex.message, :error
       raise
     end
