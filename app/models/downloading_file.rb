@@ -30,6 +30,7 @@ class DownloadingFile < ActiveRecord::Base
       on_entry do |prior_state, triggering_event, *event_args|
         @gid = Aria2cRcp.add_uri([self.uri], self.options)
         self.update_attributes!({ :gid => @gid }) if @gid
+
       end
 
     end
