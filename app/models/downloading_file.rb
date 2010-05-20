@@ -42,6 +42,8 @@ class DownloadingFile < ActiveRecord::Base
     named_scope state, :conditions => { :workflow_state => state.to_s }
   }
 
+  named_scop :ungid, :conditions => ["gid is not null"]
+
   class << self
     def process
       @tell = Aria2cRcp.tell_active
@@ -64,7 +66,7 @@ class DownloadingFile < ActiveRecord::Base
       _task =[]
       Task.downloading.each {  |task|
 
-        task.downloading_files.map {  |f|
+        task.downloading_files.ungid.map {  |f|
 
           # Получаем статус скачивание
           if file_status = Aria2cRcp.status(f.gid.to_s)
