@@ -1,0 +1,18 @@
+development:
+  web_host: localhost:3000
+  email:
+    delivery_method: sendmail
+    site_admin_email: youremail@example.com
+production:
+  web_host: hydra.raidosoft.com
+  email:
+    delivery_method: sendmail
+    site_admin_email: support@hydra.raidosoft.com
+test: &TEST
+  web_host: localhost:3000
+  email:
+    delivery_method: test
+    site_admin_email: foo@gmail.com
+
+cucumber:
+  <<: *TEST

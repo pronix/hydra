@@ -32,17 +32,6 @@ Rails::Initializer.run do |config|
 
 end
 
-
-ActionMailer::Base.smtp_settings = {
-  :address        => 'smtp.yandex.ru',
-  :domain         => 'yandex.ru',
-  :port           => '25',
-  :user_name      => 'hadooptest@yandex.ru',
-  :password       => '12345678',
-  :authentication => :plain
-}
-
-
 # если ключь локализации не находит то сначала пытаеться вывести default потом  сам ключь в нормальном виде
   module I18n
     class << self

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 class Notification < ActionMailer::Base
+  default_url_options[:host] = WEB_HOST
 
   # Уведомление о завершение задачи
   def completed_task(task)
