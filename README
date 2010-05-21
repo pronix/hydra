@@ -26,3 +26,7 @@
        данные по умолчание (пока только роли)
    - rake hydra:db:sample                      # Loading db/sample for hydra
        тестовые данные
+
+Настройка параметров:
+  /config/application.yml
+  max_active_task: размер очереди активных задач
