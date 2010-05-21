@@ -11,8 +11,8 @@ class Task < ActiveRecord::Base
   include Job::UploadingCovers
   include Job::UploadingScreenList
 
-  ROOT_PATH_DOWNLOAD = File.join(RAILS_ROOT, "data", "task_files")
-  MAX_ACTIVE_TASK = 5
+  ROOT_PATH_DOWNLOAD = Settings.root_path_download
+  MAX_ACTIVE_TASK = Settings.max_active_task
   default_scope :order => "created_at DESC"
 
 
