@@ -75,14 +75,13 @@ class DownloadingFile < ActiveRecord::Base
             if file_status["status"] && file_status["status"]["complete"]
               f.completed_length = f.total_length
               f.completed! if f.active?
-              _task << task
-
             elsif file_status["status"] && file_status["status"]["error"]
               # При скачивание ошибка
               f.comment = STATUS_DOWNLOAD[file_status["errorCode"]]
               f.erroneous! if f.active?
             end
 
+            _task << task
           end
 
         }
