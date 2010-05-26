@@ -11,7 +11,7 @@ class Mediavalise
                       "user_session[password]" => password.to_s})
     end
 
-    def get_form
+    def get_form(user, password)
       response_login = self.login(user, password)
       raise "[MEDIAVALISE ] Invalid login or password" if response_login.body.to_s["error_full"]
       self.default_cookies.add_cookies(response_login.headers["set-cookie"][0])
@@ -33,7 +33,7 @@ class Mediavalise
 
 
 
-      authenticity_token = get_form
+      authenticity_token = get_form(user, password)
       authenticity_token = Nokogiri.parse(authenticity_token)
       authenticity_token = authenticity_token.css("input[name='authenticity_token']").attr('value').to_s rescue ''
       form << "--" << boundary << "\r\n"
