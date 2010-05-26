@@ -67,21 +67,19 @@ class DownloadingFile < ActiveRecord::Base
       Task.downloading.each {  |task|
 
         task.downloading_files.ungid.map {  |f|
-
+          _task << task
           # Получаем статус скачивание
-          if file_status = Aria2cRcp.status(f.gid.to_s)
-
+          if file_status = (Aria2cRcp.status(f.gid.to_s) rescue nil)
             # Файл скачан
             if file_status["status"] && file_status["status"]["complete"]
               f.completed_length = f.total_length
               f.completed! if f.active?
+
             elsif file_status["status"] && file_status["status"]["error"]
               # При скачивание ошибка
               f.comment = STATUS_DOWNLOAD[file_status["errorCode"]]
               f.erroneous! if f.active?
             end
-
-            _task << task
           end
 
         }
