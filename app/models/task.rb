@@ -155,11 +155,14 @@ class Task < ActiveRecord::Base
     # @_percentage = read_attribute(:percentage)
     # return @_percentage if @_percentage.to_i == 100
     # return 0 if downloading_files.blank?
-    (downloading_files.active.sum(:completed_length)*100)/downloading_files.active.sum(:total_length)
+    completed_length = downloading_files.active.map{ |x| x.completed_length.to_i }.sum
+    total_length = downloading_files.active.map{ |x| x.total_length }.sum
+    (completed_length/100)/total_length
   rescue
     0
   end
 
+  #
   # Выбирает ссылки из текста для ссылок
   def extract_link(text_links=self.links)
     !text_links.blank? ? URI.extract(text_links).uniq : false
