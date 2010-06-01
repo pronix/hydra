@@ -154,7 +154,7 @@ class Task < ActiveRecord::Base
   def percentage
     completed_length = downloading_files.active.map{ |x| x.completed_length.to_i }.sum
     total_length = downloading_files.active.map{ |x| x.total_length.to_i }.sum
-    (completed_length/100)/total_length
+    (completed_length/100)/total_length.to_f
   rescue
     0
   end
