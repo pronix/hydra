@@ -41,7 +41,8 @@ module Aria2cRcp
 
   private
   def self.client
-    options = YAML.load(File.read(File.join(RAILS_ROOT,'config','aria', 'aria.yml')))[RAILS_ENV]
+    options = YAML.load(ERB.new(File.read(File.join(RAILS_ROOT,'config', 'aria', 'aria.yml'))).result).to_hash[RAILS_ENV]
+
     @_client=XMLRPC::Client.new3({:host => options["server"],
                                    :port => options["port"],
                                    :path => "/rpc",

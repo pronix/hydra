@@ -5,18 +5,18 @@ namespace :hydra do
 
     desc "Started with aria2 XML-RPC API"
     task :start => :environment do
-      options = YAML.load(File.read(File.join(RAILS_ROOT,'config','aria', 'aria.yml')))[RAILS_ENV]
+      options = YAML.load(ERB.new(File.read(File.join(RAILS_ROOT,'config', 'aria', 'aria.yml'))).result).to_hash[RAILS_ENV]
+
       command =[options["command"],
-#                "--disable-ipv6=#{!options["ipv6"]}" ,
                 "--daemon","-q",
                 "--xml-rpc-listen-port=#{options["port"]}",
                 "--xml-rpc-user=#{options["user"]}",
                 "--xml-rpc-passwd=#{options["password"]}",
-                "--log=#{RAILS_ROOT}/log/aria2c.log --log-level=error"
+                options["aria_parameters"].map {|k,v| "--#{k}=#{v}"}.join(' ')
                 ].join(" ")
 
       puts command
-      ps_ax = IO.popen("ps ax | grep  '#{command}' | grep -v grep ")
+      ps_ax = IO.popen("lsof -i :#{options["port"]}")
       ps_ax = ps_ax.readlines
       if ps_ax.blank?
         system(command)

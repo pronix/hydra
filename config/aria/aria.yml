@@ -5,6 +5,11 @@ development:
   path: "/rpc"
   user: "hydra"
   password: "hydra"
+  aria_parameters:
+    log: <%= "#{RAILS_ROOT}/log/aria2c.log" %>
+    log-level: 'error'
+    file-allocation: 'none'
+
 production:
   command: "aria2c --enable-xml-rpc"
   server: "localhost"
@@ -12,3 +17,7 @@ production:
   path: "/rpc"
   user: "hydra"
   password: "hydra"
+  aria_parameters:
+    log: <%= "#{RAILS_ROOT}/log/aria2c.log" %>
+    log-level: 'error'
+    file-allocation: 'none'
