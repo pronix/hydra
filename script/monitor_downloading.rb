@@ -4,7 +4,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'envi
 require 'optparse'
 require "daemon-spawn"
 
-SLEEP = 5
+SLEEP = 15
 class DaemonMonitorDownloading < DaemonSpawn::Base
   def start(args)
     loop do
