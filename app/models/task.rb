@@ -155,6 +155,7 @@ class Task < ActiveRecord::Base
     return read_attribute(:percentage).to_i if downloading_files.active.blank?
     completed_length = downloading_files.active.map{ |x| x.completed_length.to_i }.sum
     total_length = downloading_files.active.map{ |x| x.total_length.to_i }.sum
+    return 0 if total_length.to_i == 0
     (completed_length/100)/total_length.to_f
   rescue
     0
