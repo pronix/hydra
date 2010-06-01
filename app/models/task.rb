@@ -145,13 +145,14 @@ class Task < ActiveRecord::Base
   def speed
     # @_speed = read_attribute(:speed)
     # return @_speed unless  @_speed.to_i == 0
-    # return 0 if downloading_files.blank?
+    return 0 if downloading_files.active.blank?
     (downloading_files.active.sum(:speed)/ downloading_files.active.count)/1.kilobyte
   rescue
     0
   end
   # процент скачанного объекма файлов
   def percentage
+    return read_attribute(:percentage).to_i if downloading_files.active.blank?
     completed_length = downloading_files.active.map{ |x| x.completed_length.to_i }.sum
     total_length = downloading_files.active.map{ |x| x.total_length.to_i }.sum
     (completed_length/100)/total_length.to_f
