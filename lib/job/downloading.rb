@@ -34,6 +34,7 @@ module Job
       if downloading_files.all?{|x| x.complete? }
         write_attribute(:percentage, 100)
         write_attribute(:speed, (downloading_files.sum(:speed)/ downloading_files.count)/1.kilobyte )
+        save
         completion_downloading!("Count files: #{downloading_files.count}") if downloading?
       elsif downloading_files.any?{|x| x.error? }
         erroneous! "Error: #{downloading_files.error.first.comment}"
