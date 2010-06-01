@@ -52,14 +52,12 @@ class DownloadingFile < ActiveRecord::Base
       @active = @tell.map {|x|{ :gid => x["gid"], :speed => x["downloadSpeed"],
           :total_length => x["totalLength"] ,  :completed_length => x["completedLength"]}}
 
-      !@active.blank? && DownloadingFile.transaction do
-        @active.each {|x|
+      !@active.blank? && @active.each {|x|
           @dwn_file = find_by_gid(x[:gid])
           @dwn_file && @dwn_file.update_attributes({ :speed => x[:speed],
                                                      :total_length => x[:total_length],
                                                      :completed_length => x[:completed_length]  })
         }
-      end
 
 
       # Проверка завершено ли скачивания
