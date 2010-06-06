@@ -148,7 +148,7 @@ module Common
   end
 
   module FileFormat
-    JPG="jpeg"
+    JPG="jpg"
     PNG="png"
     def self.options_for_select
       [[JPG, JPG],[ PNG, PNG]]

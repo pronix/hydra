@@ -80,14 +80,8 @@ module Job
             out_file_name = "#{File.basename(video_file)}_#{i}.#{@macro.file_format}"
             out_files << {:file => out_file, :timestamp => tc }
 
-            # mplayer 20.avi -ss 00:20:14 -frames 1 -vo png:outdir=/home/maxim/.aMule/Incoming
-            # mplayer -nosound  -frames 1 -ss #{tc} '#{video_file}' -loop 1 -vo #{@macro.file_format}:outdir=#{@path_tmp}
-            # && mv -f 00000001.#{@macro.file_format} #{out_file_name}
-            # mplayer 20.avi -ss 00:20:14 -frames 1 -vo png:outdir=/home/maxim/.aMule/Incoming/12
-# mplayer -nosound -vo png:outdir=/root/movie -frames 1 -ss 00:10:10 215_advanced_queries_in_rails_3.mov -loop 1 && mv -f 00000001.png 00_10_10.png
-            # command = "ffmpeg -i '#{video_file}'  -an -ss #{tc} -vframes 1 -y '#{out_file}'"
-
-            command = "mplayer -nosound  -frames 1 -ss #{tc} '#{video_file}' -loop 1 -vo #{@macro.file_format}:outdir=#{@path_tmp}/ && mv -f #{@path_tmp}/00000001.#{@macro.file_format} #{@path_tmp}/#{out_file_name}"
+            @vo_format = @macro.file_format["jpg"] ? "jpeg" : "png"
+            command = "mplayer -nosound  -frames 1 -ss #{tc} '#{video_file}' -loop 1 -vo #{@vo_format}:outdir=#{@path_tmp}/ && mv -f #{@path_tmp}/00000001.#{@macro.file_format} #{@path_tmp}/#{out_file_name}"
             log "-"*90
             log "mplayer-"
             log command
