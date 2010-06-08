@@ -38,9 +38,10 @@ module Job
 
 
       command = %(rar a -inul -ep )
-      command << " -v#{part_size.to_s} " unless part_size.blank?
+      command << " -v#{part_size.to_i.megabyte/1000} " unless part_size.blank?
       command << " -p#{password_arhive.to_s} " unless password_arhive.blank?
       command << %( '#{@_out_file}' #{ @_files.map{ |x| "'#{x}'" }.join(' ') } )
+      log command, :debug
       output = `#{command}`
 
       # Переименовываем архив если включено
@@ -64,6 +65,7 @@ module Job
           @new_file_name = File.join(File.dirname(_file), @new_file_name)
 
           command = "mv '#{_file}' '#{@new_file_name}'"
+          log command, :debug
         `#{command}`
         end
       end
