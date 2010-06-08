@@ -241,7 +241,7 @@ module Job
     end
 
     def second_to_s(second)
-      [second/3600, second/60 % 60, second % 60].map{|t| t.to_s.rjust(2,'0')}.join(':')
+      "%02d:%02d:%02d" % [second/3600,(second/60 % 60),(second % 60)]
     end
 
 
@@ -264,10 +264,14 @@ module Job
         end
       }
 
+      duration = `mplayer -identify #{video_file} -nosound -vc dummy -vo null`
+      duration = duration[/ID_LENGTH=(.+)/] && $1.to_f
+      duration = (video_context.duration/1000000) unless duration.to_i > 0
+
       {
         :file_name   => "'#{File.basename(video_file)}'",
         :file_size   => ApplicationController.helpers.number_to_human_size(File.size(video_file)),
-        :duration    => second_to_s(video_context.duration/1000000),
+        :duration    =>  second_to_s(duration), #second_to_s(video_context.duration/1000000),
         :resolution  => (!video_codec.blank? ? ("#{video_codec.first[:width]}x#{video_codec.first[:height]}") : ""),
         :audio_codec => (!video_codec.blank? ? ("#{video_codec.first[:long_name]}") : ""),
         :video_codec => (!audio_codec.blank? ? ("#{audio_codec.first[:long_name]}") : "")
