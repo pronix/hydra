@@ -22,7 +22,7 @@ module Job
     rescue JobGenerationScreenListError => ex
       log ex.message, :error
       erroneous!("#{ex.message}")
-    rescue ex
+    rescue => ex
       log ex.message, :error
       erroneous!("Unknow error")
     end
@@ -34,7 +34,7 @@ module Job
     rescue JobGenerationScreenListError => ex
       log ex.message, :error
       erroneous!("#{ex.message}")
-    rescue ex
+    rescue => ex
       log ex.message, :error
       erroneous!("Unknow error")
     end
