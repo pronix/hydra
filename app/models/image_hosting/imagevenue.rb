@@ -25,6 +25,7 @@ class ImageHosting::Imagevenue < ImageHosting
       file_path, file_name, user, password, content_type  =
         args[:file_path], args[:file_name], args[:login], args[:password], args[:content_type]
 
+      type_file = `file -b '#{file_path}'`
       unless type_file[/jpg|jpeg/i]
         raise ImageHostingNotSupportError, "Not support format image"
       end
