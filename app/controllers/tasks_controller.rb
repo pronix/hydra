@@ -11,6 +11,8 @@ class TasksController < ApplicationController
     end
   end
 
+  def show; @task = (current_user.admin? ? Task : current_user.tasks).find params[:id]  end
+
   def create
     if params[:task][:category_id]
     create! do |success, failure|
@@ -80,7 +82,7 @@ class TasksController < ApplicationController
     @conditions << " category_id = :category " if session[:task_category]
     @arguments.merge!({ :category => session[:task_category]})  if session[:task_category]
     @conditions = @conditions.join(" AND ")
-    @tasks = current_user.tasks.filter(@conditions, @arguments)
+    @tasks = (current_user.admin? ? Task : current_user.tasks).filter(@conditions, @arguments)
   end
 
   def begin_of_association_chain
