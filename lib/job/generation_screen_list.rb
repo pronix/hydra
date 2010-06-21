@@ -24,7 +24,7 @@ module Job
       erroneous!("#{ex.message}")
     rescue => ex
       log ex.message, :error
-      erroneous!("Unknow error")
+      erroneous!("Generation screen list:  Unknow error")
     end
 
     # повторная генерация запусщенная в ручную
@@ -36,7 +36,7 @@ module Job
       erroneous!("#{ex.message}")
     rescue => ex
       log ex.message, :error
-      erroneous!("Unknow error")
+      erroneous!("Generation screen list: Unknow error")
     end
 
     private
@@ -69,7 +69,10 @@ module Job
 
           # Делаем скриншоты с видео файла
           file_info = ffmpeg_context(video_file)
-          duration_file = file_info.duration
+
+          duration_file = duration(video_file)
+          duration_file = file_info.duration unless duration_file.to_i > 0
+
           delta = duration_file/@number_of_frames
           video_info = get_video_info(video_file)
 
@@ -248,6 +251,10 @@ module Job
     # Информация о видео файле
     def ffmpeg_context(video_file)
       FFMpeg::AVFormatContext.new(video_file)
+    end
+    def duration(v_file)
+      _duration = `mplayer -identify #{v_file} -nosound -vc dummy -vo null`
+      _duration[/ID_LENGTH=(.+)/] && $1.to_f
     end
     def get_video_info(video_file)
       video_context = ffmpeg_context(video_file)
