@@ -77,8 +77,8 @@ module Job
           video_info = get_video_info(video_file)
 
           (1).upto(@number_of_frames) do |i|
-            tc = ((delta*i -1000)/1000000)
-            tc = tc-100 if (duration_file/1000000) <= tc
+            tc = delta*i
+            tc = tc-100 if (duration_file) <= tc
             out_file = File.join(@path_tmp, "#{File.basename(video_file)}_#{i}.#{@macro.file_format}" )
             out_file_name = "#{File.basename(video_file)}_#{i}.#{@macro.file_format}"
             out_files << {:file => out_file, :timestamp => tc }
