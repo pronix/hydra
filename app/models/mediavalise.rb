@@ -1,8 +1,10 @@
 class Mediavalise
   include HTTParty
   base_uri "http://www.mediavalise.com"
+  format  :json
 # r = HTTParty.post('http://www.mediavalise.com/user_session',:query => { "user_session[login]" => 'serg', "user_session[password]" => 'mvpass'})
-
+  # Mediavalise.uploading :file_path => "#{RAILS_ROOT}/1.jpg", :file_name => 1,
+  # :login => 'free_webmaster', :password => '123456', :task => Task.last
   class << self
 
     def login(user, password)
@@ -14,8 +16,8 @@ class Mediavalise
     def get_form(user, password)
       response_login = self.login(user, password)
       raise "[MEDIAVALISE ] Invalid login or password" if response_login.body.to_s["error_full"]
-      self.default_cookies.add_cookies(response_login.headers["set-cookie"][0])
-      get('http://www.mediavalise.com/account/upload')
+      self.default_cookies.add_cookies([response_login.headers["set-cookie"]].flatten.first)
+      HTTParty.get('http://www.mediavalise.com/account/upload')
     end
 
     def uploading(args=nil)
@@ -25,7 +27,7 @@ class Mediavalise
 
       response_login = self.login(user, password)
       raise "[MEDIAVALISE ] Invalid login or password" if response_login.body.to_s["error_full"]
-      self.default_cookies.add_cookies(response_login.headers["set-cookie"][0])
+      self.default_cookies.add_cookies([response_login.headers["set-cookie"]].flatten.first)
 
 
       boundary = ActiveSupport::SecureRandom.hex.upcase
@@ -52,29 +54,24 @@ class Mediavalise
 
       form << "\r\n--" << boundary << "--\r\n"
       form.seek(0)
-
-      response = post("/files",{ :body => form.read,
+      # "upload/direct.json"
+      # response = post("/files",{ :body => form.read,
+      response = post("/upload/direct.json",{ :body => form.read,
         :headers => {
           'Content-Length' => form.length.to_s,
-          'Content-Type' => "multipart/form-data; boundary=#{boundary}" } })
-
-      doc = Nokogiri.parse(response)
-      raise "[MEDIAVALISE ] Invalid server" unless response.code.to_i == 200
-      # Если в ответе от MEDIAVALISE есть ссылки на файл то все нормально, иначе выводим сообщения
-      # которые передаются от MEDIAVALISE
-      # TODO нужно сделать api MEDIAVALISE для загрузки файлов,
-      # с нормальной выдачей результата выдачей
-      if response.body.to_s["http:"]
-        _result = response.body.to_s.scan(/http:\/\/[a-zA-z0-9|.|\/]*\b/)
-        _result.reject!{|x| x["delete"] }
+          'Content-Type' => "multipart/form-data; boundary=#{boundary}" }, :format => :json })
+      result = response.to_hash
+      if result["error"].blank?
+        _result = result["success"].first["direct_link"] rescue ''
       else
-        _result = response.body.gsub(/"|,/,'').scan(/addFileLinks\((.*)\)\'/).to_a
-        _result = _result.flatten.map{|x| x.strip }.join(' ') unless _result.nil?
+        _result = result["error"].to_a.join(' ')
       end
+      raise "[MEDIAVALISE ] Invalid server" unless response.code.to_i == 200
 
       form.close
       task.log "links mediavalise : #{[_result].join(', ')}"
-      task.mediavalise_links = [task.mediavalise_links , _result.to_s.gsub(/\s+/, ' ').strip].compact.flatten.join(', ')
+      task.mediavalise_links ||= ""
+      task.mediavalise_links << "#{_result}\n"
       task.save!
       return _result
 

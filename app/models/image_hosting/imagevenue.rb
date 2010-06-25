@@ -66,10 +66,12 @@ class ImageHosting::Imagevenue < ImageHosting
 
       begin
         doc = Nokogiri.parse(response)
-#        result =  doc.css("form").map { |x| [ x.inner_html.split("<br>").first, x.css("textarea").inner_html ] }
-	result = []
  	# Первая форма
-	result << [
+        result = []
+
+        # result =  doc.css("form").map { |x| [ x.inner_html.split("<br>").first, x.css("textarea").inner_html ] }
+        # Первая форма
+        result << [
                    doc.css("form[@name='form1']").inner_html.split("<br>").first.strip,
                    doc.css("form[@name='form1'] textarea").inner_html
                   ]

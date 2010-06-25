@@ -69,7 +69,6 @@ module Job
 
           # Делаем скриншоты с видео файла
           file_info = ffmpeg_context(video_file)
-          # duration_file = file_info.duration
 
           duration_file = duration(video_file)
           duration_file = file_info.duration unless duration_file.to_i > 0
@@ -84,10 +83,6 @@ module Job
           (1).upto(@number_of_frames) do |i|
             tc = delta*i
             tc = tc-100 if (duration_file) <= tc
-          log '+'*90
-          log tc
-          log '+'*90
-
             out_file = File.join(@path_tmp, "#{File.basename(video_file)}_#{i}.#{@macro.file_format}" )
             out_file_name = "#{File.basename(video_file)}_#{i}.#{@macro.file_format}"
             out_files << {:file => out_file, :timestamp => tc }

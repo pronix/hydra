@@ -13,9 +13,9 @@ class DashboardsController < ApplicationController
     @arguments.merge!({ :category => session[:task_category]})  if session[:task_category]
     @conditions = @conditions.join(" AND ")
     if session[:task_category]
-      @tasks = (current_user.admin? ? Task : current_user.tasks).active.filter(@conditions, @arguments)
+      @tasks = (current_user.admin? ? Task : current_user.tasks).active.filter(@conditions, @arguments).paginate :per_page => current_user.user_per_page, :page => params[:page]
     else
-      @tasks = (current_user.admin? ? Task : current_user.tasks).active
+      @tasks = (current_user.admin? ? Task : current_user.tasks).active.paginate :per_page => current_user.user_per_page, :page => params[:page]
     end
 
 

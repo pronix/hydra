@@ -1,10 +1,12 @@
 <% semantic_form_for resource, :url => settings_path, :html => { :method => :put, :class => 'base_form' }  do |form| %>
 <% form.inputs :class => "base_form"  do -%>
+<%= form.input :user_per_page %>
 <%= form.input :name %>
 <%= form.input :email %>
 <%= form.input :notification_email %>
 <%= form.input :password %>
 <%= form.input :password_confirmation %>
+
 <% end -%>
 <% form.buttons do -%>
 <%= form.commit_button I18n.t('save'),  :class => "base_buttons" %>

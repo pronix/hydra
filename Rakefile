@@ -8,8 +8,6 @@ require 'rake/testtask'
 require 'rake/rdoctask'
 
 require 'tasks/rails'
-
-
 begin
   require 'delayed/tasks'
 rescue LoadError

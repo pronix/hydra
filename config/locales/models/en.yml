@@ -4,6 +4,12 @@ en:
       task: Tasks
       macros: Macro
     attributes:
+      user:
+        user_per_page: 'Show items per page'
+        name: Nickname
+        email: E-mail
+        password_confirmation: Repeat password
+        notification_emai: E-mail notification
       task:
         name: Task name
         links: Add links

@@ -46,6 +46,7 @@ class DownloadingFile < ActiveRecord::Base
 
   class << self
     def process
+
       @tell = Aria2cRcp.tell_active
 
       # Записываем статус скачивания
