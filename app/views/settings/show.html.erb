@@ -5,19 +5,23 @@
 <% form_for resource, :url => settings_path, :html => { :method => :put }  do |form| %>
 
  <ul class="tableForm toolsProfiles">
-   <li><label>Nickname</label><em class="rightCell"></em>
+   <li>
+     <label><%= User.human_attribute_name("name") %></label><em class="rightCell"></em>
      <%= form.text_field :name, :size => 27 %>
    </li>
-   <li><label class="yellowCell">E-mail</label><em class="rightCell"></em>
+   <li><label class="yellowCell"><%= User.human_attribute_name("email") %></label><em class="rightCell"></em>
      <%= form.text_field :email, :size => 27 %>
    </li>
-   <li><label>Password</label><em class="rightCell"></em>
+   <li><label><%= User.human_attribute_name("password") %></label><em class="rightCell"></em>
      <%= form.password_field :password, :size => 27 %>
    </li>
-   <li><label class="yellowCell">Repeat password</label><em class="rightCell"></em>
+   <li><label class="yellowCell"><%= User.human_attribute_name("password_confirmation") %></label><em class="rightCell"></em>
      <%= form.password_field :password_confirmation, :size => 27 %>
    </li>
-   <li><label class="borderNone">E-mail notification</label><em class="rightCell"></em>
+   <li><label class="borderNone"><%= User.human_attribute_name("user_per_page") %></label><em class="rightCell"></em>
+     <%= form.text_field :user_per_page, :size => 4 %>
+   </li>
+   <li><label class="borderNone"><%= User.human_attribute_name("notification_email") %></label><em class="rightCell"></em>
      <%= form.check_box :notification_email, :size => 27 %>
    </li>
    <li class="borderNone">

@@ -82,7 +82,7 @@ class TasksController < ApplicationController
     @conditions << " category_id = :category " if session[:task_category]
     @arguments.merge!({ :category => session[:task_category]})  if session[:task_category]
     @conditions = @conditions.join(" AND ")
-    @tasks = (current_user.admin? ? Task : current_user.tasks).filter(@conditions, @arguments)
+    @tasks = (current_user.admin? ? Task : current_user.tasks).filter(@conditions, @arguments).paginate :per_page => current_user.user_per_page, :page => params[:page]
   end
 
   def begin_of_association_chain

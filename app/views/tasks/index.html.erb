@@ -22,7 +22,7 @@
 
   <% if session[:task_status]["active"] -%>
     $(document).everyTime(15000,'indicate_timer' ,function(i) {
-       var _url = "<%= tasks_path :format => :js %> ";
+      var _url = location.href.split('?')[0] + ".js"+(location.href.split('?')[1] ? ('?'+location.href.split('?')[1]) : '' );
        $.ajax({ url: _url, success: function(data){ $("#load_content").html(data); } });
       });
   <% end %>
