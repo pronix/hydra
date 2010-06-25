@@ -7,7 +7,7 @@ Bluepill.application("my_app", :log_file => "#{RAILS_ROOT}/log/bluepill.log") do
     process.stop_grace_time     = 10.seconds
     process.restart_grace_time  = 10.seconds
 
-    process.start_command = "ruby script/delayed_job -e production start"
+    process.start_command = "ruby script/delayed_job -e production -n 5 start"
     process.stop_command  = "ruby script/delayed_job -e production stop"
 
     process.pid_file = "#{RAILS_ROOT}/tmp/pids/delayed_job.pid"

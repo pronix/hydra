@@ -25,6 +25,7 @@ class ImageHosting::Imagevenue < ImageHosting
       file_path, file_name, user, password, content_type  =
         args[:file_path], args[:file_name], args[:login], args[:password], args[:content_type]
 
+      type_file = `file -b '#{file_path}'`
       unless type_file[/jpg|jpeg/i]
         raise ImageHostingNotSupportError, "Not support format image"
       end
@@ -65,7 +66,28 @@ class ImageHosting::Imagevenue < ImageHosting
 
       begin
         doc = Nokogiri.parse(response)
-        result =  doc.css("form").map { |x| [ x.inner_html.split("<br>").first, x.css("textarea").inner_html ] }
+#        result =  doc.css("form").map { |x| [ x.inner_html.split("<br>").first, x.css("textarea").inner_html ] }
+	result = []
+ 	# Первая форма
+	result << [
+                   doc.css("form[@name='form1']").inner_html.split("<br>").first.strip,
+                   doc.css("form[@name='form1'] textarea").inner_html
+                  ]
+
+        # Вторая форма
+        result << [
+                    doc.css("form[@name='form2']").text.split('.').first,
+                    doc.css("form[@name='form2'] textarea").inner_html
+                  ]
+        # Третья форма
+        result << [ "", doc.css("form[@name='form3'] textarea").inner_html ]
+
+        # Четвертая форма
+        result << [
+                  doc.css("form[@name='form4']").inner_html.split("<br>").first.strip,
+                  doc.css("form[@name='form4'] textarea").inner_html
+                   ]
+
       rescue
         raise ImageHostingLinksError
       end

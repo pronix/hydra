@@ -1,5 +1,5 @@
 defaults: &defaults
-  max_active_task: 5 # размер очереди активных задач
+  max_active_task: 32 # размер очереди активных задач
   root_path_download: <%=  File.join(RAILS_ROOT, "data", "task_files") %> # пути куда сохраняються файлы
 development:
   <<: *defaults

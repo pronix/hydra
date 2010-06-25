@@ -21,3 +21,5 @@ production:
     log: <%= "#{RAILS_ROOT}/log/aria2c.log" %>
     log-level: 'error'
     file-allocation: 'none'
+    max-concurrent-downloads: '50'
+    split: '10'

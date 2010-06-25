@@ -22,21 +22,21 @@ module Job
     rescue JobGenerationScreenListError => ex
       log ex.message, :error
       erroneous!("#{ex.message}")
-    rescue ex
+    rescue => ex
       log ex.message, :error
-      erroneous!("Unknow error")
+      erroneous!(" Generate screen list: Unknow error")
     end
 
     # повторная генерация запусщенная в ручную
     def re_process_of_generation_screen_list
       _generation_screen_list
       finish_regenerate!("Count files: #{Dir.glob(screen_list_path+ "**/**").size}")
-    rescue JobGenerationScreenListError => ex
-      log ex.message, :error
-      erroneous!("#{ex.message}")
-    rescue ex
-      log ex.message, :error
-      erroneous!("Unknow error")
+    #rescue JobGenerationScreenListError => ex
+    #  log ex.message, :error
+    #  erroneous!("#{ex.message}")
+    #rescue => ex
+    #  log ex.message, :error
+    #  erroneous!("Unknow error")
     end
 
     private
@@ -69,13 +69,25 @@ module Job
 
           # Делаем скриншоты с видео файла
           file_info = ffmpeg_context(video_file)
-          duration_file = file_info.duration
+          # duration_file = file_info.duration
+
+          duration_file = duration(video_file)
+          duration_file = file_info.duration unless duration_file.to_i > 0
+
           delta = duration_file/@number_of_frames
           video_info = get_video_info(video_file)
+          log '+'*90
+          log duration_file
+          log delta
+          log '+'*90
 
           (1).upto(@number_of_frames) do |i|
-            tc = ((delta*i -1000)/1000000)
-            tc = tc-100 if (duration_file/1000000) <= tc
+            tc = delta*i
+            tc = tc-100 if (duration_file) <= tc
+          log '+'*90
+          log tc
+          log '+'*90
+
             out_file = File.join(@path_tmp, "#{File.basename(video_file)}_#{i}.#{@macro.file_format}" )
             out_file_name = "#{File.basename(video_file)}_#{i}.#{@macro.file_format}"
             out_files << {:file => out_file, :timestamp => tc }
@@ -87,7 +99,8 @@ module Job
 # mplayer -nosound -vo png:outdir=/root/movie -frames 1 -ss 00:10:10 215_advanced_queries_in_rails_3.mov -loop 1 && mv -f 00000001.png 00_10_10.png
             # command = "ffmpeg -i '#{video_file}'  -an -ss #{tc} -vframes 1 -y '#{out_file}'"
 
-            command = "mplayer -nosound  -frames 1 -ss #{tc} '#{video_file}' -loop 1 -vo #{@macro.file_format}:outdir=#{@path_tmp}/ && mv -f #{@path_tmp}/00000001.#{@macro.file_format} #{@path_tmp}/#{out_file_name}"
+            @vo_format = @macro.file_format["jpg"] ? "jpeg" : "png"
+            command = "mplayer -nosound  -frames 1 -ss #{tc} '#{video_file}' -loop 1 -vo #{@vo_format}:outdir=#{@path_tmp}/ && mv -f #{@path_tmp}/00000001.#{@macro.file_format} #{@path_tmp}/#{out_file_name}"
             log "-"*90
             log "mplayer-"
             log command
@@ -247,13 +260,18 @@ module Job
     end
 
     def second_to_s(second)
-      [second/3600, second/60 % 60, second % 60].map{|t| t.to_s.rjust(2,'0')}.join(':')
+      "%02d:%02d:%02d" % [second/3600,(second/60 % 60),(second % 60)]
     end
+
 
 
     # Информация о видео файле
     def ffmpeg_context(video_file)
       FFMpeg::AVFormatContext.new(video_file)
+    end
+    def duration(v_file)
+      _duration = `mplayer -identify #{v_file} -nosound -vc dummy -vo null`
+      _duration[/ID_LENGTH=(.+)/] && $1.to_f
     end
     def get_video_info(video_file)
       video_context = ffmpeg_context(video_file)
@@ -270,10 +288,14 @@ module Job
         end
       }
 
+      duration = `mplayer -identify #{video_file} -nosound -vc dummy -vo null`
+      duration = duration[/ID_LENGTH=(.+)/] && $1.to_f rescue nil
+      duration = (video_context.duration/1000000) unless duration.to_i > 0
+
       {
         :file_name   => "'#{File.basename(video_file)}'",
         :file_size   => ApplicationController.helpers.number_to_human_size(File.size(video_file)),
-        :duration    => second_to_s(video_context.duration/1000000),
+        :duration    => second_to_s(duration),
         :resolution  => (!video_codec.blank? ? ("#{video_codec.first[:width]}x#{video_codec.first[:height]}") : ""),
         :audio_codec => (!video_codec.blank? ? ("#{video_codec.first[:long_name]}") : ""),
         :video_codec => (!audio_codec.blank? ? ("#{audio_codec.first[:long_name]}") : "")

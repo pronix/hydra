@@ -64,7 +64,7 @@ class DownloadingFile < ActiveRecord::Base
       _task =[]
       Task.downloading.each {  |task|
 
-        task.downloading_files.ungid.map {  |f|
+        task.downloading_files.uniq.map {  |f|
           _task << task
           # Получаем статус скачивание
           if file_status = (Aria2cRcp.status(f.gid.to_s) rescue nil)
