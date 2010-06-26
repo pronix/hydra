@@ -70,9 +70,11 @@ class Mediavalise
 
       form.close
       task.log "links mediavalise : #{[_result].join(', ')}"
-      task.mediavalise_links ||= ""
-      task.mediavalise_links << "#{_result}\n"
+      task.log "links alredy in task : #{task.mediavalise_links }"
+       task.mediavalise_links = "#{task.mediavalise_links}#{_result}\n"
+
       task.save!
+
       return _result
 
     rescue => ex

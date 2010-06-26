@@ -168,7 +168,8 @@ table .editBut, table .delBut { margin-right: 5px; float: left; }
 .taskProfile .rightSide .awesome { margin-top: 30px; }
 .taskProfile .leftSide .awesome { margin-right: 100px; }
 
-.imgSettings { overflow: hidden; padding-bottom: 10px; }
+/* .imgSettings { overflow: hidden; padding-bottom: 10px; } */
+.imgSettings {  padding-bottom: 10px; }
 .imgSettings p { padding-bottom: 5px; overflow: hidden; }
 .imgSettings .linkFile { margin-right: 40px; }
 .imgSettings input { float: left; }
