@@ -77,7 +77,7 @@ class ImageHosting::Imagevenue < ImageHosting
 
         # Вторая форма
         result << [
-                   doc.css("form[@name='form2'] font").text.split('.').first,
+                   doc.css("form[@name='form2']").text.split('.').first,
                    doc.css("form[@name='form2'] textarea").inner_html
                   ]
 
