@@ -483,9 +483,7 @@ class Task < ActiveRecord::Base
     state :completed do
       on_entry { |prior_state, triggering_event, *event_args|
         start_job
-        FileUtils.rm_rf(packed_path)
-        FileUtils.rm_rf(unpacked_path)
-        FileUtils.rm_rf(screen_list_path)
+        FileUtils.rm_rf(task_path)
         run_next_task
       }
     end
