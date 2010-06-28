@@ -2,9 +2,6 @@ class Mediavalise
   include HTTParty
   base_uri "http://www.mediavalise.com"
   format  :json
-# r = HTTParty.post('http://www.mediavalise.com/user_session',:query => { "user_session[login]" => 'serg', "user_session[password]" => 'mvpass'})
-  # Mediavalise.uploading :file_path => "#{RAILS_ROOT}/1.jpg", :file_name => 1,
-  # :login => 'free_webmaster', :password => '123456', :task => Task.last
   class << self
 
     def login(user, password)
@@ -70,8 +67,7 @@ class Mediavalise
 
       form.close
       task.log "links mediavalise : #{[_result].join(', ')}"
-      task.mediavalise_links ||= ""
-      task.mediavalise_links << "#{_result}\n"
+      task.mediavalise_links = "#{task.mediavalise_links}#{_result}\n"
       task.save!
       return _result
 
