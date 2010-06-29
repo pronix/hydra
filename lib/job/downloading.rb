@@ -24,7 +24,7 @@ module Job
                    else
                      __options
                    end
-        downloading_files.create(:uri => uri, :options => _options )
+        downloading_files.create!(:uri => uri, :options => _options )
       end
       downloading_files.last.start! # стартуем закачку для одного файла
     end
