@@ -9,7 +9,7 @@ set :branch, "master"
 set :user, "root"
 
 set :deploy_via, :remote_cache
-set :deploy_to, "/home/hydra/var/www/#{application}"
+set :deploy_to, "/var/www/#{application}"
 set :use_sudo, false
 
 set :port,2222
@@ -39,7 +39,7 @@ namespace :deploy do
   end
 
   task :chown, :roles => :app do
-    run "chown -R apache:apache #{release_path}"
+    run "chown -R hydra:hydra #{release_path}"
   end
 
   desc "create symlinks on shared resources"
@@ -84,19 +84,19 @@ namespace :bluepill do
   desc "Stop processes that bluepill is monitoring and quit bluepill"
   task :quit, :roles => [:app] do
     begin
-    run "/opt/ruby-enterprise-1.8.7-2010.01/bin/bluepill stop"
-    run "/opt/ruby-enterprise-1.8.7-2010.01/bin/bluepill quit"
+    run "/opt/ruby-enterprise-1.8.7-2010.02/bin/bluepill stop"
+    run "/opt/ruby-enterprise-1.8.7-2010.02/bin/bluepill quit"
     rescue =>e
       puts e
     end
   end
   desc "Load bluepill configuration and start it"
   task :start, :roles => [:app] do
-    run "RAILS_ENV=production /opt/ruby-enterprise-1.8.7-2010.01/bin/bluepill load #{current_path}/config/production.pill"
+    run "RAILS_ENV=production /opt/ruby-enterprise-1.8.7-2010.02/bin/bluepill load #{current_path}/config/production.pill"
   end
   desc "Prints bluepills monitored processes statuses"
   task :status, :roles => [:app] do
-    run "RAILS_ENV=production /opt/ruby-enterprise-1.8.7-2010.01/bin/bluepill status"
+    run "RAILS_ENV=production /opt/ruby-enterprise-1.8.7-2010.02/bin/bluepill status"
   end
 end
 # after  "deploy"update_code
