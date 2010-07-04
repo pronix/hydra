@@ -51,6 +51,7 @@ namespace :deploy do
 #    run "ln -nfs  /var/www/hydra/shared/production.sqlite3 #{release_path}/db/production.sqlite3"
 #    run "touch #{shared_path}/database.yml"
     run "ln -nfs #{shared_path}/database.yml #{current_path}/config/database.yml "
+    run "ln -nfs #{shared_path}/application.yml #{current_path}/config/application.yml "
 
   end
   desc "start aria server"
