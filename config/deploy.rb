@@ -9,16 +9,17 @@ set :branch, "master"
 set :user, "root"
 
 set :deploy_via, :remote_cache
-set :deploy_to, "/var/www/#{application}"
+set :deploy_to, "/home/hydra/var/www/#{application}"
 set :use_sudo, false
 
-role :app, "hydra.raidosoft.com"
-role :web, "hydra.raidosoft.com"
-role :db,  "hydra.raidosoft.com" , :primary => true
+set :port,2222
+role :app, "c-n150-u0496-25.webazilla.com"
+role :web, "c-n150-u0496-25.webazilla.com"
+role :db,  "c-n150-u0496-25.webazilla.com" , :primary => true
 
 
 set(:shared_database_path) {"#{shared_path}/databases"}
-set(:ruby_path,"/opt/ruby-enterprise-1.8.7-2010.01/bin")
+set(:ruby_path,"/opt/ruby-enterprise-1.8.7-2010.02/bin")
 
 before "deploy:setup","deploy:mkdir_data"
 namespace :deploy do
@@ -54,7 +55,7 @@ namespace :deploy do
   end
   desc "start aria server"
   task :start_aria do
-    run "cd #{current_path} && RAILS_ENV=production #{ruby_path}/rake hydra:aria2c:start "
+    run "cd #{current_path} && RAILS_ENV=production #{ruby_path}/rake hydra:aria2c:start"
   end
 
 

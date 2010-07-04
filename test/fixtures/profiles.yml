@@ -1,0 +1,143 @@
+--- 
+profiles_004: 
+  name: !binary |
+    0YTQsNC50Lsg0YXQvtGB0YI=
+
+  created_at: 2010-06-09 20:43:40.039525
+  updated_at: 2010-06-09 20:44:14.408286
+  id: "4"
+  content_type_id: "1"
+  user_id: "718075440"
+  host: mediavalise.com
+  password: 242347041Ll
+  login: alex64271
+profiles_005: 
+  name: imagevenue
+  created_at: 2010-06-09 20:53:32.868031
+  updated_at: 2010-06-10 19:21:25.998885
+  id: "5"
+  content_type_id: "1"
+  user_id: "718075440"
+  host: imagevenue.com
+  password: faf36b28
+  login: alex64271
+profiles_006: 
+  name: imagebam
+  created_at: 2010-06-10 19:24:41.613173
+  updated_at: 2010-06-10 19:24:41.613173
+  id: "6"
+  content_type_id: "1"
+  user_id: "718075440"
+  host: imagebam.com
+  password: "242347041"
+  login: alex64271
+profiles_007: 
+  name: pixhost
+  created_at: 2010-06-10 19:29:10.127267
+  updated_at: 2010-06-10 19:29:10.127267
+  id: "7"
+  content_type_id: "1"
+  user_id: "718075440"
+  host: pixhost.org
+  password: ""
+  login: ""
+profiles_008: 
+  name: stooorage
+  created_at: 2010-06-10 19:31:08.986919
+  updated_at: 2010-06-10 19:31:08.986919
+  id: "8"
+  content_type_id: "1"
+  user_id: "718075440"
+  host: stooorage.com
+  password: ""
+  login: ""
+profiles_010: 
+  name: ImageBam [crococat]
+  created_at: 2010-06-11 21:57:50.944184
+  updated_at: 2010-06-11 22:20:54.200759
+  id: "10"
+  content_type_id: "1"
+  user_id: "718075441"
+  host: imagebam.com
+  password: crocodile
+  login: crococat
+profiles_009: 
+  name: PixHost [anonymous]
+  created_at: 2010-06-11 21:59:51.746027
+  updated_at: 2010-06-11 21:59:51.746027
+  id: "11"
+  content_type_id: "1"
+  user_id: "718075441"
+  host: pixhost.org
+  password: ""
+  login: ""
+profiles_011: 
+  name: "{MV}serg"
+  created_at: 2010-06-11 21:55:14.148843
+  updated_at: 2010-06-13 21:34:30.204019
+  id: "9"
+  content_type_id: "1"
+  user_id: "718075441"
+  host: mediavalise.com
+  password: mediapass
+  login: serg
+profiles_012: 
+  name: pixhost
+  created_at: 2010-06-14 14:15:00.036055
+  updated_at: 2010-06-14 14:15:00.036055
+  id: "12"
+  content_type_id: "2"
+  user_id: "718075442"
+  host: pixhost.org
+  password: ""
+  login: ""
+profiles_001: 
+  name: test account
+  created_at: 2010-04-28 11:52:17.191648
+  updated_at: 2010-04-28 11:52:17.191648
+  id: "1"
+  content_type_id: "2"
+  user_id: "718075439"
+  host: stooorage.com
+  password: ""
+  login: ""
+profiles_013: 
+  name: IV [porvator]
+  created_at: 2010-06-21 21:30:38.025236
+  updated_at: 2010-06-21 21:30:38.025236
+  id: "13"
+  content_type_id: "1"
+  user_id: "718075441"
+  host: imagevenue.com
+  password: a7b16f56
+  login: porvator
+profiles_002: 
+  name: "[MV] serg"
+  created_at: 2010-04-28 11:52:38.324616
+  updated_at: 2010-04-28 11:52:38.324616
+  id: "2"
+  content_type_id: "2"
+  user_id: "718075439"
+  host: mediavalise.com
+  password: mvpass
+  login: serg
+profiles_014: 
+  name: mv
+  created_at: 2010-06-25 16:14:54.682369
+  updated_at: 2010-06-25 16:14:54.682369
+  id: "14"
+  content_type_id: "2"
+  user_id: "718075442"
+  host: mediavalise.com
+  password: "123456"
+  login: free_webmaster
+profiles_003: 
+  name: tt_free_webmaster
+  created_at: 2010-05-03 06:43:10.425219
+  updated_at: 2010-05-03 06:43:10.425219
+  id: "3"
+  content_type_id: "2"
+  user_id: "718075439"
+  host: mediavalise.com
+  password: "123456"
+  login: free_webmaster

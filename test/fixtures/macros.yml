@@ -1,0 +1,185 @@
+--- 
+macros_001: 
+  name: default
+  created_at: 2010-06-09 20:42:08.36732
+  position_timestamp: left
+  thumb_shadow: t
+  thumb_width: "160"
+  updated_at: 2010-06-10 20:15:45.897219
+  thumb_quality: "70"
+  number_of_frames: "24"
+  id: "3"
+  file_format: jpg
+  logo_id: 
+  add_timestamp: f
+  font_size: "15"
+  font: Times-Bold
+  thumb_frame: t
+  user_id: "718075440"
+  thumb_height: "90"
+  font_color: "#121111"
+  frame_color: "#999090"
+  header_text: |-
+    File name: [file_name]
+    File size: [file_size]
+    Duration: [duration_time]
+    Size: [width]x[height]
+    Video codec: [video_codec]
+    Audio codec: [audio_codec]
+  add_logo: f
+  columns: "4"
+  template_background: "#e3dfdf"
+  thumb_padding: "5"
+  frame_size: "1"
+macros_002: 
+  name: White (200x113)
+  created_at: 2010-06-10 14:40:28.85435
+  position_timestamp: 
+  thumb_shadow: t
+  thumb_width: "200"
+  updated_at: 2010-06-10 21:22:52.295594
+  thumb_quality: "75"
+  number_of_frames: "24"
+  id: "4"
+  file_format: jpg
+  logo_id: 
+  add_timestamp: 
+  font_size: "15"
+  font: Helvetica-Bold
+  thumb_frame: t
+  user_id: "718075439"
+  thumb_height: "113"
+  font_color: "#000000"
+  frame_color: "#f7f2f2"
+  header_text: |-
+    File name: [file_name]
+    Size: [width]x[height]
+    Duration: [duration_time]
+    File size: [file_size]
+    Video codec: [video_codec]
+    Audio codec: [audio_codec]
+  add_logo: f
+  columns: "4"
+  template_background: "#ffffff"
+  thumb_padding: "5"
+  frame_size: "1"
+macros_003: 
+  name: gray theme
+  created_at: 2010-04-28 11:51:44.596368
+  position_timestamp: left
+  thumb_shadow: t
+  thumb_width: "300"
+  updated_at: 2010-06-06 05:15:08.952384
+  thumb_quality: "70"
+  number_of_frames: "21"
+  id: "1"
+  file_format: jpg
+  logo_id: 
+  add_timestamp: f
+  font_size: "14"
+  font: Helvetica
+  thumb_frame: f
+  user_id: "718075439"
+  thumb_height: "155"
+  font_color: "#000000"
+  frame_color: "#b0b0b0"
+  header_text: |-
+    File name: [file_name]
+    Size: [width]x[height]
+    Duration: [duration_time]
+    File size: [file_size]
+  add_logo: f
+  columns: "3"
+  template_background: "#ffffff"
+  thumb_padding: "5"
+  frame_size: "0"
+macros_004: 
+  name: default_long
+  created_at: 2010-06-18 19:58:25.299198
+  position_timestamp: left
+  thumb_shadow: t
+  thumb_width: "160"
+  updated_at: 2010-06-18 19:58:25.299198
+  thumb_quality: "70"
+  number_of_frames: "32"
+  id: "8"
+  file_format: jpg
+  logo_id: 
+  add_timestamp: f
+  font_size: "15"
+  font: Palatino-BoldItalic
+  thumb_frame: t
+  user_id: "718075440"
+  thumb_height: "90"
+  font_color: "#000000"
+  frame_color: "#ffffff"
+  header_text: |-
+    File name: [file_name]
+    File size: [file_size]
+    Duration: [duration_time]
+    Size: [width]x[height]
+    Video codec: [video_codec]
+    Audio codec: [audio_codec]
+  add_logo: f
+  columns: "4"
+  template_background: "#cccccc"
+  thumb_padding: "5"
+  frame_size: "1"
+macros_005: 
+  name: gray
+  created_at: 2010-06-14 14:14:18.374669
+  position_timestamp: right
+  thumb_shadow: t
+  thumb_width: "250"
+  updated_at: 2010-06-21 12:06:21.093707
+  thumb_quality: "75"
+  number_of_frames: "20"
+  id: "6"
+  file_format: png
+  logo_id: 
+  add_timestamp: t
+  font_size: "15"
+  font: Helvetica-Bold
+  thumb_frame: t
+  user_id: "718075442"
+  thumb_height: "113"
+  font_color: "#000000"
+  frame_color: "#c2c2c2"
+  header_text: ""
+  add_logo: f
+  columns: "2"
+  template_background: "#ffffff"
+  thumb_padding: "7"
+  frame_size: "1"
+macros_006: 
+  name: White (250x141)
+  created_at: 2010-06-11 21:54:31.335784
+  position_timestamp: 
+  thumb_shadow: t
+  thumb_width: "250"
+  updated_at: 2010-06-28 02:19:43.378403
+  thumb_quality: "75"
+  number_of_frames: "24"
+  id: "5"
+  file_format: jpg
+  logo_id: 
+  add_timestamp: 
+  font_size: "15"
+  font: Helvetica-Bold
+  thumb_frame: t
+  user_id: "718075441"
+  thumb_height: "141"
+  font_color: "#000000"
+  frame_color: "#d6d6d6"
+  header_text: |-
+    File name: [file_name]
+    Resolution: [width]x[height]
+    Duration: [duration_time]
+    File size: [file_size]
+    Video codec: [video_codec]
+    Audio codec: [audio_codec]
+  add_logo: f
+  columns: "4"
+  template_background: "#ffffff"
+  thumb_padding: "5"
+  frame_size: "1"

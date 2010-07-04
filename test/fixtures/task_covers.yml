@@ -1,7 +1,14 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+--- 
+task_covers_001: 
+  task_id: "2408"
+  id: "4"
+  cover_id: "1051770407"
+  links: |
+    --- 
+    - - "Show to friend:"
+      - http://www.pixhost.org/show/1086/2914024_1031877.jpg
+    - - "Forum thumbnail:"
+      - "[url=http://www.pixhost.org/show/1086/2914024_1031877.jpg][img]http://t2.pixhost.org/thumbs/1086/2914024_1031877.jpg[/img][/url]"
+    - - "HTML thumbmail:"
+      - <a href="http://www.pixhost.org/show/1086/2914024_1031877.jpg"><img src="http://t2.pixhost.org/thumbs/1086/2914024_1031877.jpg" alt="2914024_1031877.jpg"  border="0"/></a>
 
-# one:
-#   column: value
-#
-# two:
-#   column: value

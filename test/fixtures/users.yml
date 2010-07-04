@@ -1,0 +1,85 @@
+--- 
+users_004: 
+  name: alex64271
+  created_at: 2010-06-09 19:54:53.86323
+  last_request_at: 2010-07-03 21:35:53.844356
+  crypted_password: db731a191f01c78eefccc02886d0265fccc0b801a26079cbb7915610f4dd812b7276cf1d5d89025ecf9f9044d1866b639fae83a85331d15baa7920a7b357c00f
+  updated_at: 2010-07-03 21:35:53.845015
+  perishable_token: ilZRD4SLBDB9h17Q4ftF
+  current_login_ip: 109.165.15.204
+  id: "718075440"
+  completed_tasks: 
+  current_login_at: 2010-06-25 19:29:13.721942
+  password_salt: 4XDdgUUBmAegVGbx4WCW
+  user_per_page: "300"
+  login_count: "14"
+  persistence_token: b3f3fb6944e8b67bd0d7d899be1260662f8710ccfaf85ac1680c52df77771e9d993c8064c6c644ff889691082d8cb4ea0d8cb05abb3e2f8491053b9b7c1d6e45
+  last_login_ip: 109.165.15.204
+  last_login_at: 2010-06-25 19:19:03.897049
+  notification_email: f
+  active_tasks: 
+  active: t
+  email: alex64271@gmail.com
+users_001: 
+  name: porvator
+  created_at: 2010-06-11 16:22:35.788581
+  last_request_at: 2010-07-02 03:37:22.815185
+  crypted_password: 3108f25ed5dfc654fa3df3bd326d03e5ff502399260d24ed03963b14f56732f77a82865168244c0b2084924e971aa996dc1923e08948d768362bdbae88f03307
+  updated_at: 2010-07-02 03:37:22.815834
+  perishable_token: nz6xsgdhD33Mkofcdlss
+  current_login_ip: 91.44.41.99
+  id: "718075441"
+  completed_tasks: 
+  current_login_at: 2010-06-27 11:18:19.815804
+  password_salt: l-lw1ppOo2gDh8O4mj4l
+  user_per_page: "300"
+  login_count: "3"
+  persistence_token: bdef3ce5ab7dbf1233f1c1a00180c2c58e022de249cce058147883cbe051bf71bf3f01af8091c3efe4f8358df9f33519db6ffa9d4f300cff6a4f48bca5aacfb7
+  last_login_ip: 91.44.51.17
+  last_login_at: 2010-06-26 10:33:02.457327
+  notification_email: f
+  active_tasks: 
+  active: t
+  email: porvator@googlemail.com
+users_002: 
+  name: hydrauser@gmail.com
+  created_at: 2010-06-14 13:31:44.610844
+  last_request_at: 2010-06-29 09:49:08.187705
+  crypted_password: 659e5d7f53bfd9b42df97faeb45edcbe9b303e79223f7f0c6b07b19d77800359e62f654c089c47d85c2b9bd7d1ebcee71431b30c26f0ba6bca1dce878a7d6638
+  updated_at: 2010-06-29 09:49:08.188364
+  perishable_token: z5eRtvrGs5sx8XD7fw49
+  current_login_ip: 78.155.184.108
+  id: "718075442"
+  completed_tasks: 
+  current_login_at: 2010-06-29 09:41:08.344434
+  password_salt: 4qygFRjQ07cJnYCKOTBb
+  user_per_page: "4"
+  login_count: "15"
+  persistence_token: 1c6bda3c952d32490d8cd2db6d90b14e8dd80973dba058e07af4d60117e2bd1b10454d81140f1ead153173d25bed46453a2bb4ecb2bd170eaf0eac0e36c96e9b
+  last_login_ip: 109.191.44.159
+  last_login_at: 2010-06-28 05:30:41.760364
+  notification_email: f
+  active_tasks: 
+  active: t
+  email: hydrauser@gmail.com
+users_003: 
+  name: serg
+  created_at: 2010-06-06 14:07:34
+  last_request_at: 2010-06-28 05:12:54.532435
+  crypted_password: 0be991a8cfbf8a7eaa026113c03c9d218726a9a86ba3767e3ee9978c01e4a2b41db26ddffe6a77f7c9d6af9c634b2a5629eb606cf3e42ede1c0db7ec097de710
+  updated_at: 2010-06-28 05:12:54.533109
+  perishable_token: NBFsBT3ohvYBIFy-3ncz
+  current_login_ip: 91.44.33.188
+  id: "718075439"
+  completed_tasks: 
+  current_login_at: 2010-06-14 13:29:39.067302
+  password_salt: 753xJYSAw_tTkx9jOhj0
+  user_per_page: "100"
+  login_count: "11"
+  persistence_token: ca53b6c06c831a2fb20ad5741c8d4ea793bbc34ea458395cc41edfbc508c30b8f7e05605bb402c47aab584ef11f641e524f79c76609dd7cc26247b8853801e89
+  last_login_ip: 91.44.33.188
+  last_login_at: 2010-06-14 13:28:46.373204
+  notification_email: t
+  active_tasks: 
+  active: t
+  email: info@mediavalise.com
