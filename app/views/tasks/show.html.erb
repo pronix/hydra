@@ -41,7 +41,7 @@ taskProfile
       </p>
         <% list_screen.links && list_screen.links.each do |link| -%>
           <p><%=h link.first %><br />
-             <%= text_field_tag "", link.last, :size => 35  %>
+             <%= text_field_tag "", link.last.strip, :size => 35  %>
              <a href="#" class="copyBut" title="Copy">Copy</a>
           </p>
         <% end -%>
@@ -61,7 +61,7 @@ taskProfile
   <h2><%= I18n.t("files") %></h2>
   <% unless @task.mediavalise_links.blank? -%>
   <div class="imgSettings">
-    <%= text_area_tag "",   @task.mediavalise_links.gsub(' ',"\n"), :rows => 10, :cols => 80, :class => "floatLeft" %>
+    <%= text_area_tag "", @task.mediavalise_links.sort{|x,n| x.reverse <=> n.reverse}, :rows => 10, :cols => 80, :class => "floatLeft" %>
     <a href="#" class="copyBut" title="Copy">Copy</a>
   </div>
   <% end -%>
