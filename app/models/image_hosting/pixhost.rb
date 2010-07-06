@@ -6,8 +6,7 @@ class ImageHosting::Pixhost < ImageHosting
   class << self
     def get_cookeis
       response_get = get('/?lang=en')
-      self.default_cookies.add_cookies(response_get.headers["set-cookie"][0]) if  response_get.headers["set-cookie"] &&
-        response_get.headers["set-cookie"][0]
+      self.default_cookies.add_cookies([response_get.headers["set-cookie"]].first) if  response_get.headers["set-cookie"]
     end
 
     def send_image(args=nil)

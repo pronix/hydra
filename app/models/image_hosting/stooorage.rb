@@ -4,8 +4,7 @@ class ImageHosting::Stooorage < ImageHosting
   class << self
     def get_cookeis
       response_get = get('/')
-      self.default_cookies.add_cookies(response_get.headers["set-cookie"][0]) if  response_get.headers["set-cookie"] &&
-        response_get.headers["set-cookie"][0]
+      self.default_cookies.add_cookies([response_get.headers["set-cookie"]].flatten.first) if  response_get.headers["set-cookie"]
     end
 
     # Picture is larger than 2 MBWrong file format, allowed are gif,png,jpgArray

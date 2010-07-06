@@ -49,8 +49,7 @@ class ImageHosting::Imagevenue < ImageHosting
       response_login = self.login(user, password)
       raise "[ IMAGEVENUE ] Invalid login or password" if response_login.body[/You specified the wrong user name password combination/i]
 
-      self.default_cookies.add_cookies(response_login.headers["set-cookie"][0]) if  response_login.headers["set-cookie"] &&
-        response_login.headers["set-cookie"][0]
+      self.default_cookies.add_cookies([response_login.headers["set-cookie"]].flatten.first) if  response_login.headers["set-cookie"]
 
       begin
         response = post "/upload.php",{ :body => form.read,
