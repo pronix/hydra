@@ -19,7 +19,7 @@
    - ./script/delayed_job start
 
    - rake hydra:aria2c:start                   # Started with aria2 XML-RPC API
-      запуск менеджера закачек, запускаеться если менеджер еще не запущен с параметрами которые указываються
+      запуск менеджера закачек, запускаться если менеджер еще не запущен с параметрами которые указываются
      ./config/aria/aria.yml
 
    - rake hydra:db:default                     # Loading db/default for hydra
@@ -30,3 +30,6 @@
 Настройка параметров:
   /config/application.yml
   max_active_task: размер очереди активных задач
+
+В задаче распаковки файлов, если файл не архив то проверяться соответствует ли файл поддерживаемым видео файлам, если файл поддерживаться то выполняться следующая задача, если же нет то выдается сообщение об ошибке  Stopped [ archive type is not defined or not supported ].
+Список файлов находиться здесь: lib/common.rb  Video.mime_type
