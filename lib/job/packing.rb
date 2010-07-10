@@ -37,7 +37,7 @@ module Job
                  ].flatten
 
 
-      command = %(rar a -inul -ep )
+      command = Settings.rar_command
       command << " -v#{part_size.to_i.megabyte/1000} " unless part_size.blank?
       command << " -p#{password_arhive.to_s} " unless password_arhive.blank?
       command << %( '#{@_out_file}' #{ @_files.map{ |x| "'#{x}'" }.join(' ') } )
