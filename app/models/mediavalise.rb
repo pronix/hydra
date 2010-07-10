@@ -66,13 +66,16 @@ class Mediavalise
       raise "[MEDIAVALISE ] Invalid server" unless response.code.to_i == 200
 
       form.close
+      form = nil
       task.log "links mediavalise : #{[_result].join(', ')}"
       task.mediavalise_links = "#{task.mediavalise_links}#{_result}\n"
       task.save!
+      GC.start
       return _result
 
     rescue => ex
-      form.close
+      form = nil
+      GC.start
       raise "Error: uploading file to MediaValise: #{ex.message}"
     end
 
