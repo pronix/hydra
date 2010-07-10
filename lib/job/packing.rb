@@ -76,6 +76,9 @@ module Job
 
     rescue => ex
       erroneous!(ex.message)
+    ensure
+      command = nil
+      GC.start
     end
 
   end

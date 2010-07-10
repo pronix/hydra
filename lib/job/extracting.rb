@@ -66,6 +66,9 @@ module Job
       erroneous!(" Extracting: Unknow error")
       Task.log ex.message, :error
       raise
+    ensure
+      command = nil
+      GC.start
     end
 
   end

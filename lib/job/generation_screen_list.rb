@@ -85,10 +85,7 @@ module Job
 
             @vo_format = @macro.file_format["jpg"] ? "jpeg" : "png"
             command = "mplayer -nosound  -frames 1 -ss #{tc} '#{video_file}' -loop 1 -vo #{@vo_format}:outdir=#{@path_tmp}/ && mv -f #{@path_tmp}/00000001.#{@macro.file_format} #{@path_tmp}/#{out_file_name}"
-            log "-"*90
-            log "mplayer-"
             log command
-            log "="*90
             output = `#{command}`
           end
 
@@ -234,6 +231,11 @@ module Job
         list_screens.build :screen => Screen.create!(:attachment => File.open(ff))
         save
       end
+    ensure
+      command = nil
+      _files = nil
+      output = nil
+      GC.start
     end
 
 
@@ -280,8 +282,8 @@ module Job
         :file_size   => ApplicationController.helpers.number_to_human_size(File.size(video_file)),
         :duration    =>  second_to_s(duration), #second_to_s(video_context.duration/1000000),
         :resolution  => (!video_codec.blank? ? ("#{video_codec.first[:width]}x#{video_codec.first[:height]}") : ""),
-        :audio_codec => (!video_codec.blank? ? ("#{video_codec.first[:long_name]}") : ""),
-        :video_codec => (!audio_codec.blank? ? ("#{audio_codec.first[:long_name]}") : "")
+        :video_codec => (!video_codec.blank? ? ("#{video_codec.first[:long_name]}") : ""),
+        :audio_codec => (!audio_codec.blank? ? ("#{audio_codec.first[:long_name]}") : "")
       }
 
     end
