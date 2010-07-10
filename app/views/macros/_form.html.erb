@@ -134,9 +134,9 @@
 
 <%= form.label :file_format , Macros.human_attribute_name("file_format"), :class => "yellowCell" %>
 <em class="rightCell"></em>
-<%= radio_button_tag "macro[file_format]", Common::FileFormat::JPG,  @macro.file_format %>
+<%= radio_button_tag "macro[file_format]", Common::FileFormat::JPG,  (@macro.file_format == Common::FileFormat::JPG) %>
 <%= Common::FileFormat::JPG %>
-<%= radio_button_tag "macro[file_format]", Common::FileFormat::PNG,  @macro.file_format %>
+<%= radio_button_tag "macro[file_format]", Common::FileFormat::PNG,  (@macro.file_format == Common::FileFormat::PNG) %>
 <%= Common::FileFormat::PNG %>
 </li>
 
