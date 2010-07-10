@@ -1,5 +1,5 @@
 require 'open3'
-require 'ffmpeg'
+require 'ffmpeg-ruby'
 class JobGenerationScreenListError < StandardError #:nodoc:
 end
 
