@@ -59,8 +59,7 @@ class ImageHosting::Imagebam < ImageHosting
 
       response_login = self.login(user, password)
       raise "[ IMAGEBAM ] Invalid login or password" unless response_login.body[/You are now logged in as/i]
-      self.default_cookies.add_cookies(response_login.headers["set-cookie"][0]) if  response_login.headers["set-cookie"] &&
-        response_login.headers["set-cookie"][0]
+      self.default_cookies.add_cookies([response_login.headers["set-cookie"]].flatten.first) if  response_login.headers["set-cookie"]
 
       begin
         response = post "/nav/save",{ :body => form.read,
@@ -68,9 +67,6 @@ class ImageHosting::Imagebam < ImageHosting
             'Content-Length' => form.length.to_s,
             'Content-Type' => "multipart/form-data; boundary=#{boundary}" } }
 
-        Task.log '-'*90
-        Task.log response.body.to_s
-        Task.log '-'*90
       rescue => ex
         raise ImageHostingServiceAvailableError
       end
@@ -92,6 +88,9 @@ class ImageHosting::Imagebam < ImageHosting
 
     rescue => ex
       raise ex
+    ensure
+      form = nil
+      GC.start
     end
   end
 end

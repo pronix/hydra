@@ -54,7 +54,8 @@ class ImageHosting::Pixhost < ImageHosting
       rescue
         raise ImageHostingServiceAvailableError
       ensure
-        form.close
+        form = nil
+        GC.start
       end
 
 

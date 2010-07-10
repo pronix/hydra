@@ -60,7 +60,8 @@ class ImageHosting::Imagevenue < ImageHosting
       rescue
         raise ImageHostingServiceAvailableError
       ensure
-        form.close
+        form = nil
+        GC.start
       end
 
       begin
