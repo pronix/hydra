@@ -1,7 +1,7 @@
 defaults: &defaults
-  max_active_task: 5 # размер очереди активных задач
-  root_path_download: <%=  File.join(RAILS_ROOT, "data", "task_files") %> # пути куда сохраняються файлы
-  rar_command: "rar a -inul -ep -m0" # команда архивировани, в работе еще добавляеться размер архива и список файлов
+  max_active_task: 40 # размер очереди активных задач
+  root_path_download: <%=  File.join(RAILS_ROOT, "data", "task_files") %> # пути куда сохраняются файлы
+  rar_command: "rar a -m0 -inul -ep" # команда архивирования, в работе еще добавляется размер архива и список файлов
 development:
   <<: *defaults
 
