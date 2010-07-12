@@ -4,7 +4,7 @@
 module Job
   module Packing
     def process_packing
-      @_tmp_packed_path = File.join(task_path, 'tmp_packed_path')
+      _tmp_packed_path = File.join(task_path, 'tmp_packed_path')
       FileUtils.mkdir_p(@_tmp_packed_path)
       FileUtils.mkdir_p(packed_path)
 
@@ -25,16 +25,17 @@ module Job
 
 
 
-      @_out_file = Dir.glob(unpacked_path + "**/**").map { |x| x }.first
-      @_out_file = [(@_out_file.blank? ? "arhive" :
-                     (File.basename(@_out_file, File.extname(@_out_file)))), 'rar' ].join('.')
-      @_out_file = File.join(packed_path, @_out_file)
+      _out_file = Dir.glob(unpacked_path + "**/**").map { |x| x }.first
+      _out_file = [(_out_file.blank? ? "arhive" :
+                     (File.basename(_out_file, File.extname(@_out_file)))), 'rar' ].join('.')
+      _out_file = File.join(packed_path, _out_file)
 
 
-      @_files =  [
+      _files =  [
                   Dir.glob(unpacked_path + "**/**").map { |x| x },
-                  Dir.glob(@_tmp_packed_path + "**/**").map { |x| x }
+                  Dir.glob(_tmp_packed_path + "**/**").map { |x| x }
                  ].flatten
+
 
 
       command = Settings.rar_command
@@ -54,7 +55,7 @@ module Job
           _name = File.basename(_file, File.extname(_file))
           _part = _name[/\.part\d+/]
 
-          @new_file_name = macro_renaming.
+          new_file_name = macro_renaming.
             gsub(/\[file_name\]/,(!rename_file_name.blank? ? rename_file_name : _name) ).
             gsub(/\[part_number\]/, _part.to_s).
             gsub(/\[ext\]/,_ext).
@@ -62,16 +63,16 @@ module Job
             gsub(/^\.|\.$/, '').gsub(/\.\./,'.')
 
 
-          @new_file_name = File.join(File.dirname(_file), @new_file_name)
+          new_file_name = File.join(File.dirname(_file), new_file_name)
 
-          command = "mv '#{_file}' '#{@new_file_name}'"
+          command = "mv '#{_file}' '#{new_file_name}'"
           log command, :debug
         `#{command}`
         end
       end
 
       # Удаляем временные файлы
-      FileUtils.rm_rf(@_tmp_packed_path)
+      FileUtils.rm_rf(_tmp_packed_path)
       job_completion!
 
     rescue => ex
