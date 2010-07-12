@@ -47,7 +47,13 @@ class Mediavalise
       form << "filename=\"#{file_name}\"\r\n"
       form << "Content-Type: #{Rack::Mime.mime_type(File.extname(file_path))}\r\n"
       form << "Content-Transfer-Encoding: binary\r\n\r\n"
-      form << File.open(file_path).binmode.read
+      begin
+        _task_file = File.open(file_path, 'r').binmode
+        form << _task_file.read
+        _task_file.try(:close)
+      rescue
+        _task_file.try(:close)
+      end
 
       form << "\r\n--" << boundary << "--\r\n"
       form.seek(0)
@@ -57,6 +63,9 @@ class Mediavalise
         :headers => {
           'Content-Length' => form.length.to_s,
           'Content-Type' => "multipart/form-data; boundary=#{boundary}" }, :format => :json })
+      form.try(:close)
+      form = nil
+
       result = response.to_hash
       if result["error"].blank?
         _result = result["success"].first["direct_link"] rescue ''
