@@ -23,5 +23,3 @@ production:
     file-allocation: 'none'
     max-concurrent-downloads: '60'
     split: '10'
-	realtime-chunk-checksum: 'true'
-	human-readable: 'true'
