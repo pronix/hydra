@@ -5,29 +5,29 @@ module Job
   module Packing
     def process_packing
       _tmp_packed_path = File.join(task_path, 'tmp_packed_path')
-      FileUtils.mkdir_p(@_tmp_packed_path)
+      FileUtils.mkdir_p(_tmp_packed_path)
       FileUtils.mkdir_p(packed_path)
 
       # Добавляем обложки в архив
       add_covers_to_arhive? && task_covers.each { |x|
-        `cp '#{x.cover.attachment.path}' '#{File.join(@_tmp_packed_path,x.cover.attachment.original_filename )}'`
+        `cp '#{x.cover.attachment.path}' '#{File.join(_tmp_packed_path,x.cover.attachment.original_filename )}'`
       }
 
       # Добавляем файлы в архив
       attachment_files.each { |x|
-        `cp '#{x.attachment.path}' '#{File.join(@_tmp_packed_path,x.attachment.original_filename )}'`
+        `cp '#{x.attachment.path}' '#{File.join(_tmp_packed_path,x.attachment.original_filename )}'`
       }
 
       # Добавляем скрин листы в архивu
       screen_list? && add_screens_to_arhive? && !list_screens.blank? &&
         list_screens.each { |x|
-        `cp '#{x.screen.attachment.path}' '#{File.join(@_tmp_packed_path,x.screen.attachment.original_filename)}'` }
+        `cp '#{x.screen.attachment.path}' '#{File.join(_tmp_packed_path,x.screen.attachment.original_filename)}'` }
 
 
 
       _out_file = Dir.glob(unpacked_path + "**/**").map { |x| x }.first
       _out_file = [(_out_file.blank? ? "arhive" :
-                     (File.basename(_out_file, File.extname(@_out_file)))), 'rar' ].join('.')
+                     (File.basename(_out_file, File.extname(_out_file)))), 'rar' ].join('.')
       _out_file = File.join(packed_path, _out_file)
 
 
