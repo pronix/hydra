@@ -61,7 +61,7 @@ taskProfile
   <h2><%= I18n.t("files") %></h2>
   <% unless @task.mediavalise_links.blank? -%>
   <div class="imgSettings">
-    <%= text_area_tag "", @task.mediavalise_links.sort{|x,n| x.reverse <=> n.reverse}, :rows => 10, :cols => 80, :class => "floatLeft" %>
+    <%= text_area_tag "", @task.mediavalise_links.sort{|x,n| x.reverse <=> n.reverse}, :rows => 8, :cols => 55, :class => "floatLeft" %>
     <a href="#" class="copyBut" title="Copy">Copy</a>
   </div>
   <% end -%>
