@@ -235,6 +235,7 @@ module Job
       command = nil
       _files = nil
       output = nil
+      file_info = nil
       GC.start
     end
 
@@ -276,7 +277,7 @@ module Job
       duration = `mplayer -identify #{video_file} -nosound -vc dummy -vo null`
       duration = duration[/ID_LENGTH=(.+)/] && $1.to_f
       duration = (video_context.duration/1000000) unless duration.to_i > 0
-
+      video_context = nil
       {
         :file_name   => "'#{File.basename(video_file)}'",
         :file_size   => ApplicationController.helpers.number_to_human_size(File.size(video_file)),
