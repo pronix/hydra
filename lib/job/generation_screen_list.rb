@@ -72,6 +72,7 @@ module Job
 
           duration_file = duration(video_file)
           duration_file = file_info.duration unless duration_file.to_i > 0
+          file_info.close_file rescue nil
 
           delta = duration_file/@number_of_frames
           video_info = get_video_info(video_file)
@@ -185,6 +186,7 @@ module Job
               log "create temp logo"
               log command
               `#{command}`
+
             end
 
             # Присоединяем шаблон логотипа к основному скрн листу
@@ -209,6 +211,7 @@ module Job
           log command
           output = `#{command}`
         end
+        video_info = nil
       end
 
       # Удаляем временные файлы
@@ -277,6 +280,7 @@ module Job
       duration = `mplayer -identify #{video_file} -nosound -vc dummy -vo null`
       duration = duration[/ID_LENGTH=(.+)/] && $1.to_f
       duration = (video_context.duration/1000000) unless duration.to_i > 0
+      video_context.close_file rescue nil
       video_context = nil
       {
         :file_name   => "'#{File.basename(video_file)}'",
