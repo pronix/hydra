@@ -24,8 +24,6 @@ namespace :hydra do
         puts "[aria] - не запускаем"
         puts ps_ax
       end
-    ensure
-      ps_ax.close
     end
 
   end

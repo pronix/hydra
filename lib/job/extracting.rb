@@ -54,7 +54,7 @@ module Job
           type_file = nil
           Open3.popen3("file -i #{task_file}") {|i,o,e| type_file =  o.gets }
           if !type_file.blank? && Common::Video.mime_type.include?(type_file.split(':').last.scan(/[a-zA-Z0-9-]+\/[a-zA-Z0-9-]+/).first)
-            system(%(cp #{task_file} #{@path}/))
+            `cp #{task_file} #{@path}/`
           else
             raise JobExtractingError, "archive type is not defined or not supported"
           end
