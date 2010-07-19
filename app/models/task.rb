@@ -540,17 +540,17 @@ class Task < ActiveRecord::Base
   end
   class << self
     def re_uploading_screen_list(task_id)
-      if (@task = Task.fin_by_id(task_id))
+      if (@task = Task.find_by_id(task_id))
         @task.re_uploading_screen_list
       end
     end
     def re_uploading_cover(task_id)
-      if (@task = Task.fin_by_id(task_id))
+      if (@task = Task.find_by_id(task_id))
         @task.re_uploading_cover
       end
     end
     def process_uploading(task_id)
-      if (@task = Task.fin_by_id(task_id))
+      if (@task = Task.find_by_id(task_id))
         @task.process_uploading
       end
     end
