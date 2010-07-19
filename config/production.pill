@@ -1,6 +1,6 @@
 RAILS_ROOT='/var/www/hydra/current'
 Bluepill.application("my_app", :log_file => "#{RAILS_ROOT}/log/bluepill.log") do |app|
-5.times do |i|
+
   app.process("delayed_job") do |process|
     process.working_dir = RAILS_ROOT
 
@@ -17,6 +17,6 @@ Bluepill.application("my_app", :log_file => "#{RAILS_ROOT}/log/bluepill.log") do
     process.uid = "apache"
     process.gid = "apache"
   end
-end
+
 end
 
