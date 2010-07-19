@@ -435,11 +435,15 @@ class Task < ActiveRecord::Base
 
         case triggering_event.to_s
         when /reuploading\b/
-          send_later :re_uploading_screen_list
+          # send_later :re_uploading_screen_list
+          `RAILS_ENV=#{RAILS_ENV} #{RAILS_ROOT}/script/runner 'Task.re_uploading_screen_list(#{self.id})' &`
         when /reuploading_covers\b/
-          send_later :re_uploading_cover
+          # send_later :re_uploading_cover
+          `RAILS_ENV=#{RAILS_ENV} #{RAILS_ROOT}/script/runner 'Task.re_uploading_cover(#{self.id})' &`
         else
-          process_uploading
+          # process_uploading
+         `RAILS_ENV=#{RAILS_ENV} #{RAILS_ROOT}/script/runner 'Task.process_uploading(#{self.id})' &`
+
         end
       }
 
@@ -534,7 +538,23 @@ class Task < ActiveRecord::Base
   def self.open_log
     ActiveSupport::BufferedLogger.new(File.join(RAILS_ROOT, 'log', 'jobs.log'))
   end
-
+  class << self
+    def re_uploading_screen_list(task_id)
+      if (@task = Task.fin_by_id(task_id))
+        @task.re_uploading_screen_list
+      end
+    end
+    def re_uploading_cover(task_id)
+      if (@task = Task.fin_by_id(task_id))
+        @task.re_uploading_cover
+      end
+    end
+    def process_uploading(task_id)
+      if (@task = Task.fin_by_id(task_id))
+        @task.process_uploading
+      end
+    end
+  end
 end
 
 
