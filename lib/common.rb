@@ -13,7 +13,8 @@ module Common
 
     def self.list
       unless @font_list
-        @font_list = IO.popen("identify -list font").readlines.select {|x| x[/Font/]}.map{|x| x[/Font: (.*)/] && $1 }
+        @font_list = `identify -list font`
+        @font_list = @font_list.select {|x| x[/Font/]}.map{|x| x[/Font: (.*)/] && $1 }
       end
       @font_list
     end

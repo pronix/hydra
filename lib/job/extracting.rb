@@ -15,7 +15,9 @@ module Job
       # Если есть файлы в архиве gzip or bzip2 распакуем их сначала
       Dir.glob(downloding_path + "**/**").each do |task_file|
         result = nil
-        case IO.popen(%(file -b #{task_file})).readline
+        type_arhive = ''
+        Open3.popen3(%(file -b #{task_file})){ |in_c, out_c, err_c| type_arhive = out_c.gets }
+        case type_arhive
         when /^gzip/i
           raise JobExtractingError, "not support arhive: gunzip" if `which gunzip` && !$?.success?
           command = %(gunzip -f #{task_file})
@@ -29,8 +31,9 @@ module Job
 
       Dir.glob(downloding_path + "**/**").each do |task_file|
         result = nil
-
-        case IO.popen(%(file -b #{task_file})).readline
+        type_arhive = ''
+        Open3.popen3(%(file -b #{task_file})){ |in_c, out_c, err_c| type_arhive = out_c.gets }
+        case type_arhive
         when /^zip/i
           raise JobExtractingError, "not support arhive: zip" if `which zip` && !$?.success?
           command =  use_password? ? %(unzip -o -P #{password}  #{task_file} -d #{@path}/ ) :
